@@ -1,0 +1,49 @@
+//Shopping mall;
+{
+  "name" : "K11",
+  "area" : 19000,
+  "cinema" : {
+    "name" : "Cinema A",
+    "openedDate" : "01-Jan-2022",
+    "releasedFilms" : [
+      {
+        "name" : "Avengers",
+        "releaseDate" : "01-Feb-2022",
+      },
+      {
+        "name" : "Spiderman",
+        "releaseDate" : "01-Mar-2022",
+      }
+    ]
+  },
+  "shopCategory" : [
+    "Sport",
+    "Food",
+    "Clothing"
+  ]
+}
+
+public class Shopping Mall{
+  private String name;
+  private int area;
+  private Cinema cinema;
+  private String[] shopCategory;
+  private ShopCategory[] shopCategory;
+
+  public class Cinema{
+    private String name;
+    private String openedDate;
+    private Film[] releasedFilms;
+  }
+
+  public class Film{
+    private String name;
+    private String releaseDate;
+  }
+
+  public enum ShopCategory{
+    Sport,
+    Food,
+    Clothing
+  }
+}

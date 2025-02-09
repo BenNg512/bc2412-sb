@@ -1,0 +1,41 @@
+{
+  "name" : {
+  "firstname" : "John",
+  "lastname" : "Lau",
+  "nickanme" : null
+  },
+  "age" : 14,
+  "address" : [
+    {
+    "line1" : "ABC",
+    "line2" : "DEF",
+    "line3" : "DEF"
+    },
+    {
+    "line1" : "ABC",
+    "line2" : "DEF",
+    "line3" : "DEF"
+    }
+  ]
+}
+
+// {} -> bject -> Create class for this object
+// [] -> array -> Create class for this array
+
+  public class Person{
+    private Name name; // class in class
+    private int age;
+    private Address[] address;
+    
+    public class Address{
+      private String line1;
+      private String line2;
+      private String line3;
+    }
+    
+    public class Name{
+      private String firstName;
+      private String lastName;
+      private String nickName;
+    }
+}

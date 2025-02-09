@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @ResponseBody
 @RequestMapping(value = "/api/v1")
-public class HelloworldController {
-  @GetMapping(value = "/greeting")
-  public String hello() {
-    return "Hello World! 1";
-}
+public class Cat {
+  @GetMapping(value = "/meow")
+  public String meow2() {
+    return "Meow!";
+  }
+  
 }
