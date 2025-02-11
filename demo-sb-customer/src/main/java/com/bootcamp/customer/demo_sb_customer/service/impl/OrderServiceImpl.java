@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.bootcamp.customer.demo_sb_customer.entity.CustomerEntity;
 import com.bootcamp.customer.demo_sb_customer.entity.OrderEntity;
-import com.bootcamp.customer.demo_sb_customer.model.BusinessException;
+import com.bootcamp.customer.demo_sb_customer.exceptioin.BusinessException;
 import com.bootcamp.customer.demo_sb_customer.service.OrderService;
 import com.bootcamp.customer.demo_sb_customer.repository.CustomerRepository;
 import com.bootcamp.customer.demo_sb_customer.repository.OrderRepository;

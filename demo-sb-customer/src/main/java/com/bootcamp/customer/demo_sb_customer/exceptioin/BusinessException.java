@@ -1,4 +1,4 @@
-package com.bootcamp.customer.demo_sb_customer.model;
+package com.bootcamp.customer.demo_sb_customer.exceptioin;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
