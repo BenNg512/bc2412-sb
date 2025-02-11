@@ -1,0 +1,15 @@
+# server.port
+server:
+  port: 8100
+
+# spring.datasource.driverClassName
+# spring.datasource.url
+spring.datasource:
+  driveClassName: "org.postgresql.Driver"
+  url: "jdbc:postgresql://localhost:5432/bc2412"
+  username: "postgres"
+  password: "admin1234"
+
+spring.jpa:
+  show-sql: true
+  hibernate.ddl-auto: update
