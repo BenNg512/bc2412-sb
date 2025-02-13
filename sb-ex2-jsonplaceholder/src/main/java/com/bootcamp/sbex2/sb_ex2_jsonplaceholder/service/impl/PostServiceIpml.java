@@ -4,22 +4,22 @@ import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.client.RestTemplate;
-import com.bootcamp.sbex2.sb_ex2_jsonplaceholder.model.dto.UserDto;
-import com.bootcamp.sbex2.sb_ex2_jsonplaceholder.service.UserService;
+import org.springframework.web.util.UriComponentsBuilder;
+import com.bootcamp.sbex2.sb_ex2_jsonplaceholder.model.dto.PostDto;
+import com.bootcamp.sbex2.sb_ex2_jsonplaceholder.service.PostService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class PostServiceIpml implements PostService {
 
   @Value("${api.jsonplaceholder.domain}")
   private String domain;
 
-  @Value("${api.jsonplaceholder.endpoints.users}")
+  @Value("${api.jsonplaceholder.endpoints.posts}")
   private String usersEndpoint;
 
   @Override
-  public List<UserDto> getUsers() {
+  public List<PostDto> getPosts() {
     String url = UriComponentsBuilder.newInstance()
       .scheme("https")
       .host(domain)
@@ -28,8 +28,9 @@ public class UserServiceImpl implements UserService {
       .toUriString();
 
     RestTemplate restTemplate = new RestTemplate();
-    UserDto[] results = restTemplate.getForObject(url, UserDto[].class);
+    PostDto[] results = restTemplate.getForObject(url, PostDto[].class);
 
     return Arrays.asList(results);
   }
+  
 }
