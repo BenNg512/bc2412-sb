@@ -10,7 +10,7 @@ import com.bootcamp.sbex2.sb_ex2_jsonplaceholder.model.dto.PostDto;
 import com.bootcamp.sbex2.sb_ex2_jsonplaceholder.service.PostService;
 
 @Service
-public class PostServiceIpml implements PostService {
+public class PostServiceImpl implements PostService {
 
   @Value("${api.jsonplaceholder.domain}")
   private String domain;
