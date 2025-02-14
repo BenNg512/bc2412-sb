@@ -8,11 +8,10 @@ import java.util.List;
 @Getter
 @Setter
 public class PostDTO {
-    private Long id;
-    private String title;
-    private String body;
-    private List<CommentDTO> comments;
-    public Long getUserId() {
-      return this.id;
-    }
+  private Long userId;
+  private Long id;
+  private String title;
+  private String body;
+  private List<CommentDTO> comments;
+
 }

@@ -34,7 +34,6 @@ public class UserServiceImpl implements UserService {
   @Autowired
   private EntityMapper entityMapper;
 
-  //! check application.yml file before using this part and autowired restTemplate
   @Value("${api.jsonplaceholder.domain}")
   private String domain;
 
