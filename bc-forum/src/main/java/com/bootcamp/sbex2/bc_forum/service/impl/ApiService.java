@@ -49,4 +49,15 @@ public class ApiService {
     return users;
   }
 
+  public UserDTO getUserComments(Long userId) {
+    List<UserDTO> users = this.getUsers();
+    UserDTO user = users.stream()
+      .filter(u -> u.getId().equals(userId))
+      .findFirst()
+      .orElse(null);
+    return user;
+    
+    
+  }
+
 }
