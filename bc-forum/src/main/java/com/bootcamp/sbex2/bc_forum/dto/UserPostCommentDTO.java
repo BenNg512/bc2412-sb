@@ -1,14 +1,14 @@
-package com.bootcamp.demo.demo_sb_customer.model.dto;
+package com.bootcamp.sbex2.bc_forum.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-// ! Data Transfer Object
-// This DTO is for deserialization (JSON -> OBJECT)
-@Getter
 @Builder
-public class UserDto {
+@Getter
+@Setter
+public class UserPostCommentDTO {
   private Long id;
   private String name;
   private String username;
@@ -17,9 +17,10 @@ public class UserDto {
   private String phone;
   private String website;
   private Company company;
+  private List<Post> posts;
 
   @Getter
-  @Builder
+  @Setter
   public static class Address {
     private String street;
     private String suite;
@@ -28,20 +29,36 @@ public class UserDto {
     private Geo geo;
 
     @Getter
-    @Builder
+    @Setter
     public static class Geo {
-      @JsonProperty(value = "lat")
-      private String latitude;
-      @JsonProperty(value = "lng")
-      private String longitude;
+      private String lat;
+      private String lng;
     }
   }
-
+  
   @Getter
-  @Builder
+  @Setter
   public static class Company {
     private String name;
     private String catchPhrase;
     private String bs;
+  }
+
+  @Getter
+  @Setter
+  public static class Post {
+    private Long id;
+    private String title;
+    private String body;
+    private List<Comment> comments;
+
+    @Getter
+    @Setter
+    public static class Comment {
+      private Long id;
+      private String name;
+      private String email;
+      private String body;
+    }
   }
 }

@@ -1,13 +1,8 @@
-package com.bootcamp.demo.demo_sb_customer.model.dto;
+package com.bootcamp.sbex2.bc_forum.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
 import lombok.Getter;
 
-// ! Data Transfer Object
-// This DTO is for deserialization (JSON -> OBJECT)
 @Getter
-@Builder
 public class UserDto {
   private Long id;
   private String name;
@@ -19,8 +14,7 @@ public class UserDto {
   private Company company;
 
   @Getter
-  @Builder
-  public static class Address {
+  public class Address{
     private String street;
     private String suite;
     private String city;
@@ -28,18 +22,14 @@ public class UserDto {
     private Geo geo;
 
     @Getter
-    @Builder
-    public static class Geo {
-      @JsonProperty(value = "lat")
-      private String latitude;
-      @JsonProperty(value = "lng")
-      private String longitude;
+    public class Geo{
+      private String lat;
+      private String lng;
     }
   }
-
+  
   @Getter
-  @Builder
-  public static class Company {
+  public class Company{
     private String name;
     private String catchPhrase;
     private String bs;
