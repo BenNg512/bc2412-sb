@@ -25,6 +25,7 @@ public class CustomerController implements CustomerOperation {
 
   @Override
   public ApiResp<CustomerEntity> createCustomer(CustomerEntity customerEntity) {
+    System.out.println("createCustomer: customerEntity=" + customerEntity);
     CustomerEntity serviceResult =
         this.customerService.createCustomer(customerEntity);
     return ApiResp.<CustomerEntity>builder() //

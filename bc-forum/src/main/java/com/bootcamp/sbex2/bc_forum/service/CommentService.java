@@ -4,5 +4,6 @@ import java.util.List;
 import com.bootcamp.sbex2.bc_forum.model.dto.CommentDto;
 
 public interface CommentService {
-  List <CommentDto> getAllComments();
+  List<CommentDto> getAllComments();
+  List<CommentDto> fetchAndSaveComments();
 }

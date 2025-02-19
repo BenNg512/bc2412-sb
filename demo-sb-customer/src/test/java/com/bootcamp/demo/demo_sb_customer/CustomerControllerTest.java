@@ -1,6 +1,9 @@
 package com.bootcamp.demo.demo_sb_customer;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +36,7 @@ class CustomerControllerTest {
   // ! @WebMvcTest inject MockMvc Bean into context
   @Autowired
   private MockMvc mockMvc; // pretend Postman
-
+  
   @Test
   void testGetAllCustomers() throws Exception {
     // Mock behavior for the mock bean
@@ -59,15 +62,17 @@ class CustomerControllerTest {
         .andExpect(jsonPath("$.message").value("Success."))
         .andExpect(jsonPath("$.data[0].name").value("testname1"))
         .andExpect(jsonPath("$.data[0].email").value("test123@gmail.com"));
-
+    
     // Approach 2
     String json = result.andReturn().getResponse().getContentAsString();
 
     ApiResp<List<CustomerEntity>> customerEntityArray = new ObjectMapper()
         .readValue(json, new TypeReference<ApiResp<List<CustomerEntity>>>() {});
 
-    MatcherAssert.assertThat(customerEntityArray.getCode(), Matchers.is("000000"));
-    MatcherAssert.assertThat(customerEntityArray.getMessage(), Matchers.is("Success."));
+    MatcherAssert.assertThat(customerEntityArray.getCode(),
+        Matchers.is("000000"));
+    MatcherAssert.assertThat(customerEntityArray.getMessage(),
+        Matchers.is("Success."));
 
     List<CustomerEntity> customerEntities = customerEntityArray.getData();
 
@@ -78,7 +83,42 @@ class CustomerControllerTest {
   }
 
   @Test
-  void testCreateCustomer() {
+  void testCreateCustomer() throws Exception {
+    //! Mock Behavior (Pass Mary, return John)
+    CustomerEntity customerEntity = CustomerEntity.builder()
+        .email("john@gmail.com").name("John Wong").id(10L).build();
 
+    CustomerEntity customerEntityRequest = CustomerEntity.builder()
+        .email("mary@gmail.com").name("Mary Chan").id(11L).build();
+
+    Mockito.when(customerService.createCustomer(customerEntityRequest))
+        .thenReturn(customerEntity);
+
+    // ! Prepare Requst Body Json (Mary)
+    // Serialization
+    String requestBodyJson =
+        new ObjectMapper().writeValueAsString(customerEntityRequest);
+
+    ResultActions result = mockMvc
+        .perform(post("/customer").contentType(MediaType.APPLICATION_JSON_VALUE)
+            .content(requestBodyJson))
+        .andExpect(status().isCreated())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+    // ! Get Response, extract response data to validate
+    String json = result.andReturn().getResponse().getContentAsString();
+
+    // Deserialization
+    // ! KEY
+    ApiResp<CustomerEntity> apiResp = new ObjectMapper().readValue(json,
+        new TypeReference<ApiResp<CustomerEntity>>() {});
+
+    MatcherAssert.assertThat(apiResp.getCode(), Matchers.is("000000"));
+    MatcherAssert.assertThat(apiResp.getMessage(), Matchers.is("Success."));
+
+    CustomerEntity responseData = apiResp.getData();
+    MatcherAssert.assertThat(responseData.getName(), Matchers.is("John Wong"));
+
+    verify(customerService, times(1)).createCustomer(customerEntityRequest);
   }
 }

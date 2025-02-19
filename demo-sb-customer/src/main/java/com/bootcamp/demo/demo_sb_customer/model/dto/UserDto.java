@@ -3,11 +3,13 @@ package com.bootcamp.demo.demo_sb_customer.model.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 // ! Data Transfer Object
 // This DTO is for deserialization (JSON -> OBJECT)
 @Getter
 @Builder
+@ToString
 public class UserDto {
   private Long id;
   private String name;

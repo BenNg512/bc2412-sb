@@ -5,5 +5,6 @@ import com.bootcamp.sbex2.bc_forum.model.dto.UserDto;
 
 public interface UserService {
   List<UserDto> getAllUsers();
+  List<UserDto> fetchAndSaveAllUsers();
   
 }

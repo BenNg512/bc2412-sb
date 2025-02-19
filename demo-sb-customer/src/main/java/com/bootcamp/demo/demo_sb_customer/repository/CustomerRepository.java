@@ -1,5 +1,6 @@
 package com.bootcamp.demo.demo_sb_customer.repository;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.bootcamp.demo.demo_sb_customer.entity.CustomerEntity;
@@ -14,4 +15,14 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
   // findAll()
   // findById()
   // deleteById()
+  // .. etc
+
+  // controller -> service -> 
+  // how about return List?
+  List<CustomerEntity> findByName(String name);
+
+  // Support both and & or
+  List<CustomerEntity> findByNameAndEmail(String name, String email);
+
+  
 }

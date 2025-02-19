@@ -2,12 +2,12 @@ package com.bootcamp.sbex2.bc_forum.codewave;
 
 public enum SysCode {
   OK("000000", "Success."),
+  CREATED("000000", "Create Success."),
   USER_NOT_FOUND("1", "User not found."),
   INVALID_INPUT("2", "Invalid input."),
   REST_ERROR("3", "RestTemplate Error - JsonPlaceHolder"),
-  
-  // Pre-handled Runtime Exception
-  RTE_NPE("999999", "Null Pointer Exception."),;
+  RTE_NPE("999999", "Null Pointer Exception."), 
+  ;
 
   private final String code;
   private final String message;

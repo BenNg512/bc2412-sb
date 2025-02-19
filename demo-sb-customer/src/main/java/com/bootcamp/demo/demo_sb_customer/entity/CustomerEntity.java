@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 // ! Spring: Convention Over Configuration
 
@@ -24,6 +25,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@EqualsAndHashCode
+@ToString
 public class CustomerEntity {
   @Id // PK
   @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment

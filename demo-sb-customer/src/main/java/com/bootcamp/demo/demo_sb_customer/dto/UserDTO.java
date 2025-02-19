@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 // Features of DTO
@@ -14,6 +15,7 @@ import lombok.Setter;
 @Builder
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
   private Long id;
   private String name;
@@ -25,6 +27,7 @@ public class UserDTO {
   @Builder
   @Setter
   @AllArgsConstructor
+  @NoArgsConstructor
   public static class Address {
     private String street;
     private String suite;
@@ -36,6 +39,7 @@ public class UserDTO {
     @Builder
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Geo {
       @JsonProperty(value = "x")
       private String latitude;

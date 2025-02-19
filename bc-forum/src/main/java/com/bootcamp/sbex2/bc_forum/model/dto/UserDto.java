@@ -25,6 +25,10 @@ public class UserDto {
     public class Geo{
       private String lat;
       private String lng;
+      public String getLongitude() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getLongitude'");
+      }
     }
   }
   

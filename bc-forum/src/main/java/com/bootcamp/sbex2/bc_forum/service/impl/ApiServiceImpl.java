@@ -11,7 +11,7 @@ import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
 import com.bootcamp.sbex2.bc_forum.endpoint.ApiEndpoint;
 
 @Service
-public class ApiService {
+public class ApiServiceImpl {
 
 @Autowired
   private RestTemplate restTemplate;
@@ -24,11 +24,11 @@ public class ApiService {
     String postsUrl = ApiEndpoint.POSTS.getUrl(domain);
     String commentsUrl = ApiEndpoint.COMMENTS.getUrl(domain);
 
-    UserDTO[] usersArray = restTemplate.getForObject(usersUrl, UserDTO[].class);
+    UserDTO[] usersArray = this.restTemplate.getForObject(usersUrl, UserDTO[].class);
       List<UserDTO> users = Arrays.asList(usersArray);
-    UserDTO.Post[] postsArray = restTemplate.getForObject(postsUrl, UserDTO.Post[].class);
+    UserDTO.Post[] postsArray = this.restTemplate.getForObject(postsUrl, UserDTO.Post[].class);
       List<UserDTO.Post> posts = Arrays.asList(postsArray);
-    UserDTO.Post.Comment[] commentsArray = restTemplate.getForObject(commentsUrl, UserDTO.Post.Comment[].class);
+    UserDTO.Post.Comment[] commentsArray = this.restTemplate.getForObject(commentsUrl, UserDTO.Post.Comment[].class);
       List<UserDTO.Post.Comment> comments = Arrays.asList(commentsArray);
 
     posts.forEach(post -> {
@@ -56,8 +56,6 @@ public class ApiService {
       .findFirst()
       .orElse(null);
     return user;
-    
-    
   }
 
 }
