@@ -11,10 +11,10 @@ import com.bootcamp.sbex2.bc_forum.model.dto.UserDto;
 public interface UserOperation {
   @GetMapping(value = "/users")
   @ResponseStatus(HttpStatus.OK)
-  public List<UserDto> getAllUsers();
+  public ApiResp<List<UserDto>> getAllUsers();
 
   @PostMapping(value = "/users")
   @ResponseStatus(HttpStatus.CREATED)
-  public ApiResp<Void> fetchAndSaveUsers();
+  public ApiResp<List<UserDto>> fetchAndSaveUsers();
 
 }

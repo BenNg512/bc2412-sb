@@ -16,7 +16,7 @@ public interface CommentOperation {
 
   @PostMapping(value = "/comments")
   @ResponseStatus(HttpStatus.CREATED) // 201
-  public ApiResp<Void> fetchAndSaveComments();
+  public ApiResp<List<CommentDto>> fetchAndSaveComments();
 }
 
 

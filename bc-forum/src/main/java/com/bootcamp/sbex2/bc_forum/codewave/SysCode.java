@@ -6,6 +6,8 @@ public enum SysCode {
   USER_NOT_FOUND("1", "User not found."),
   INVALID_INPUT("2", "Invalid input."),
   REST_ERROR("3", "RestTemplate Error - JsonPlaceHolder"),
+  API_UNAVAILABLE("999998", "Json PlaceHolder API Unavailable."),
+  DATABASE_CONNECTION_ERROR("999999", "Database Connection Failed."),
   RTE_NPE("999999", "Null Pointer Exception."), 
   ;
 

@@ -16,15 +16,18 @@ public class PostController implements PostOperation {
 
   // http://localhost:8005/jsonplaceholder/posts
   @Override
-  public List<PostDto> getAllPosts() {
-    return this.postService.getAllPosts();
+  public ApiResp<List<PostDto>> getAllPosts() {
+    return ApiResp.<List<PostDto>>builder()
+        .syscode(SysCode.OK)
+        .data(this.postService.getAllPosts())
+        .build();
   }
 
   @Override
-  public ApiResp<Void> fetchAndSavePosts(){
-    this.postService.fetchAndSavePosts();
-    return ApiResp.<Void>builder()
+  public ApiResp<List<PostDto>> fetchAndSavePosts(){
+    return ApiResp.<List<PostDto>>builder()
           .syscode(SysCode.CREATED)
+          .data(this.postService.fetchAndSavePosts())
           .build();
   }
 }

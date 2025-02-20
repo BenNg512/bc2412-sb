@@ -2,6 +2,7 @@ package com.bootcamp.sbex2.bc_forum.controller.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.bootcamp.sbex2.bc_forum.codewave.ApiResp;
@@ -27,11 +28,12 @@ public class ApiController implements ApiOperation {
     @Autowired
     private UserCommentDTOMapper userCommentDTOMapper;
 
-    @Override
+    @GetMapping("/original/all-users-posts-comments")
     public List<UserDTO> getUsers() {
         return apiService.getUsers();
     }
 
+    // http://localhost:8005/users-with-posts-and-comments
     @Override
     public List<UserPostCommentDTO> getUsersPostsComments() {
         List<UserDTO> users = apiService.getUsers();
@@ -39,6 +41,7 @@ public class ApiController implements ApiOperation {
         return userPostCommentDTO;
     } 
 
+    // http://localhost:8005/user/all-comments/?userId=1
     @Override
     public ApiResp<UserCommentDTO> getUserComments(@RequestParam String userId) {
 

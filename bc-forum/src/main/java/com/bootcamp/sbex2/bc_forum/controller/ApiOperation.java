@@ -11,7 +11,7 @@ import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
 import com.bootcamp.sbex2.bc_forum.dto.UserPostCommentDTO;
 
 public interface ApiOperation {
-  @GetMapping("/get-all-data")
+  @GetMapping("/users")
   @ResponseStatus(HttpStatus.OK)
   public List<UserDTO> getUsers();
 
@@ -19,7 +19,7 @@ public interface ApiOperation {
   @ResponseStatus(HttpStatus.OK)
   public List<UserPostCommentDTO> getUsersPostsComments();
 
-  @GetMapping("/user/all-comments/")
+  @GetMapping("/users/comments")
   @ResponseStatus(HttpStatus.OK)
   ApiResp<UserCommentDTO> getUserComments(@RequestParam String userId);
 }

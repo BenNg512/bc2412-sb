@@ -16,18 +16,17 @@ public class CommentController implements CommentOperation {
 
   @Override
   public ApiResp<List<CommentDto>> getAllComments() {
-    List<CommentDto> comments = this.commentService.getAllComments();
     return ApiResp.<List<CommentDto>>builder() //
         .syscode(SysCode.OK) //
-        .data(comments) //
+        .data(this.commentService.getAllComments()) //
         .build();
   }
 
   @Override
-    public ApiResp<Void> fetchAndSaveComments() {
-        this.commentService.fetchAndSaveComments();
-        return ApiResp.<Void>builder()
+    public ApiResp<List<CommentDto>> fetchAndSaveComments() {
+        return ApiResp.<List<CommentDto>>builder()
           .syscode(SysCode.CREATED)
+          .data(this.commentService.getAllComments())
           .build();
     }
 }

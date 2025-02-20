@@ -11,9 +11,9 @@ import com.bootcamp.sbex2.bc_forum.model.dto.PostDto;
 public interface PostOperation {
   @GetMapping(value = "/posts")
   @ResponseStatus(HttpStatus.OK)
-  public List<PostDto> getAllPosts();
+  public ApiResp<List<PostDto>> getAllPosts();
   
   @PostMapping(value = "/posts")
   @ResponseStatus(HttpStatus.CREATED)
-  public ApiResp<Void> fetchAndSavePosts();
+  public ApiResp<List<PostDto>> fetchAndSavePosts();
 }
