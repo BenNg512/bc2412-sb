@@ -1,5 +1,7 @@
-package com.bootcamp.sbex2.bc_forum.dto;
+package com.bootcamp.sbex2.bc_forum.model.dto;
 
+
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +9,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class UserDTO {
+public class UserPostComment {
   private Long id;
   private String name;
   private String username;
@@ -16,10 +18,11 @@ public class UserDTO {
   private String phone;
   private String website;
   private Company company;
+  private List<Post> posts;
 
-  @Builder
   @Getter
   @Setter
+  @Builder
   public static class Address {
     private String street;
     private String suite;
@@ -27,22 +30,43 @@ public class UserDTO {
     private String zipcode;
     private Geo geo;
 
-    @Builder
     @Getter
     @Setter
+    @Builder
     public static class Geo {
       private String lat;
       private String lng;
     }
-  } 
-
-  @Builder
+  }
+  
   @Getter
   @Setter
+  @Builder
   public static class Company {
     private String name;
     private String catchPhrase;
     private String bs;
   }
 
+  @Getter
+  @Setter
+  @Builder
+  public static class Post {
+    private Long userId;
+    private Long id;
+    private String title;
+    private String body;
+    private List<Comment> comments;
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Comment {
+      private Long postId;
+      private Long id;
+      private String name;
+      private String email;
+      private String body;
+    }
+  }
 }

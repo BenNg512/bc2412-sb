@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.bootcamp.sbex2.bc_forum.endpoint.ApiEndpoint;
 import com.bootcamp.sbex2.bc_forum.entity.PostEntity;
 import com.bootcamp.sbex2.bc_forum.entity.map.EntityMapper;
+import com.bootcamp.sbex2.bc_forum.lib.ApiEndpoint;
 import com.bootcamp.sbex2.bc_forum.model.dto.PostDto;
 import com.bootcamp.sbex2.bc_forum.repository.PostRepository;
 import com.bootcamp.sbex2.bc_forum.service.PostService;
@@ -32,7 +32,7 @@ public class PostServiceImpl implements PostService {
 
   @Override
   public List<PostDto> getAllPosts() {
-    String url = ApiEndpoint.POSTS.getUrl(domain);
+    String url = ApiEndpoint.POSTS.httpsBuilder(domain);
 
     List<PostDto> postDtos = Arrays.asList(this.restTemplate.getForObject(url, PostDto[].class));
     return postDtos;

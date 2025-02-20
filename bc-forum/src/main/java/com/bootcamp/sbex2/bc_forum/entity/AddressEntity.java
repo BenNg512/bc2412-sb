@@ -16,6 +16,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "Addresses")
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

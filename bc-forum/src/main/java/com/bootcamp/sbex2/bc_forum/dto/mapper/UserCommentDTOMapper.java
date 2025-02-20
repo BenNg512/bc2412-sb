@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import com.bootcamp.sbex2.bc_forum.dto.UserCommentDTO;
 import com.bootcamp.sbex2.bc_forum.dto.UserCommentDTO.Comment;
-import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
+import com.bootcamp.sbex2.bc_forum.model.dto.UserPostComment;
 
 @Component
 public class UserCommentDTOMapper {
 
-    public static UserCommentDTO map(UserDTO userDTO) {
+    public static UserCommentDTO map(UserPostComment userDTO) {
         return UserCommentDTO.builder()
             .id(userDTO.getId())
             .username(userDTO.getUsername())
@@ -18,14 +18,14 @@ public class UserCommentDTOMapper {
             .build();
     }
 
-    private static List<Comment> toCommentList(List<UserDTO.Post> posts) {
+    private static List<Comment> toCommentList(List<UserPostComment.Post> posts) {
         return posts.stream()
             .flatMap(post -> post.getComments().stream())
             .map(UserCommentDTOMapper::toComment)
             .collect(Collectors.toList());
     }
 
-    private static Comment toComment(UserDTO.Post.Comment commentDTO) {
+    private static Comment toComment(UserPostComment.Post.Comment commentDTO) {
         return Comment.builder()
             .name(commentDTO.getName())
             .email(commentDTO.getEmail())

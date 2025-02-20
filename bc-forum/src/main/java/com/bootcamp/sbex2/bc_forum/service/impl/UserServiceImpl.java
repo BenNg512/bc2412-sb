@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.bootcamp.sbex2.bc_forum.endpoint.ApiEndpoint;
 import com.bootcamp.sbex2.bc_forum.entity.AddressEntity;
 import com.bootcamp.sbex2.bc_forum.entity.CompanyEntity;
 import com.bootcamp.sbex2.bc_forum.entity.GeoEntity;
 import com.bootcamp.sbex2.bc_forum.entity.UserEntity;
 import com.bootcamp.sbex2.bc_forum.entity.map.EntityMapper;
+import com.bootcamp.sbex2.bc_forum.lib.ApiEndpoint;
 import com.bootcamp.sbex2.bc_forum.model.dto.UserDto;
 import com.bootcamp.sbex2.bc_forum.repository.AddressRepository;
 import com.bootcamp.sbex2.bc_forum.repository.CompanyRepository;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<UserDto> getAllUsers() {
-    String url = ApiEndpoint.USERS.getUrl(domain);
+    String url = ApiEndpoint.USERS.httpsBuilder(domain);
 
     UserDto[] results = this.restTemplate.getForObject(url, UserDto[].class);
 

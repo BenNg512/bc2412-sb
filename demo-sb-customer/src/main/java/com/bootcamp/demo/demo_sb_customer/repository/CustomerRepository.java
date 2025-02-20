@@ -2,6 +2,8 @@ package com.bootcamp.demo.demo_sb_customer.repository;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import com.bootcamp.demo.demo_sb_customer.entity.CustomerEntity;
 
@@ -17,12 +19,20 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
   // deleteById()
   // .. etc
 
+  //! JPA Method
   // controller -> service -> 
   // how about return List?
   List<CustomerEntity> findByName(String name);
 
   // Support both and & or
   List<CustomerEntity> findByNameAndEmail(String name, String email);
+  //! JPQL (reference to Entity classes)
+  @Query(value = "select c from CustomerEntity c where c.name = :name", nativeQuery = false)
+  List<CustomerEntity> findByNamebyJPQL(@Param("name") String customerName);
+  //! Native query (reference to tables in database)
+  //! Compile time exception
+  @Query(value = "select c.* from customers c where c.customer_name = :name", nativeQuery = true)
+  List<CustomerEntity> findByNameByNativeQuery(@Param("name") String customerName);
 
-  
+
 }

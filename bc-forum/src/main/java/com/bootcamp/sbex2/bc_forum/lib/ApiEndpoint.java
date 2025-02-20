@@ -1,4 +1,4 @@
-package com.bootcamp.sbex2.bc_forum.endpoint;
+package com.bootcamp.sbex2.bc_forum.lib;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,7 +17,16 @@ public enum ApiEndpoint {
     this.endpoint = endpoint;
   }
 
-  public String getUrl(String domain) {
+  // public String getUrl(String domain) {
+  //   return UriComponentsBuilder.newInstance()
+  //     .scheme("https")
+  //     .host(domain)
+  //     .path(this.endpoint)
+  //     .build()
+  //     .toUriString();
+  // }
+  
+  public String httpsBuilder(String domain) {
     return UriComponentsBuilder.newInstance()
       .scheme("https")
       .host(domain)
@@ -25,4 +34,5 @@ public enum ApiEndpoint {
       .build()
       .toUriString();
   }
+
 }

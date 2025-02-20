@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.bootcamp.sbex2.bc_forum.endpoint.ApiEndpoint;
 import com.bootcamp.sbex2.bc_forum.entity.CommentEntity;
 import com.bootcamp.sbex2.bc_forum.entity.map.EntityMapper;
+import com.bootcamp.sbex2.bc_forum.lib.ApiEndpoint;
 import com.bootcamp.sbex2.bc_forum.model.dto.CommentDto;
 import com.bootcamp.sbex2.bc_forum.repository.CommentRepository;
 import com.bootcamp.sbex2.bc_forum.service.CommentService;
@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
   
   @Override
   public List<CommentDto> getAllComments() {
-  String url = ApiEndpoint.COMMENTS.getUrl(domain);
+  String url = ApiEndpoint.COMMENTS.httpsBuilder(domain);
 
   List<CommentDto> commentDtos = Arrays.asList(this.restTemplate.getForObject(url, CommentDto[].class));
 
