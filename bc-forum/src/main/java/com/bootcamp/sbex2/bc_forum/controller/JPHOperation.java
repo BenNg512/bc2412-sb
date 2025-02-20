@@ -10,7 +10,7 @@ import com.bootcamp.sbex2.bc_forum.dto.UserCommentDTO;
 import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
 import com.bootcamp.sbex2.bc_forum.dto.UserPostCommentDTO;
 
-public interface ApiOperation {
+public interface JPHOperation {
   @GetMapping("/users")
   @ResponseStatus(HttpStatus.OK)
   public List<UserDTO> getUsers();

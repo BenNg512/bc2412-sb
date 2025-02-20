@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
 import com.bootcamp.sbex2.bc_forum.endpoint.ApiEndpoint;
+import com.bootcamp.sbex2.bc_forum.service.JPHService;
 
 @Service
-public class ApiServiceImpl {
+public class JPHServiceImpl implements JPHService {
 
 @Autowired
   private RestTemplate restTemplate;

@@ -7,20 +7,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.bootcamp.sbex2.bc_forum.codewave.ApiResp;
 import com.bootcamp.sbex2.bc_forum.codewave.SysCode;
-import com.bootcamp.sbex2.bc_forum.controller.ApiOperation;
+import com.bootcamp.sbex2.bc_forum.controller.JPHOperation;
 import com.bootcamp.sbex2.bc_forum.dto.UserCommentDTO;
 import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
 import com.bootcamp.sbex2.bc_forum.dto.UserPostCommentDTO;
 import com.bootcamp.sbex2.bc_forum.dto.mapper.UserCommentDTOMapper;
 import com.bootcamp.sbex2.bc_forum.dto.mapper.UserPostCommentDTOMapper;
-import com.bootcamp.sbex2.bc_forum.service.impl.ApiServiceImpl;
+import com.bootcamp.sbex2.bc_forum.service.impl.JPHServiceImpl;
 
 
 @RestController
-public class ApiController implements ApiOperation {
+public class JPHController implements JPHOperation {
 
     @Autowired
-    private ApiServiceImpl apiService;
+    private JPHServiceImpl apiService;
     
     @Autowired
     private UserPostCommentDTOMapper UserPostCommentDTOMapper;

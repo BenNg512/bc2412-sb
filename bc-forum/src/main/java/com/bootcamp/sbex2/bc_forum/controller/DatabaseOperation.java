@@ -8,7 +8,7 @@ import com.bootcamp.sbex2.bc_forum.entity.PostEntity;
 import com.bootcamp.sbex2.bc_forum.entity.UserEntity;
 
 @RequestMapping(value = "/database")
-public interface DatabaseApiOperation {
+public interface DatabaseOperation {
 
   @GetMapping(value = "/comments")
   public List<CommentEntity> getAllComments();

@@ -9,10 +9,10 @@ import com.bootcamp.sbex2.bc_forum.entity.UserEntity;
 import com.bootcamp.sbex2.bc_forum.repository.CommentRepository;
 import com.bootcamp.sbex2.bc_forum.repository.PostRepository;
 import com.bootcamp.sbex2.bc_forum.repository.UserRepository;
-import com.bootcamp.sbex2.bc_forum.service.DatabaseApiService;
+import com.bootcamp.sbex2.bc_forum.service.DatabaseService;
 
 @Service
-public class DatabaseApiServiceImpl implements DatabaseApiService {
+public class DatabaseServiceImpl implements DatabaseService {
   @Autowired
   CommentRepository commentRepository;
   @Autowired
