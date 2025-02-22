@@ -3,7 +3,9 @@ package com.bootcamp.sbex2.bc_forum.codewave;
 public enum SysCode {
   OK("000000", "Success."),
   CREATED("000000", "Create Success."),
-  USER_NOT_FOUND("1", "User not found."),
+  USER_NOT_FOUND("1", "User Not Found."),
+  POST_NOT_FOUND("100001","Post Not Found"), 
+  COMMENT_NOT_FOUND("100002","Comment Not Found"), 
   INVALID_INPUT("2", "Invalid input."),
   REST_ERROR("3", "RestTemplate Error - JsonPlaceHolder"),
   API_UNAVAILABLE("999998", "Json PlaceHolder API Unavailable."),

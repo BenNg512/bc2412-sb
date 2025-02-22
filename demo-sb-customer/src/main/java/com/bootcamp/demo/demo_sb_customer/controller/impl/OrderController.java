@@ -14,11 +14,10 @@ public class OrderController implements OrderOperation {
   private OrderService orderService;
 
   @Override
-  public ApiResp<OrderEntity> createOrder(Long customerId,
-      OrderEntity orderEntity) {
-    OrderEntity serviceResult =
-        this.orderService.createOrder(customerId, orderEntity);
-    return ApiResp.<OrderEntity>builder().syscode(SysCode.OK)
+  public ApiResp<OrderEntity> createOrder(Long customerId, OrderEntity orderEntity) {
+    OrderEntity serviceResult = this.orderService.createOrder(customerId, orderEntity);
+    return ApiResp.<OrderEntity>builder()
+        .syscode(SysCode.OK)
         .data(serviceResult).build();
   }
 }

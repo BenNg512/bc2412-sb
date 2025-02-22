@@ -27,19 +27,25 @@ public class JPHController implements JPHOperation {
     @Autowired
     private UserCommentDTOMapper userCommentDTOMapper;
 
-    public List<UserPostComment> getUsers() {
-        return apiService.getUsers();
+    public ApiResp<List<UserPostComment>> getUsers() {
+        return ApiResp.<List<UserPostComment>> builder()
+            .syscode(SysCode.OK)
+            .data(apiService.getUsers())
+            .build();
     }
 
-    // http://localhost:8005/users-with-posts-and-comments
+    // http://localhost:8005/jph/users/posts/comments
     @Override
-    public List<UserPostCommentDTO> getUsersPostsComments() {
+    public ApiResp<List<UserPostCommentDTO>> getUsersPostsComments() {
         List<UserPostComment> users = apiService.getUsers();
         List<UserPostCommentDTO> userPostCommentDTO = UserPostCommentDTOMapper.map(users);
-        return userPostCommentDTO;
+        return ApiResp.<List<UserPostCommentDTO>> builder()
+            .syscode(SysCode.OK)
+            .data(userPostCommentDTO)
+            .build();
     } 
 
-    // http://localhost:8005/user/all-comments/?userId=1
+    // http://localhost:8005/jph/users/comments?userId=1
     @Override
     public ApiResp<UserCommentDTO> getUserComments(@RequestParam String userId) {
 
@@ -48,8 +54,8 @@ public class JPHController implements JPHOperation {
             userLongId = Long.valueOf(userId);
         } catch (NumberFormatException e) {
             return ApiResp.<UserCommentDTO>builder()
-                .syscode(SysCode.INVALID_INPUT)
-                .build();
+            .syscode(SysCode.INVALID_INPUT)
+            .build();
         } 
 
         List<UserPostComment> users = apiService.getUsers();
@@ -57,8 +63,8 @@ public class JPHController implements JPHOperation {
             .anyMatch(user -> user.getId().equals(userLongId));
         if (!userExist) {
             return ApiResp.<UserCommentDTO>builder()
-                .syscode(SysCode.USER_NOT_FOUND)
-                .build();
+            .syscode(SysCode.USER_NOT_FOUND)
+            .build();
         }
 
         UserPostComment user = apiService.getUserComments(userLongId);

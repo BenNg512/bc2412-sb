@@ -3,6 +3,8 @@ package com.bootcamp.sbex2.bc_forum.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
 import com.bootcamp.sbex2.bc_forum.entity.AddressEntity;
 import com.bootcamp.sbex2.bc_forum.entity.CommentEntity;
@@ -36,15 +38,49 @@ public class DatabaseServiceImpl implements DatabaseService {
   @Autowired
   EntityMapper entityMapper;
   
-
+  @Override
   public List<CommentEntity> getAllComments(){
       return commentRepository.findAllByOrderByIdAsc();
     }
-  public List<PostEntity> getAllPosts(){
-      return postRepository.findAll();
+  @Override
+  public List<CommentEntity> getCommentsByPostId(Integer postId){
+      return commentRepository.findAllByPostId(postId);
     }
+
+  @Override
+  public CommentEntity addCommentToPost(Long postId, CommentEntity comment) {
+      comment.setPostId(postId);
+      comment.setId(this.commentRepository.findMaxCommentId()+1);
+    return commentRepository.save(comment);
+  }
+
+  @Override
+  public CommentEntity patchComment(@RequestParam Long commentId, @RequestBody CommentEntity partialUpdate){
+    if (commentRepository.findById(commentId).isPresent()) {
+        CommentEntity comment = commentRepository.findById(commentId).get();
+        if (partialUpdate.getName() != null) {
+            comment.setName(partialUpdate.getName());
+        }
+        if (partialUpdate.getEmail() != null) {
+            comment.setEmail(partialUpdate.getEmail());
+        }
+        if (partialUpdate.getBody() != null) {
+            comment.setBody(partialUpdate.getBody());
+        }
+        return commentRepository.save(comment);
+    } else {
+        throw new RuntimeException("Comment with id " + commentId + " not found");
+    }
+  }
+
+  @Override
+  public List<PostEntity> getAllPosts(){
+      return postRepository.findAllByOrderByIdAsc();
+    }
+
+  @Override
   public List<UserEntity> getAllUsers(){
-      return userRepository.findAll();
+      return userRepository.findAllByOrderByIdAsc();
     }
 
   @Override

@@ -10,7 +10,7 @@ import com.bootcamp.sbex2.bc_forum.model.dto.UserPostComment;
 @Component
 public class UserCommentDTOMapper {
 
-    public static UserCommentDTO map(UserPostComment userDTO) {
+    public UserCommentDTO map(UserPostComment userDTO) {
         return UserCommentDTO.builder()
             .id(userDTO.getId())
             .username(userDTO.getUsername())

@@ -25,4 +25,5 @@ public class PostEntity {
     Long userId;
     String title;
     String body;
+
 }

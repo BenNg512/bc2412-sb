@@ -42,7 +42,7 @@ public class CustomerController implements CustomerOperation {
   // http://localhost:8100/findBen
   @GetMapping("/findBen")
   public List<CustomerEntity> findBen(){
-    return this.customerRepository.findByNamebyJPQL("Ben");
+    return this.customerRepository.findByNameByJPQL("Ben");
   }
 
   // http://localhost:8100/findCustomer?name=Ben

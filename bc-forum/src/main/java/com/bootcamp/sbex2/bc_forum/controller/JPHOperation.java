@@ -13,15 +13,18 @@ import com.bootcamp.sbex2.bc_forum.model.dto.UserPostComment;
 
 @RequestMapping("/jph")
 public interface JPHOperation {
+  // http://localhost:8005/jph/users
   @GetMapping("/users")
   @ResponseStatus(HttpStatus.OK)
-  public List<UserPostComment> getUsers();
+  public ApiResp<List<UserPostComment>> getUsers();
 
+  // http://localhost:8005/jph/users/posts/comments
   @GetMapping("/users/posts/comments")
   @ResponseStatus(HttpStatus.OK)
-  public List<UserPostCommentDTO> getUsersPostsComments();
+  public ApiResp<List<UserPostCommentDTO>> getUsersPostsComments();
 
+  // http://localhost:8005/jph/users/comments?userId=1
   @GetMapping("/users/comments")
   @ResponseStatus(HttpStatus.OK)
-  ApiResp<UserCommentDTO> getUserComments(@RequestParam String userId);
+  public ApiResp<UserCommentDTO> getUserComments(@RequestParam String userId);
 }

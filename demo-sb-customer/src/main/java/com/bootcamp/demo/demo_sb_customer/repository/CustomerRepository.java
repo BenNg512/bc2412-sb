@@ -28,7 +28,7 @@ public interface CustomerRepository extends JpaRepository<CustomerEntity, Long> 
   List<CustomerEntity> findByNameAndEmail(String name, String email);
   //! JPQL (reference to Entity classes)
   @Query(value = "select c from CustomerEntity c where c.name = :name", nativeQuery = false)
-  List<CustomerEntity> findByNamebyJPQL(@Param("name") String customerName);
+  List<CustomerEntity> findByNameByJPQL(@Param("name") String customerName);
   //! Native query (reference to tables in database)
   //! Compile time exception
   @Query(value = "select c.* from customers c where c.customer_name = :name", nativeQuery = true)

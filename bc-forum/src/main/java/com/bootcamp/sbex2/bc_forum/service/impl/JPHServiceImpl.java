@@ -25,11 +25,14 @@ public class JPHServiceImpl implements JPHService {
     String postsUrl = ApiEndpoint.POSTS.httpsBuilder(domain);
     String commentsUrl = ApiEndpoint.COMMENTS.httpsBuilder(domain);
 
-    UserPostComment[] usersArray = this.restTemplate.getForObject(usersUrl, UserPostComment[].class);
+    UserPostComment[] usersArray = 
+      this.restTemplate.getForObject(usersUrl, UserPostComment[].class);
       List<UserPostComment> users = Arrays.asList(usersArray);
-    UserPostComment.Post[] postsArray = this.restTemplate.getForObject(postsUrl, UserPostComment.Post[].class);
+    UserPostComment.Post[] postsArray = 
+      this.restTemplate.getForObject(postsUrl, UserPostComment.Post[].class);
       List<UserPostComment.Post> posts = Arrays.asList(postsArray);
-    UserPostComment.Post.Comment[] commentsArray = this.restTemplate.getForObject(commentsUrl, UserPostComment.Post.Comment[].class);
+    UserPostComment.Post.Comment[] commentsArray = 
+      this.restTemplate.getForObject(commentsUrl, UserPostComment.Post.Comment[].class);
       List<UserPostComment.Post.Comment> comments = Arrays.asList(commentsArray);
 
     posts.forEach(post -> {
