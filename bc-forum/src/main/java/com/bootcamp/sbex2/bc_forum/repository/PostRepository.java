@@ -16,4 +16,5 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
   @Query("SELECT COALESCE(MAX(p.id), 0) FROM PostEntity p")
     Long findMaxPostId();
   PostEntity deleteById(Integer id);
+  List<PostEntity> deleteByUserId(Integer userId);
 }

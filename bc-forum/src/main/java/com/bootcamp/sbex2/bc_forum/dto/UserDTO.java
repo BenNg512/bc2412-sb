@@ -1,12 +1,16 @@
 package com.bootcamp.sbex2.bc_forum.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
   private Long id;
   private String name;
@@ -20,6 +24,8 @@ public class UserDTO {
   @Builder
   @Getter
   @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Address {
     private String street;
     private String suite;
@@ -30,6 +36,8 @@ public class UserDTO {
     @Builder
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Geo {
       private String lat;
       private String lng;
@@ -39,6 +47,8 @@ public class UserDTO {
   @Builder
   @Getter
   @Setter
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Company {
     private String name;
     private String catchPhrase;

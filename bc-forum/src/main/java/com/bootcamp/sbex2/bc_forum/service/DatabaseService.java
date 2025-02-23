@@ -17,4 +17,7 @@ public interface DatabaseService {
   void deletePostAndComments(Long postId);
   List<UserEntity> getAllUsers();
   List<UserDTO> getAllUserDTOs();
+  UserDTO getUserById(Long userId);
+  UserDTO updateUser(Long userId, UserDTO updatedUser);
+
 }

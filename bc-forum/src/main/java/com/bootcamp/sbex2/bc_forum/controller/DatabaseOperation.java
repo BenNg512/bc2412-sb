@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,49 +22,63 @@ import com.bootcamp.sbex2.bc_forum.entity.UserEntity;
 public interface DatabaseOperation {
 
   @GetMapping(value = "/comments")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<CommentEntity>> getAllComments();
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<List<CommentEntity>> getAllComments();
 
   // http://localhost:8005/database/comments/id?postId=100
   @GetMapping(value = "/comments/id")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<CommentEntity>> getCommentById(@RequestParam Long postId);
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<List<CommentEntity>> getCommentById(@RequestParam Long postId);
 
   // http://localhost:8005/database/comments?postId=1
   @PostMapping(value = "/comments")
-  @ResponseStatus(HttpStatus.CREATED)
-  public ApiResp<CommentEntity> addComment(@RequestParam Long postId, 
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResp<CommentEntity> addComment(@RequestParam Long postId, 
                                           @RequestBody CommentEntity comment);
 
   // http://localhost:8005/database/comments?commentId=1
   @PatchMapping(value = "/comments")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<CommentEntity> patchComment(@RequestParam Long commentId, 
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<CommentEntity> patchComment(@RequestParam Long commentId, 
                                             @RequestBody CommentEntity comment);
-  
+
+  // http://localhost:8005/database/posts
   @GetMapping(value = "/posts")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<PostEntity>> getAllPosts();
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<List<PostEntity>> getAllPosts();
 
   // http://localhost:8005/database/users/2/posts
   @GetMapping("/users/{userId}/posts")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<PostEntity>> getAllPostsByUserId(@PathVariable("userId") Long userId);
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<List<PostEntity>> getAllPostsByUserId(@PathVariable("userId") Long userId);
 
+  // http://localhost:8005/database/users/2/posts
   @PostMapping("/users/{userId}/posts")
-  @ResponseStatus(HttpStatus.CREATED)
-  public ApiResp<PostEntity> addPost(@PathVariable("userId") Long userId, PostEntity postEntity);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResp<PostEntity> addPost(@PathVariable("userId") Long userId, PostEntity postEntity);
   
+  // http://localhost:8005/database/posts/1
   @DeleteMapping("/posts/{postId}")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<PostEntity> deletePost(@PathVariable("postId") Long postId);
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<PostEntity> deletePost(@PathVariable("postId") Long postId);
 
   @GetMapping(value = "/v0//users")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<UserEntity>> getAllUsers();
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<List<UserEntity>> getAllUsers();
 
+  // http://localhost:8005/database/users
   @GetMapping(value = "/users")
-  @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<UserDTO>> getAllUserDTOs();
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<List<UserDTO>> getAllUserDTOs();
+
+  // http://localhost:8005/database/user?userId=1
+  @GetMapping(value = "/user")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResp<UserDTO> getUserById(@RequestParam Long userId);
+
+  // http://localhost:8005/database/users/1
+  @PutMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO updateUser(@PathVariable("id") Long userId, @RequestBody UserDTO updatedUser);
   
 }

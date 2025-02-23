@@ -136,5 +136,23 @@ public class DatabaseController implements DatabaseOperation {
         .data(databaseApiService.getAllUserDTOs())
         .build();
   }
+
+  @Override
+  public ApiResp<UserDTO> getUserById(@RequestParam Long userId){
+    if (!this.userRepository.findById(userId).isPresent())
+      return ApiResp.<UserDTO>builder()
+          .syscode(SysCode.USER_NOT_FOUND)
+          .build();
+    else
+      return ApiResp.<UserDTO>builder()
+          .syscode(SysCode.OK)
+          .data(databaseApiService.getUserById(userId))
+          .build();
+  }
+
+  @Override
+  public UserDTO updateUser(@PathVariable("id") Long userId, @RequestBody UserDTO updatedUser) {
+    return databaseApiService.updateUser(userId, updatedUser);
+  }
   
 }

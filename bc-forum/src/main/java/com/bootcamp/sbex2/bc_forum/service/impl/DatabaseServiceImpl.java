@@ -115,5 +115,46 @@ public class DatabaseServiceImpl implements DatabaseService {
         companyEntities, 
         geoEntities);
   }
-  
+
+  @Override
+  public UserDTO getUserById(Long userId){
+    return getAllUserDTOs().stream()
+        .filter(user -> user.getId()
+        .equals(userId))
+        .findFirst()
+        .orElse(null);
+  }
+
+  @Override
+  @Transactional
+    public UserDTO updateUser(Long userId, UserDTO updatedUser) {
+    List<PostEntity> posts = postRepository.findAllByUserId(userId.intValue());
+      for (PostEntity post : posts) {
+      commentRepository.deleteByPostId(post.getId());
+      }
+      postRepository.deleteByUserId(userId.intValue());
+
+// Update user information
+    UserEntity existingUser = userRepository.findById(userId)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+        existingUser.setName(updatedUser.getName());
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPhone(updatedUser.getPhone());
+        existingUser.setWebsite(updatedUser.getWebsite());
+
+// Update address information
+        AddressEntity address = addressRepository.findByUserId(userId);
+        address.setStreet(updatedUser.getAddress().getStreet());
+        address.setSuite(updatedUser.getAddress().getSuite());
+        address.setCity(updatedUser.getAddress().getCity());
+        address.setZipcode(updatedUser.getAddress().getZipcode());
+// Update geo information
+        GeoEntity geo = geoRepository.findById(address.getId())
+            .orElseThrow(() -> new RuntimeException("Geo not found"));
+        geo.setLatitude(Double.valueOf(updatedUser.getAddress().getGeo().getLat()));
+        geo.setLongitude(Double.valueOf(updatedUser.getAddress().getGeo().getLat()));
+
+        return updatedUser;
+}
 }
