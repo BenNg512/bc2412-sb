@@ -2,6 +2,7 @@ package com.bootcamp.sbex2.bc_forum.controller.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +15,8 @@ import com.bootcamp.sbex2.bc_forum.entity.PostEntity;
 import com.bootcamp.sbex2.bc_forum.entity.UserEntity;
 import com.bootcamp.sbex2.bc_forum.repository.CommentRepository;
 import com.bootcamp.sbex2.bc_forum.repository.PostRepository;
+import com.bootcamp.sbex2.bc_forum.repository.UserRepository;
 import com.bootcamp.sbex2.bc_forum.service.DatabaseService;
-import jakarta.websocket.server.PathParam;
 
 @RestController
 public class DatabaseController implements DatabaseOperation {
@@ -25,6 +26,8 @@ public class DatabaseController implements DatabaseOperation {
   CommentRepository commentRepository;
   @Autowired
   PostRepository postRepository;
+  @Autowired
+  UserRepository userRepository;
 
   @Override
   public ApiResp<List<CommentEntity>> getAllComments() {
@@ -35,13 +38,12 @@ public class DatabaseController implements DatabaseOperation {
   }
 
   @Override
-  public ApiResp<List<CommentEntity>> getCommentById(@RequestParam Integer postId){
+  public ApiResp<List<CommentEntity>> getCommentById(@RequestParam Long postId){
     if (!this.postRepository.findById(postId).isPresent())
       return ApiResp.<List<CommentEntity>>builder()
           .syscode(SysCode.POST_NOT_FOUND)
           .build();
-    // throw BusinessException.of(SysCode.COMMENT_NOT_FOUND);
-      else 
+    else 
       return ApiResp.<List<CommentEntity>>builder()
           .syscode(SysCode.OK)
           .data(databaseApiService.getCommentsByPostId(postId))
@@ -64,14 +66,14 @@ public class DatabaseController implements DatabaseOperation {
   @Override
   public ApiResp<CommentEntity> patchComment(@RequestParam Long commentId, @RequestBody CommentEntity comment){
     if (!this.commentRepository.findById(commentId).isPresent())
-    return ApiResp.<CommentEntity>builder()
-        .syscode(SysCode.POST_NOT_FOUND)
-        .build();
-  else
-    return ApiResp.<CommentEntity>builder()
-        .syscode(SysCode.CREATED)
-        .data(databaseApiService.patchComment(commentId, comment))
-        .build();
+      return ApiResp.<CommentEntity>builder()
+          .syscode(SysCode.POST_NOT_FOUND)
+          .build();
+    else
+      return ApiResp.<CommentEntity>builder()
+          .syscode(SysCode.CREATED)
+          .data(databaseApiService.patchComment(commentId, comment))
+          .build();
   }
 
   @Override
@@ -83,13 +85,41 @@ public class DatabaseController implements DatabaseOperation {
   }
 
   @Override
-  public ApiResp<List<PostEntity>> getAllPostsByUserId(Integer userId){
+  public ApiResp<List<PostEntity>> getAllPostsByUserId(Long userId){
+    if (!this.userRepository.findById(userId).isPresent())
+    return ApiResp.<List<PostEntity>>builder()
+        .syscode(SysCode.USER_NOT_FOUND)
+        .build();
     return ApiResp.<List<PostEntity>>builder()
         .syscode(SysCode.OK)
         .data(databaseApiService.getPostsByUserId(userId))
         .build();
   }
 
+  @Override
+  public ApiResp<PostEntity> addPost(Long userId, PostEntity postEntity){
+    if (!this.userRepository.findById(userId).isPresent())
+    return ApiResp.<PostEntity>builder()
+        .syscode(SysCode.USER_NOT_FOUND)
+        .build();
+    return ApiResp.<PostEntity>builder()
+        .syscode(SysCode.OK)
+        .data(this.databaseApiService.addPostByUserId(userId, postEntity))
+        .build();
+  }
+
+  @Override
+  public ApiResp<PostEntity> deletePost(@PathVariable("postId") Long postId){
+    if (!this.postRepository.findById(postId).isPresent())
+      return ApiResp.<PostEntity>builder()
+          .syscode(SysCode.POST_NOT_FOUND)
+          .build();
+    else
+      this.databaseApiService.deletePostAndComments(postId);
+      return ApiResp.<PostEntity>builder()
+          .syscode(SysCode.OK)
+          .build();
+  }
 
   @Override
   public ApiResp<List<UserEntity>> getAllUsers() {

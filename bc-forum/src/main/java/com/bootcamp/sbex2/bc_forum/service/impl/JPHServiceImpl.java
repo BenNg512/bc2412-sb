@@ -20,6 +20,7 @@ public class JPHServiceImpl implements JPHService {
   @Value("${api.jsonplaceholder.domain}")
   private String domain;
 
+  @Override
   public List<UserPostComment> getUsers() {
     String usersUrl = ApiEndpoint.USERS.httpsBuilder(domain);
     String postsUrl = ApiEndpoint.POSTS.httpsBuilder(domain);
@@ -53,6 +54,7 @@ public class JPHServiceImpl implements JPHService {
     return users;
   }
 
+  @Override
   public UserPostComment getUserComments(Long userId) {
     List<UserPostComment> users = this.getUsers();
     UserPostComment user = users.stream()

@@ -41,7 +41,7 @@ public class PostServiceImpl implements PostService {
   @Override
   public List<PostDto> fetchAndSavePosts() {
     List<PostDto> postDtos = this.getAllPosts();
-    //this.postRepository.deleteAll();
+    this.postRepository.deleteAll();
 
     postDtos.stream().forEach(e -> {
         PostEntity postEntity = entityMapper.map(e);

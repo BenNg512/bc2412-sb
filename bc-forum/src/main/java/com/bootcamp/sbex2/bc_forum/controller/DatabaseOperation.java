@@ -2,6 +2,7 @@ package com.bootcamp.sbex2.bc_forum.controller;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,7 @@ public interface DatabaseOperation {
   // http://localhost:8005/database/comments/id?postId=100
   @GetMapping(value = "/comments/id")
   @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<CommentEntity>> getCommentById(@RequestParam Integer postId);
+  public ApiResp<List<CommentEntity>> getCommentById(@RequestParam Long postId);
 
   // http://localhost:8005/database/comments?postId=1
   @PostMapping(value = "/comments")
@@ -47,8 +48,16 @@ public interface DatabaseOperation {
   // http://localhost:8005/database/users/2/posts
   @GetMapping("/users/{userId}/posts")
   @ResponseStatus(HttpStatus.OK)
-  public ApiResp<List<PostEntity>> getAllPostsByUserId(@PathVariable("userId") Integer userId);
+  public ApiResp<List<PostEntity>> getAllPostsByUserId(@PathVariable("userId") Long userId);
+
+  @PostMapping("/users/{userId}/posts")
+  @ResponseStatus(HttpStatus.CREATED)
+  public ApiResp<PostEntity> addPost(@PathVariable("userId") Long userId, PostEntity postEntity);
   
+  @DeleteMapping("/posts/{postId}")
+  @ResponseStatus(HttpStatus.OK)
+  public ApiResp<PostEntity> deletePost(@PathVariable("postId") Long postId);
+
   @GetMapping(value = "/v0//users")
   @ResponseStatus(HttpStatus.OK)
   public ApiResp<List<UserEntity>> getAllUsers();

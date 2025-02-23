@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
   List<CommentEntity> findAllByPostId(Integer postId);
   @Query("SELECT COALESCE(MAX(c.id), 0) FROM CommentEntity c")
     Long findMaxCommentId();
+
+    List<CommentEntity> deleteByPostId(Long postId);
 }

@@ -1,11 +1,8 @@
 package com.bootcamp.sbex2.bc_forum.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.bootcamp.sbex2.bc_forum.dto.UserDTO;
 import com.bootcamp.sbex2.bc_forum.entity.AddressEntity;
 import com.bootcamp.sbex2.bc_forum.entity.CommentEntity;
@@ -21,6 +18,7 @@ import com.bootcamp.sbex2.bc_forum.repository.GeoRepository;
 import com.bootcamp.sbex2.bc_forum.repository.PostRepository;
 import com.bootcamp.sbex2.bc_forum.repository.UserRepository;
 import com.bootcamp.sbex2.bc_forum.service.DatabaseService;
+import jakarta.transaction.Transactional;
 
 @Service
 public class DatabaseServiceImpl implements DatabaseService {
@@ -44,8 +42,8 @@ public class DatabaseServiceImpl implements DatabaseService {
       return this.commentRepository.findAllByOrderByIdAsc();
     }
   @Override
-  public List<CommentEntity> getCommentsByPostId(Integer postId){
-      return this.commentRepository.findAllByPostId(postId);
+  public List<CommentEntity> getCommentsByPostId(Long postId){
+      return this.commentRepository.findAllByPostId(postId.intValue());
     }
 
   @Override
@@ -56,7 +54,7 @@ public class DatabaseServiceImpl implements DatabaseService {
   }
 
   @Override
-  public CommentEntity patchComment(@RequestParam Long commentId, @RequestBody CommentEntity partialUpdate){
+  public CommentEntity patchComment(Long commentId, CommentEntity partialUpdate){
     if (commentRepository.findById(commentId).isPresent()) {
         CommentEntity comment = commentRepository.findById(commentId).get();
         if (partialUpdate.getName() != null) {
@@ -80,9 +78,23 @@ public class DatabaseServiceImpl implements DatabaseService {
   }
   
   @Override
-  public List<PostEntity> getPostsByUserId(Integer userId) {
-    return this.postRepository.findAllByUserId(userId);
+  public List<PostEntity> getPostsByUserId(Long userId) {
+    return this.postRepository.findAllByUserId(userId.intValue());
     //return this.postRepository.findAllByOrderByIdAsc();
+  }
+
+  @Override
+  public PostEntity addPostByUserId(Long userId, PostEntity postEntity){
+    postEntity.setUserId(userId.longValue());
+    postEntity.setId(this.postRepository.findMaxPostId()+1);
+  return this.postRepository.save(postEntity);
+  }
+
+  @Override
+  @Transactional
+  public void deletePostAndComments(Long postId){
+    this.postRepository.deleteById(postId);
+    this.commentRepository.deleteByPostId(postId);
   }
 
   @Override
