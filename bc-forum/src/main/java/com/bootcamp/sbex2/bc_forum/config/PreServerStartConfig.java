@@ -39,25 +39,25 @@ public class PreServerStartConfig implements CommandLineRunner {
       throw BusinessException.of(SysCode.API_UNAVAILABLE);
     }
 
-    // try{
-    //   this.userRepository.findAll();
-    //   this.postRepository.findAll();
-    //   this.commentRepository.findAll();
-    //   }catch(Exception e){
-    //   throw BusinessException.of(SysCode.DATABASE_CONNECTION_ERROR);
-    // }
+    try{
+      this.userRepository.findAll();
+      this.postRepository.findAll();
+      this.commentRepository.findAll();
+      }catch(Exception e){
+      throw BusinessException.of(SysCode.DATABASE_CONNECTION_ERROR);
+    }
 
-    // try{
-    // this.userService.fetchAndSaveAllUsers();
-    // this.postService.fetchAndSavePosts();
-    // this.commentService.fetchAndSaveComments();
+    try{
+    this.userService.fetchAndSaveAllUsers();
+    this.postService.fetchAndSavePosts();
+    this.commentService.fetchAndSaveComments();
     
-    // System.out.println("API Connection Success");
-    // System.out.println("Database Connection Success");
-    // System.out.println("Database Update Success");
-    // }catch(Exception e){
-    //   throw BusinessException.of(SysCode.DATABASE_CONNECTION_ERROR);
-    // }
+    System.out.println("API Connection Success");
+    System.out.println("Database Connection Success");
+    System.out.println("Database Update Success");
+    }catch(Exception e){
+      throw BusinessException.of(SysCode.DATABASE_CONNECTION_ERROR);
+    }
   
   }
 }
