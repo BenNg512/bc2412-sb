@@ -11,4 +11,5 @@ import com.bootcamp.sbex2.bc_forum.entity.PostEntity;
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
   List<PostEntity> findAllByOrderByIdAsc();
   Optional<PostEntity> findById(Integer id);
+  List<PostEntity> findAllByUserId(Integer userId);
 }

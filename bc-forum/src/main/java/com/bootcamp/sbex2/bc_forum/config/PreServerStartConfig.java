@@ -30,7 +30,7 @@ public class PreServerStartConfig implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    // call api
+
     try{
       this.userService.getAllUsers();
       this.postService.getAllPosts();
@@ -38,7 +38,7 @@ public class PreServerStartConfig implements CommandLineRunner {
     }catch(Exception e){
       throw BusinessException.of(SysCode.API_UNAVAILABLE);
     }
-    // connect DB
+
     try{
       this.userRepository.findAll();
       this.postRepository.findAll();
@@ -46,7 +46,7 @@ public class PreServerStartConfig implements CommandLineRunner {
       }catch(Exception e){
       throw BusinessException.of(SysCode.DATABASE_CONNECTION_ERROR);
     }
-    // save DB
+
     try{
     this.userService.fetchAndSaveAllUsers();
     this.postService.fetchAndSavePosts();
@@ -58,5 +58,6 @@ public class PreServerStartConfig implements CommandLineRunner {
     }catch(Exception e){
       throw BusinessException.of(SysCode.DATABASE_CONNECTION_ERROR);
     }
+  
   }
 }

@@ -1,6 +1,7 @@
 package com.bootcamp.sbex2.bc_forum.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,18 +41,18 @@ public class DatabaseServiceImpl implements DatabaseService {
   
   @Override
   public List<CommentEntity> getAllComments(){
-      return commentRepository.findAllByOrderByIdAsc();
+      return this.commentRepository.findAllByOrderByIdAsc();
     }
   @Override
   public List<CommentEntity> getCommentsByPostId(Integer postId){
-      return commentRepository.findAllByPostId(postId);
+      return this.commentRepository.findAllByPostId(postId);
     }
 
   @Override
   public CommentEntity addCommentToPost(Long postId, CommentEntity comment) {
       comment.setPostId(postId);
       comment.setId(this.commentRepository.findMaxCommentId()+1);
-    return commentRepository.save(comment);
+    return this.commentRepository.save(comment);
   }
 
   @Override
@@ -75,13 +76,19 @@ public class DatabaseServiceImpl implements DatabaseService {
 
   @Override
   public List<PostEntity> getAllPosts(){
-      return postRepository.findAllByOrderByIdAsc();
-    }
+    return this.postRepository.findAllByOrderByIdAsc();
+  }
+  
+  @Override
+  public List<PostEntity> getPostsByUserId(Integer userId) {
+    return this.postRepository.findAllByUserId(userId);
+    //return this.postRepository.findAllByOrderByIdAsc();
+  }
 
   @Override
   public List<UserEntity> getAllUsers(){
-      return userRepository.findAllByOrderByIdAsc();
-    }
+    return this.userRepository.findAllByOrderByIdAsc();
+  }
 
   @Override
   public List<UserDTO> getAllUserDTOs(){

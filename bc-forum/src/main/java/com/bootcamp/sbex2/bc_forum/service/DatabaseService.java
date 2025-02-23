@@ -14,6 +14,7 @@ public interface DatabaseService {
   CommentEntity addCommentToPost(Long postId, CommentEntity comment);
   CommentEntity patchComment(@RequestParam Long commentId, @RequestBody CommentEntity comment);
   List<PostEntity> getAllPosts();
+  List<PostEntity> getPostsByUserId(Integer userId);
   List<UserEntity> getAllUsers();
   List<UserDTO> getAllUserDTOs();
 }

@@ -15,6 +15,7 @@ import com.bootcamp.sbex2.bc_forum.entity.UserEntity;
 import com.bootcamp.sbex2.bc_forum.repository.CommentRepository;
 import com.bootcamp.sbex2.bc_forum.repository.PostRepository;
 import com.bootcamp.sbex2.bc_forum.service.DatabaseService;
+import jakarta.websocket.server.PathParam;
 
 @RestController
 public class DatabaseController implements DatabaseOperation {
@@ -46,6 +47,7 @@ public class DatabaseController implements DatabaseOperation {
           .data(databaseApiService.getCommentsByPostId(postId))
           .build();
   }
+
   @Override
   public ApiResp<CommentEntity> addComment(@RequestParam Long postId, @RequestBody CommentEntity comment) {
     if (!this.postRepository.findById(postId).isPresent())
@@ -58,6 +60,7 @@ public class DatabaseController implements DatabaseOperation {
           .data(databaseApiService.addCommentToPost(postId, comment))
           .build();
   }
+
   @Override
   public ApiResp<CommentEntity> patchComment(@RequestParam Long commentId, @RequestBody CommentEntity comment){
     if (!this.commentRepository.findById(commentId).isPresent())
@@ -78,6 +81,15 @@ public class DatabaseController implements DatabaseOperation {
         .data(databaseApiService.getAllPosts())
         .build();
   }
+
+  @Override
+  public ApiResp<List<PostEntity>> getAllPostsByUserId(Integer userId){
+    return ApiResp.<List<PostEntity>>builder()
+        .syscode(SysCode.OK)
+        .data(databaseApiService.getPostsByUserId(userId))
+        .build();
+  }
+
 
   @Override
   public ApiResp<List<UserEntity>> getAllUsers() {
