@@ -8,10 +8,10 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.bootcamp.calculator</groupId>
-	<artifactId>bc-calculator</artifactId>
+	<groupId>com.mtr</groupId>
+	<artifactId>mtr-station</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bc-calculator</name>
+	<name>mtr-station</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -51,6 +51,15 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
 	</dependencies>
 
 	<build>

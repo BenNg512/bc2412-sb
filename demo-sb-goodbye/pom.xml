@@ -8,10 +8,10 @@
 		<version>3.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.bootcamp.calculator</groupId>
-	<artifactId>bc-calculator</artifactId>
+	<groupId>com.bootcamp.goodbye</groupId>
+	<artifactId>demo-goodbye</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bc-calculator</name>
+	<name>demo-goodbye</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
