@@ -1,54 +1,23 @@
 package com.mtr.mtr_station.dto;
 
-import java.util.List;
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-
-@Setter
 @Getter
+@Setter
 public class TrainScheduleDto {
+    @JsonProperty("status")
     private int status;
+    @JsonProperty("message")
     private String message;
     @JsonProperty("sys_time")
     private String sysTime;
     @JsonProperty("curr_time")
     private String currTime;
-    private Data data;
-    private String isdelay;
-
-
-    @Setter
-    @Getter
-    public class Data {
-        // private Map<String, StationSchedule> stations;
-        private StationSchedule stations;
-
-    }
-
-    @Setter
-    @Getter
-    public class StationSchedule {
-        @JsonProperty("curr_time")
-        private String currTime;
-        @JsonProperty("sys_time")
-        private String sysTime;
-        @JsonProperty("DOWN")
-        private List<TrainInfo> down;
-        @JsonProperty("UP")
-        private List<TrainInfo> up;
-    }
-
-    @Setter
-    @Getter
-    public class TrainInfo {
-        private String seq;
-        private String dest;
-        private String plat;
-        private String time;
-        private String ttnt;
-        private String valid;
-        private String source;
-}
+    @JsonProperty("data")
+    private Map<String, StationScheduleDto> data;
+    @JsonProperty("isdelay")
+    private String isDelay;
 }
