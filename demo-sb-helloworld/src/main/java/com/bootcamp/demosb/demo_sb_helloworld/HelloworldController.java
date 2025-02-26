@@ -10,6 +10,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HelloworldController {
   @GetMapping(value = "/ipad/greeting")
   public String hello() {
-    return "Hello World!";
-}
+    return "Hello World!+1+1+1+1";
+  }
+
+  @GetMapping(value = "/ipod/goodbye")
+  public String bye() {
+  return "Good Bye!";
+  }
+
+  @GetMapping(value = "/path/h")
+  public String HB() {
+  return "Happy Birthday!";
+  }
+
+  @GetMapping(value = "/path/c")
+  public String MEOW() {
+  return "Meow! Meow! Meow!";
+  }
 }

@@ -9,6 +9,7 @@ import com.bootcamp.demo.demo_sb_customer.dto.UserDTO;
 import com.bootcamp.demo.demo_sb_customer.dto.mapper.UserDTOMapper;
 import com.bootcamp.demo.demo_sb_customer.model.dto.UserDto;
 import com.bootcamp.demo.demo_sb_customer.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 public class UserController {
@@ -18,7 +19,7 @@ public class UserController {
   private UserDTOMapper userDTOMapper;
 
   @GetMapping(value = "/jsonplaceholder/users")
-  public List<UserDTO> getUsers() {
+  public List<UserDTO> getUsers() throws JsonProcessingException {
     // List of UserDto -> List of UserDTO
     List<UserDto> userDtos = this.userService.getUsers();
     System.out.println("userDtos=" + userDtos);

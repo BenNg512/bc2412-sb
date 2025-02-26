@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @ResponseBody
-@RequestMapping(value = "/api/v1")
+
 public class Cat {
-  @GetMapping(value = "/meow")
-  public String meow2() {
-    return "Meow!";
-  }
+  // @GetMapping("/hello")
+  // public String hello() {
+  //     return "hello"; // This will serve the hello.html file from the templates directory
+  // }
   
 }

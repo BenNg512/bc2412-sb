@@ -1,6 +1,7 @@
 package com.bootcamp.demo.demo_sb_customer.codewave;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 public class GlobalExceptionHandler {
