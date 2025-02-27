@@ -78,9 +78,9 @@
                             <span th:text="${coin.name}"></span>
                         </td>
                         <td th:text="${coin.symbol}"></td>
-                        <td th:text="${#numbers.formatDecimal(coin.currentPrice, 1, 4)}"></td>
-                        <td th:text="${#numbers.formatDecimal(coin.priceChange24h, 1, 4)}" th:class="${coin.priceChange24h >= 0} ? 'text-success' : 'text-danger'"></td>
-                        <td th:text="${#numbers.formatDecimal(coin.priceChangePercentage24h, 1, 4)}" th:class="${coin.priceChangePercentage24h >= 0} ? 'text-success' : 'text-danger'"></td>
+                        <td th:text="${#numbers.formatDecimal(coin.currentPrice, 1, 6)}"></td>
+                        <td th:text="${#numbers.formatDecimal(coin.priceChange24h, 1, 6)}" th:class="${coin.priceChange24h >= 0} ? 'text-success' : 'text-danger'"></td>
+                        <td th:text="${#numbers.formatDecimal(coin.priceChangePercentage24h, 1, 6)}" th:class="${coin.priceChangePercentage24h >= 0} ? 'text-success' : 'text-danger'"></td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(coin)}">
                         <td colspan="5">No coins available</td>

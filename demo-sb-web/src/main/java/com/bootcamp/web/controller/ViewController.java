@@ -20,7 +20,7 @@ private CoinService coinService;
     model.addAttribute("tutor", "vincent");
 
     return "hello"; // html file na
-  }
+  } 
 
   @GetMapping(value = "/coins")
   public String coinPage(Model model) {
