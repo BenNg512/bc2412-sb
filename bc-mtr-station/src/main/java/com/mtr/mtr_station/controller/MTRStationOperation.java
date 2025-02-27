@@ -4,14 +4,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.mtr.mtr_station.codewave.ApiResp;
-import com.mtr.mtr_station.codewave.MTRStationCode;
-import com.mtr.mtr_station.dto.TrainScheduleDto;
+import com.mtr.mtr_station.model.TrainScheduleDto;
 
 @RequestMapping("/mtr")
 public interface MTRStationOperation {
 
-  // http://localhost:8006/mtr/stations?code=AEL_HOK
+  // http://localhost:8006/mtr/stations?line=KTL&station=KWT
   @GetMapping(value = "/stations")
-  ApiResp<TrainScheduleDto> getTainSchedule(@RequestParam(value = "code") MTRStationCode mtrStationCode);
+  ApiResp<TrainScheduleDto> getTrainSchedule(@RequestParam String line, @RequestParam String station);
   
 }

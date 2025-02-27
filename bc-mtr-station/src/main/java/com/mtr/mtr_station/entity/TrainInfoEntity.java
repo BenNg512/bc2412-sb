@@ -23,13 +23,13 @@ public class TrainInfoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String seq;
-    private String dest;
-    private String plat;
-    private String time;
     private String ttnt;
     private String valid;
+    private String plat;
+    private String time;
     private String source;
+    private String dest;
+    private String seq;
     private String direction;
     private String lineStation;
 }

@@ -1,4 +1,4 @@
-package com.mtr.mtr_station.dto;
+package com.mtr.mtr_station.model;
 
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;

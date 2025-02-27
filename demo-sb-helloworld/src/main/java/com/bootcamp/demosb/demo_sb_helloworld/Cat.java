@@ -13,5 +13,5 @@ public class Cat {
   // public String hello() {
   //     return "hello"; // This will serve the hello.html file from the templates directory
   // }
-  
+
 }
