@@ -9,7 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.coin.demo_coin.entity.CoinEntity;
+import com.coin.demo_coin.entity.Coin;
 import com.coin.demo_coin.model.CoinDto;
 import com.coin.demo_coin.repository.CoinRepository;
 import com.coin.demo_coin.service.CoinService;
@@ -31,17 +31,17 @@ import com.coin.demo_coin.service.CoinService;
     
     return coinDto;
     }
-    public void saveCoin(List<CoinEntity> coin) {
-      for (CoinEntity coinEntity : coin) {
+    public void saveCoin(List<Coin> coin) {
+      for (Coin coinEntity : coin) {
         coinRepository.save(coinEntity);
       }
     }
 
-    public Optional<CoinEntity> getCoin(String id) {
+    public Optional<Coin> getCoin(String id) {
       return coinRepository.findById(id);
     }
 
-    public List<CoinEntity> fetchCoinDataFromApi() {
+    public List<Coin> fetchCoinDataFromApi() {
       String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd";
         ResponseEntity<List<CoinDto>> response = restTemplate.exchange(
             url,
@@ -50,8 +50,8 @@ import com.coin.demo_coin.service.CoinService;
             new ParameterizedTypeReference<List<CoinDto>>() {}
         );
         List<CoinDto> coinDtos = response.getBody();
-        List<CoinEntity> coinEntities = coinDtos.stream().map(coinDto -> {
-            CoinEntity coinEntity = new CoinEntity();
+        List<Coin> coinEntities = coinDtos.stream().map(coinDto -> {
+            Coin coinEntity = new Coin();
             coinEntity.setId(coinDto.getId());
             coinEntity.setSymbol(coinDto.getSymbol());
             coinEntity.setName(coinDto.getName());

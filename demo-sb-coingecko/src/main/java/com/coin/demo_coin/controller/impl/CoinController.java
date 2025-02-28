@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.coin.demo_coin.controller.CoinOperation;
-import com.coin.demo_coin.entity.CoinEntity;
+import com.coin.demo_coin.entity.Coin;
 import com.coin.demo_coin.model.CoinDto;
 import com.coin.demo_coin.service.CoinService;
 
@@ -21,15 +20,18 @@ public class CoinController implements CoinOperation {
     public List<CoinDto> getCoins(){
       return this.coinService.getCoins();
     }
+    public List<CoinDto> getCoins2(){
+      return this.coinService.getCoins();
+    }
 
     @PostMapping("/fetch-and-save")
     public void fetchAndSaveCoin() {
-        List<CoinEntity> coinEntity = this.coinService.fetchCoinDataFromApi();
+        List<Coin> coinEntity = this.coinService.fetchCoinDataFromApi();
         coinService.saveCoin(coinEntity);
     }
 
     @GetMapping("/{id}")
-    public Optional<CoinEntity> getCoinEntity(@PathVariable String coinId) {
+    public Optional<Coin> getCoinEntity(@PathVariable String coinId) {
         return this.coinService.getCoin(coinId);
     }
   }

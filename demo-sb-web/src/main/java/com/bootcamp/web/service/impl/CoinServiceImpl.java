@@ -14,7 +14,8 @@ public class CoinServiceImpl implements CoinService{
     RestTemplate restTemplate;
 
     public List<CoinDto> getCoins(){
-    String url = "http://localhost:8080/coins";
+    String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd";
+    // String url = "http://localhost:8080/coins";
 
     List<CoinDto> coinDto = Arrays.asList(this.restTemplate.getForObject(url, CoinDto[].class));
     // CoinEntity coinEntity = 

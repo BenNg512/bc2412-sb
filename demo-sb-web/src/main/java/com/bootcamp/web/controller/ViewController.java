@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.bootcamp.web.model.CoinDto;
 import com.bootcamp.web.service.CoinService;
@@ -22,6 +23,7 @@ private CoinService coinService;
     return "hello"; // html file na
   } 
 
+  @CrossOrigin
   @GetMapping(value = "/coins")
   public String coinPage(Model model) {
     List<CoinDto> coinDtos = coinService.getCoins();

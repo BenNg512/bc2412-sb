@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @RedisHash("CoinEntity")
-public class CoinEntity implements Serializable {
+public class Coin implements Serializable {
     @Id
     private String id;
     private String symbol;
@@ -50,5 +52,6 @@ public class CoinEntity implements Serializable {
     private Double atlChangePercentage;
     private LocalDateTime atlDate;
     private Object roi;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastUpdated;
     }
