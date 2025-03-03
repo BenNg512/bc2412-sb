@@ -22,7 +22,7 @@ public class TrainInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     private String ttnt;
     private String valid;
     private String plat;
