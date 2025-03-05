@@ -7,6 +7,17 @@
     <title>Cryptocurrency Market (designed by Ben Ng)</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        .last-update {
+            color: white;
+            position: absolute; 
+            top: 20px;
+            right: 20px;
+        }
+        .italic-text {
+            font-style: italic;
+            color: #000;
+            font-size: 12px;
+        }
         .text-success {
             color: green;
         }
@@ -30,6 +41,9 @@
         h1 {
             color: rgb(255, 199, 56);
             scroll-padding: 20px;
+            font-size: 40pt;
+            padding: 20px;
+            text-align: center;
         }
         html {
             height: 100%;
@@ -40,7 +54,7 @@
             margin: 0;
         }
         .table-container {
-            max-height: 700px;
+            max-height: 500px;
             overflow-y: auto;
             width: 100%;
         }
@@ -61,28 +75,31 @@
             background-attachment: scroll;">
     <div class="container">
         <h1 class="mt-5">Cryptocurrency Market</h1>
+        <div class="last-update">Last Updated: <span th:text="${latestUpdate}"></span></div>
         <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for coins.." class="form-control mb-3">
         <div class="table-container">
             <table class="table table-striped mt-3">
                 <thead>
                     <tr>
                         <th>Coin</th>
-                        <th>Symbol</th>
                         <th>Price</th>
                         <th>Price Change (24h)</th>
                         <th>Change Percentage (24h)</th>
+                        <th>Market Cap</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="coin : ${coin}">
                         <td>
                             <img th:src="${coin.image}" alt="${coin.name} image" style="width: 50px; height: 50px;" />
-                            <span th:text="${coin.name}"></span>
+                            <span style="color: #000; font-weight: bold;" th:text="${coin.name} + ' '"></span>
+                            <span style="color: #5e5e5e;" th:text="${coin.symbol != null and coin.symbol != ''} ? ${#strings.toUpperCase(coin.symbol)} : ''"></span>
+                            <br><span class="italic-text" th:text="${coin.lastUpdatedHKTime}"></span>
                         </td>
-                        <td th:text="${coin.symbol}"></td>
-                        <td th:text="${coin.currentPrice}"></td>
-                        <td th:text="${coin.priceChange24h > 0? '+' + coin.priceChange24h : coin.priceChange24h}" th:class="${coin.priceChange24h >= 0} ? 'text-success' : 'text-danger'"></td>
+                        <td>$<span class="price" th:text="${coin.currentPrice}"></span></td>
+                        <td class="price-change" th:text="${coin.priceChange24h}"></td>
                         <td th:text="${coin.priceChangePercentage24h > 0? '+' + coin.priceChangePercentage24h : coin.priceChangePercentage24h} + '%'" th:class="${coin.priceChangePercentage24h >= 0} ? 'text-success' : 'text-danger'"></td>
+                        <td>$<span class="price" th:text="${coin.marketCap}"></span></td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(coin)}">
                         <td colspan="5">No coins available</td>
@@ -95,27 +112,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        // Filter function to search for coins
-        function filterTable() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById('filterInput');
-            filter = input.value.toUpperCase();
-            table = document.querySelector('table');
-            tr = table.getElementsByTagName('tr');
+    <script src="/js/script.js"></script>
 
-            for (i = 1; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName('td')[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = '';
-                    } else {
-                        tr[i].style.display = 'none';
-                    }
-                }
-            }
-        }
-    </script>
 </body>
 </html>

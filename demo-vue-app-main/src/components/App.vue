@@ -176,7 +176,8 @@ export default {
     const retrieveCoins = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/coins"
+          // "http://localhost:8080/coins"
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd"
         );
         coins.value = response.data;
         console.log;

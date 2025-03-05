@@ -1,5 +1,6 @@
 package com.bootcamp.demosb.demo_sb_helloworld;
 
+import java.util.HashMap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DemoSbHelloworldApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoSbHelloworldApplication.class, args);
+
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.bootcamp.web.service.impl;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,11 @@ public class CoinServiceImpl implements CoinService{
     // String url = "http://localhost:8080/coins";
 
     List<CoinDto> coinDto = Arrays.asList(this.restTemplate.getForObject(url, CoinDto[].class));
-    // CoinEntity coinEntity = 
-    // this.redisManager.get("coins", CoinEntity.class);
-    
+
+    for (CoinDto coinDto2 : coinDto) {
+        coinDto2.convertLastUpdatedToHKT();
+    }
+
     return coinDto;
     }
 }
