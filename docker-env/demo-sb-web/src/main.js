@@ -1,0 +1,7 @@
+[
+{
+  "scripts": {
+    "serve": "vue-cli-service serve"
+  }
+}
+]
