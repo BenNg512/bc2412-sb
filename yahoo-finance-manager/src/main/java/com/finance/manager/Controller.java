@@ -2,7 +2,6 @@ package com.finance.manager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.finance.manager.model.QuoteDto;
@@ -21,8 +20,8 @@ FinanceManager financeManager;
     return crumbManager.getCrumb();
   }
 
-  @GetMapping("/stock")
-  public QuoteDto getApi(@RequestParam String stockCode){
-    return financeManager.getApi(stockCode);
+  @GetMapping("/quote")
+  public QuoteDto getApi(@RequestParam String code) {
+    return financeManager.getQuote(code);
   }
 }
