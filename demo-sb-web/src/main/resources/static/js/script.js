@@ -1,5 +1,6 @@
-// Format price
 document.addEventListener('DOMContentLoaded', function() {
+
+    // Format price
     const priceElements = document.getElementsByClassName('price');
 
     Array.from(priceElements).forEach(priceElement => {
@@ -29,7 +30,70 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-});
+
+// Format price change
+    const priceChangeElements = document.getElementsByClassName('price-change');
+
+    Array.from(priceChangeElements).forEach(element => {
+        const priceChange = parseFloat(element.textContent);
+        if (isNaN(priceChange)) return;
+
+        const isPositive = priceChange > 0;
+        const sign = isPositive ? '▲ ' : (priceChange < 0 ? '▼ ' : '');
+        element.className = isPositive ? 'text-success' : (priceChange < 0 ? 'text-danger' : '');
+
+        const absValue = Math.abs(priceChange);
+        let formattedText;
+
+        if (absValue >= 1) {
+            formattedText = absValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } else if (absValue > 0) {
+            const parts = absValue.toString().split('.');
+            const integerPart = parts[0]
+            let decimalPart = parts[1] || '0';
+
+            decimalPart = decimalPart.padEnd(4, '0').slice(0, 4);
+
+            const firstDigit = decimalPart.slice(0, 1);
+            const lastThreeDigits = decimalPart.slice(1, 4);
+
+            formattedText = `0.${firstDigit},${lastThreeDigits}`;
+        } else {
+            formattedText = '0.0000';
+        }
+
+        element.textContent = `${sign}${formattedText}`;
+    });
+
+
+// formate priceChangePercentage24h (apply-able to all %change)
+    const priceChangePercentage24hElements = document.getElementsByClassName('percentage-change');
+
+    Array.from(priceChangePercentage24hElements).forEach(element => {
+        const priceChangePercentage24h = parseFloat(element.textContent);
+        if (isNaN(priceChangePercentage24h)) return;
+
+        const roundedValue = priceChangePercentage24h.toFixed(3);
+
+        const isPositive = priceChangePercentage24h > 0;
+        const sign = isPositive ? '▲ ' : (priceChangePercentage24h < 0 ? '▼ ' : '');
+        element.className = isPositive ? 'text-success' : (priceChangePercentage24h < 0 ? 'text-danger' : '');
+
+        element.textContent = `${sign}${Math.abs(roundedValue)}%`;
+    });
+
+
+// timer
+let timeLeft = 30;
+const timerElement = document.getElementById('timer');
+function updateTimer() {
+    timerElement.textContent = timeLeft;
+    timeLeft--;
+    if (timeLeft < 0) {
+        timeLeft = 30;
+    }
+}
+setInterval(updateTimer, 1000);
 
 // Filter Function
 function filterTable() {
@@ -52,78 +116,4 @@ function filterTable() {
     }
 }
 
-// Format price change
-document.addEventListener('DOMContentLoaded', function() {
-    const priceChangeElements = document.getElementsByClassName('price-change');
-
-    Array.from(priceChangeElements).forEach(element => {
-        const priceChange = parseFloat(element.textContent);
-        if (isNaN(priceChange)) return; // Skip if not a valid number
-
-        // Determine sign and color
-        const isPositive = priceChange > 0;
-        const sign = isPositive ? '+' : (priceChange < 0 ? '-' : '');
-        element.className = isPositive ? 'text-success' : (priceChange < 0 ? 'text-danger' : '');
-
-        // Handle absolute value for formatting
-        const absValue = Math.abs(priceChange);
-        let formattedText;
-
-        if (absValue >= 1) {
-            // Large numbers: format with 2 decimal places and commas
-            formattedText = absValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        } else if (absValue > 0) {
-            // Small numbers (< 1): format with 4 digits, comma after first
-            const parts = absValue.toString().split('.');
-            const integerPart = parts[0]; // Always "0" for small numbers
-            let decimalPart = parts[1] || '0';
-
-            // Ensure exactly 4 digits
-            decimalPart = decimalPart.padEnd(4, '0').slice(0, 4); // Pad or truncate to 4 digits
-
-            // Split into first digit and next 3
-            const firstDigit = decimalPart.slice(0, 1); // e.g., "0" from "0543"
-            const lastThreeDigits = decimalPart.slice(1, 4); // e.g., "543" from "0543"
-
-            // Format with comma
-            formattedText = `0.${firstDigit},${lastThreeDigits}`;
-        } else {
-            // Zero case: display with 4 zeros
-            formattedText = '0.0000';
-        }
-
-        // Combine sign and formatted text
-        element.textContent = `${sign}${formattedText}`;
-    });
 });
-
-// percentage change
-document.addEventListener('DOMContentLoaded', function() {
-    const priceChangeElements = document.getElementsByClassName('percentage-change');
-
-    Array.from(priceChangeElements).forEach(element => {
-        const priceChange = parseFloat(element.textContent);
-        if (isNaN(priceChange)) return;
-
-        const roundedValue = priceChange.toFixed(3);
-
-        const isPositive = priceChange > 0;
-        const sign = isPositive ? '+' : (priceChange < 0 ? '-' : '');
-        element.className = isPositive ? 'text-success' : (priceChange < 0 ? 'text-danger' : '');
-
-        element.textContent = `${sign}${Math.abs(roundedValue)}%`;
-    });
-});
-
-
-// timer
-let timeLeft = 30;
-const timerElement = document.getElementById('timer');
-function updateTimer() {
-    timerElement.textContent = timeLeft;
-    timeLeft--;
-    if (timeLeft < 0) {
-        timeLeft = 30;
-    }
-}
-setInterval(updateTimer, 1000);

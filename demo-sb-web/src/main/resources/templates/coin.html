@@ -8,6 +8,88 @@
     <title>Cryptocurrency Market (designed by Ben Ng)</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
+    <style>
+.last-update1 {
+  color: white;
+  position: absolute; 
+  top: 10px;
+  right: 20px;
+  font-size: 10pt;
+}
+.last-update2 {
+  color: white;
+  position: absolute; 
+  top: 30px;
+  right: 20px;
+  font-size: 10pt;
+}
+.last-update3 {
+  color: white;
+  position: absolute; 
+  top: 50px;
+  right: 20px;
+  font-size: 10pt;
+}
+.version {
+  color: rgb(122, 246, 255); 
+  bottom: 40px;
+  right: 20px;
+  font-size: 10pt;
+}
+.italic-text {
+  font-style: italic;
+  color: #868585;
+  font-size: 12px;
+}
+.text-success {
+  color: green;
+}
+.text-danger {
+  color: red;
+}
+table {
+  width: auto;
+  height: auto;
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #f2f2f2;
+}
+h1 {
+  color: rgb(255, 199, 56);
+  scroll-padding: 20px;
+  font-size: 40pt;
+  padding: 20px;
+  text-align: center;
+}
+html {
+  height: 100%;
+  margin: 0;
+}
+body {
+  min-height: 100%;
+  margin: 0;
+}
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+  width: 100%;
+}
+thead th {
+  color: rgb(4, 0, 112);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: rgb(180, 251, 251);
+}
+
+    </style>
 </head>
 
 <body style="background-image:url('https://img.freepik.com/premium-photo/bitcoin-coins-stacked-abstract-bluegray-background-with-financial-market-chart-cryptocurrency_1299685-27403.jpg'); 
@@ -17,9 +99,9 @@
             background-attachment: scroll;">
     <div class="container">
         <h1 class="mt-5">Cryptocurrency Market</h1>
-        <div class="last-update">Data Last Updated: <span th:text="${latestUpdate}"></span></div>
-        <br>
-        <!-- <div class="last-update2"><span id="timer">30</span> seconds until next refresh</div> -->
+        <div class="last-update1">Data Last Updated from Coingecko api:</div>
+        <div class="last-update2" th:text="${latestUpdate}"></div>
+        <div class="last-update3"><span id="timer">30</span> seconds until next refresh</div>
 
         <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for coins.." class="form-control mb-3">
         <div class="table-container">
@@ -30,23 +112,21 @@
                         <th>Price (USD)</th>
                         <th>Price Change (24h)</th>
                         <th>Change Percentage (24h)</th>
-                        <th>Market Cap</th>
+                        <th>Market Cap (USD)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="coin : ${coin}">
                         <td>
                             <img th:src="${coin.image}" alt="${coin.name} image" style="width: 50px; height: 50px;" />
-                            <span style="color: #000; font-weight: bold;" th:text="${coin.name} + ' '"></span>
-                            <span style="color: #5e5e5e;" th:text="${coin.symbol != null and coin.symbol != ''} ? ${#strings.toUpperCase(coin.symbol)} : ''"></span>
+                            <span style="color: #000000; font-weight: bold;" th:text="${coin.name} + ' '"></span>
+                            <span style="color: #676767;" th:text="${coin.symbol != null and coin.symbol != ''} ? ${#strings.toUpperCase(coin.symbol)} : ''"></span>
                             <br><span class="italic-text" th:text="${coin.lastUpdatedHKTime}"></span>
                         </td>
-                        <td>$<span class="price" th:text="${coin.currentPrice}"></span></td>
-                        <td th:class="${coin.priceChange24h > 0} ? 'text-success' : 'text-danger'">
-                            <span th:text="${coin.priceChange24h > 0} ? '+'"></span><span th:text="${coin.priceChange24h}"></span></td>
-                        <td th:class="${coin.priceChangePercentage24h > 0} ? 'text-success' : 'text-danger'">
-                            <span th:text="${coin.priceChangePercentage24h > 0} ? '+'"></span><span th:text="${coin.priceChangePercentage24h} + '%'"></span></td>
-                        <td>$<span class="price" th:text="${coin.marketCap}"></span></td>
+                        <td>$<span th:class="price" th:text="${coin.currentPrice}"></span></td>
+                        <td th:class="price-change" th:text="${coin.priceChange24h}"></td>
+                        <td th:class="percentage-change" th:text="${coin.priceChangePercentage24h}"></td>
+                        <td>$<span th:class="price" th:text="${coin.marketCap}"></span></td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(coin)}">
                         <td colspan="5">No coins available</td>
@@ -54,12 +134,12 @@
                 </tbody>
             </table>
         </div>
+        <div class="version"><span>Version last updated on 10th, March 2025</span></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/js/script.js"></script>
-
 </body>
 </html>

@@ -72,7 +72,7 @@ public QuoteDto getQuote(String code) {
 
         HttpResponse<String> quoteResponse = client.send(quoteRequest, HttpResponse.BodyHandlers.ofString());
         QuoteDto quoteDto = objectMapper.readValue(quoteResponse.body(), QuoteDto.class);
-        //QuoteDto quoteDto = this.restTemplate.getForObject(apiUrl, QuoteDto.class);
+
         return quoteDto;
 
     } catch (Exception e) {
