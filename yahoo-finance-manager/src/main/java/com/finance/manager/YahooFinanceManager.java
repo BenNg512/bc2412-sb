@@ -10,17 +10,12 @@ import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finance.manager.model.QuoteDto;
 
 @Service
-public class FinanceManager{
-
-@Autowired
-RestTemplate restTemplate;
+public final class YahooFinanceManager{
 
 private final CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
 private final ObjectMapper objectMapper = new ObjectMapper();
@@ -82,7 +77,7 @@ public QuoteDto getQuote(String code) {
 }
 
 public static void main(String[] args) {
-    FinanceManager financeManager = new FinanceManager();
+    YahooFinanceManager financeManager = new YahooFinanceManager();
     System.out.println(financeManager.getQuote("0005"));
 }
 }

@@ -11,7 +11,7 @@ public class Controller {
 @Autowired
 CrumbManager crumbManager;
 @Autowired
-FinanceManager financeManager;
+YahooFinanceManager financeManager;
 
   // http://localhost:8080/crumb
   // get crumb from https://query1.finance.yahoo.com/v1/test/getcrumb
