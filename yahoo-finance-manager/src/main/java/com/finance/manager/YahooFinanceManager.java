@@ -20,7 +20,7 @@ public final class YahooFinanceManager{
 private final CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
 private final ObjectMapper objectMapper = new ObjectMapper();
 
-public QuoteDto getQuote(String code) {
+public QuoteDto getQuote(String symbol) {
     String crumbUrl = "https://query1.finance.yahoo.com/v1/test/getcrumb";
 
     try {
@@ -54,7 +54,7 @@ public QuoteDto getQuote(String code) {
         HttpResponse<String> crumbResponse = client.send(crumbRequest, HttpResponse.BodyHandlers.ofString());
         //return crumbResponse.body();
         String apiUrl = "https://query1.finance.yahoo.com/v7/finance/quote?symbols="
-            + code + ".HK&crumb=" + crumbResponse.body();
+            + symbol + "&crumb=" + crumbResponse.body();
 
         HttpRequest quoteRequest = HttpRequest.newBuilder()
         .uri(URI.create(apiUrl))
@@ -78,6 +78,6 @@ public QuoteDto getQuote(String code) {
 
 public static void main(String[] args) {
     YahooFinanceManager financeManager = new YahooFinanceManager();
-    System.out.println(financeManager.getQuote("0005"));
+    System.out.println(financeManager.getQuote("0005.HK"));
 }
 }
