@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
+import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
 public interface Operation {
@@ -21,5 +22,12 @@ public interface Operation {
   @GetMapping("/api")
   public QuoteDto getQuote(@RequestParam String symbol);
 
+  // http://localhost:8101/stock/symbols
+  @GetMapping("/stock/symbols")
+  public List<StockSymbolEntity> getAllStockSymbolsFromRedis();
+
+  // http://localhost:8101/stock/symbol?symbol=0005.HK
+  @GetMapping("/stock/symbol")
+  public StockPriceEntity getStockPrice(@RequestParam String symbol);
 
 }

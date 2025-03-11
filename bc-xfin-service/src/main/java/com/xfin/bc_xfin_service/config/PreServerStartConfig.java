@@ -14,6 +14,7 @@ public class PreServerStartConfig implements CommandLineRunner {
   public void run(String... args) throws Exception {
     try{
         this.entityService.saveStockSymbolsFromJson();
+        this.entityService.redisSaveStockSymbols();
     }catch(Exception e){
         throw e;
     }

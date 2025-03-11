@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
+import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.service.impl.EntityServiceImpl;
 
@@ -32,6 +33,15 @@ public class Controller implements Operation {
       return this.yahooFinanceManager.getQuote(symbol);
   }
   
+  @Override
+  public List<StockSymbolEntity> getAllStockSymbolsFromRedis() {
+    return this.entityService.getAllStockSymbolsFromRedis();
+  }
+
+  @Override
+  public StockPriceEntity getStockPrice(String symbol) {
+    return this.entityService.saveStockPriceFromApi(symbol);
+  }
 
   
   

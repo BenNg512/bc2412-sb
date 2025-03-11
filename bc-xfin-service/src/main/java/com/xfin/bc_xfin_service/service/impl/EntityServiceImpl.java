@@ -5,9 +5,17 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xfin.bc_xfin_service.codewave.RedisManager;
+import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
+import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
+import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
+import com.xfin.bc_xfin_service.entity.mapper.EntityMapper;
+import com.xfin.bc_xfin_service.repository.StockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockSymbolRepository;
 import com.xfin.bc_xfin_service.service.EntityService;
 
@@ -15,8 +23,22 @@ import com.xfin.bc_xfin_service.service.EntityService;
 public class EntityServiceImpl implements EntityService {
 
 @Autowired
-  private StockSymbolRepository stockSymbolRepository;
-  
+private StockSymbolRepository stockSymbolRepository;
+
+@Autowired
+private StockPriceRepository stockPriceRepository;
+
+@Autowired
+RestTemplate restTemplate;
+
+@Autowired
+RedisManager redisManager;
+
+@Autowired
+YahooFinanceManager yahooFinanceManager;
+// private RedisTemplate<String, String> redisTemplate;
+// private ObjectMapper objectMapper;
+
   @Override
   public List<StockSymbolEntity> saveStockSymbolEntity(List<StockSymbolEntity> stockSymbolEntity) {
     return stockSymbolRepository.saveAll(stockSymbolEntity);
@@ -53,5 +75,59 @@ public class EntityServiceImpl implements EntityService {
     } catch (Exception e) {
         e.printStackTrace();
     }
+  }
+
+  // save default StockSymbol to redis
+  public void redisSaveStockSymbols() throws JsonProcessingException {
+    List<StockSymbolEntity> entities = this.stockSymbolRepository.findAll();
+    System.out.println(entities);
+    String key = "stockSymbols";
+    this.redisManager.set(key, entities);
+  }
+
+  // get all stock symbols from redis
+  public List<StockSymbolEntity> getAllStockSymbolsFromRedis() {
+    try {
+      List<StockSymbolEntity> stockSymbols = redisManager.getStockSymbols();
+            if (stockSymbols != null) {
+                System.out.println("Stock symbols retrieved from Redis!");
+            } else {
+                System.out.println("No stock symbols found in Redis.");
+            }
+            return stockSymbols;
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+  // get api and save to database
+  @Override
+  public StockPriceEntity saveStockPriceFromApi(String symbol) {
+    QuoteDto quoteDto = this.yahooFinanceManager.getQuote(symbol);
+    if (quoteDto == null || quoteDto.getQuoteResponse() == null) {
+        System.err.println("QuoteDto or QuoteResponse is null for symbol: " + symbol);
+        return null;
+    }
+    List<YahooFinanceManager.QuoteDto.Result> results = quoteDto.getQuoteResponse().getResult();
+    if (results == null || results.isEmpty()) {
+        System.err.println("No results found for symbol: " + symbol);
+        return null;
+    }
+    StockPriceEntity stockPriceEntity = EntityMapper.mapToStockPriceEntity(results.get(0));
+    if (stockPriceEntity == null) {
+        System.err.println("Failed to map QuoteDto.Result to StockPriceEntity for symbol: " + symbol);
+        return null;
+    }
+    try {
+        stockPriceRepository.save(stockPriceEntity);
+        System.out.println("Stock price for symbol " + symbol + " saved successfully.");
+        return stockPriceEntity;
+    } catch (Exception e) {
+        System.err.println("Error saving stock price for symbol: " + symbol);
+        e.printStackTrace();
+        return null;
+    }
 }
+    
 }

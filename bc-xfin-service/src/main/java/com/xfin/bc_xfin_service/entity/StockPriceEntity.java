@@ -1,6 +1,5 @@
 package com.xfin.bc_xfin_service.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,16 +12,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Stock_List")
+@Table(name = "Stock_Price")
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StockSymbolEntity {
+public class StockPriceEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Column(unique = true, nullable = false)
   private String symbol;
+  private long regularMarketTime;
+  private double regularMarketPrice;
+  private double regularMarketChangePercent;
+  private double bid;
+  private double ask;
+
 }

@@ -10,3 +10,7 @@ spring.datasource:
 spring.jpa:
   show-sql: true
   hibernate.ddl-auto: update
+
+spring.data.redis:
+  host: "localhost"
+  port: 6379
