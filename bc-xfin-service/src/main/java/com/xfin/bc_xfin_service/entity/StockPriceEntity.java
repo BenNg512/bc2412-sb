@@ -1,10 +1,8 @@
 package com.xfin.bc_xfin_service.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.xfin.bc_xfin_service.codewave.TimestampConverter;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +21,22 @@ public class StockPriceEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String symbol;
-  private long regularMarketTime;
-  private double regularMarketPrice;
-  private double regularMarketChangePercent;
-  private double bid;
-  private double ask;
+  private Long regularMarketTime;
+  private Double regularMarketPrice;
+  private Double regularMarketChangePercent;
+  private Double bid;
+  private Double ask;
+  
+  @Builder.Default
+  private Long currentTimeStamp = System.currentTimeMillis();
+  @Builder.Default
+  private String type = "5M";
+  @JsonProperty("regular_market_time_UTC")
+  private String regularMarketTimeUTC;
 
+  @PrePersist
+  @PreUpdate
+  private void prePersistOrUpdate() {
+    this.regularMarketTimeUTC = TimestampConverter.convertTimestampToUTC(this.regularMarketTime);
+  }
 }

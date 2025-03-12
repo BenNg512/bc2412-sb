@@ -12,11 +12,11 @@ import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 public interface Operation {
   // http://localhost:8101/stock/symbols
   @PostMapping("/stock/symbols")
-  public List<StockSymbolEntity> savSymbolEntities(@RequestBody List<StockSymbolEntity> stockSymbolEntity);
+  public List<StockSymbolEntity> saveSymbolEntities(@RequestBody List<StockSymbolEntity> stockSymbolEntity);
 
   // http://localhost:8101/stock/symbol
   @PostMapping("/stock/symbol")
-  public StockSymbolEntity savSymbolEntity(@RequestBody StockSymbolEntity stockSymbolEntity);
+  public StockSymbolEntity saveSymbolEntity(@RequestBody StockSymbolEntity stockSymbolEntity);
 
   // http://localhost:8101/api?symbol=0005.HK
   @GetMapping("/api")
@@ -28,6 +28,6 @@ public interface Operation {
 
   // http://localhost:8101/stock/symbol?symbol=0005.HK
   @GetMapping("/stock/symbol")
-  public StockPriceEntity getStockPrice(@RequestParam String symbol);
+  public StockPriceEntity saveStockPrice(@RequestParam String symbol);
 
 }

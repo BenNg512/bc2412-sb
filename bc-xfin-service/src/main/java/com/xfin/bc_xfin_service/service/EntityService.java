@@ -10,4 +10,5 @@ public interface EntityService {
   public StockSymbolEntity saveStockSymbolEntity(StockSymbolEntity stockSymbolEntity);
   public void saveStockSymbolsFromJson();
   public StockPriceEntity saveStockPriceFromApi(String symbol);
+  public void saveAllStockPriceFromApi();
 }

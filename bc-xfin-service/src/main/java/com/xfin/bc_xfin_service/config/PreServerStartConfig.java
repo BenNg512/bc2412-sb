@@ -15,6 +15,7 @@ public class PreServerStartConfig implements CommandLineRunner {
     try{
         this.entityService.saveStockSymbolsFromJson();
         this.entityService.redisSaveStockSymbols();
+        this.entityService.saveAllStockPriceFromApi();
     }catch(Exception e){
         throw e;
     }

@@ -19,12 +19,12 @@ public class Controller implements Operation {
   private YahooFinanceManager yahooFinanceManager;
   
   @Override
-  public List<StockSymbolEntity> savSymbolEntities(List<StockSymbolEntity> stockSymbolEntity) {
+  public List<StockSymbolEntity> saveSymbolEntities(List<StockSymbolEntity> stockSymbolEntity) {
       return this.entityService.saveStockSymbolEntity(stockSymbolEntity);
   }
   
   @Override
-  public StockSymbolEntity savSymbolEntity(StockSymbolEntity stockSymbolEntity) {
+  public StockSymbolEntity saveSymbolEntity(StockSymbolEntity stockSymbolEntity) {
     return this.entityService.saveStockSymbolEntity(stockSymbolEntity);
   }
 
@@ -39,7 +39,7 @@ public class Controller implements Operation {
   }
 
   @Override
-  public StockPriceEntity getStockPrice(String symbol) {
+  public StockPriceEntity saveStockPrice(String symbol) {
     return this.entityService.saveStockPriceFromApi(symbol);
   }
 

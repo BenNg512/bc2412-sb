@@ -3,6 +3,7 @@ package com.xfin.bc_xfin_service.service.impl;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -101,7 +102,7 @@ YahooFinanceManager yahooFinanceManager;
         }
     }
 
-  // get api and save to database
+  // get stock prices and save to database
   @Override
   public StockPriceEntity saveStockPriceFromApi(String symbol) {
     QuoteDto quoteDto = this.yahooFinanceManager.getQuote(symbol);
@@ -114,6 +115,7 @@ YahooFinanceManager yahooFinanceManager;
         System.err.println("No results found for symbol: " + symbol);
         return null;
     }
+    // map 
     StockPriceEntity stockPriceEntity = EntityMapper.mapToStockPriceEntity(results.get(0));
     if (stockPriceEntity == null) {
         System.err.println("Failed to map QuoteDto.Result to StockPriceEntity for symbol: " + symbol);
@@ -128,6 +130,20 @@ YahooFinanceManager yahooFinanceManager;
         e.printStackTrace();
         return null;
     }
-}
+  }
+
+  // get api and save all stock price to database
+  @Override
+  public void saveAllStockPriceFromApi(){
+    List<String> symbols = this.stockSymbolRepository.findAll()
+                                                  .stream()
+                                                  .map(StockSymbolEntity::getSymbol)
+                                                  .collect(Collectors.toList());
+    for (String string : symbols) {
+      this.saveStockPriceFromApi(string);
+    }
+    
+  }
+
     
 }
