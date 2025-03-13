@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
+import com.xfin.bc_xfin_service.entity.PublicHolidayEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.service.impl.EntityServiceImpl;
@@ -41,6 +42,12 @@ public class Controller implements Operation {
   @Override
   public StockPriceEntity saveStockPrice(String symbol) {
     return this.entityService.saveStockPriceFromApi(symbol);
+  }
+
+  @Override
+  public List<PublicHolidayEntity> savePHEntity(){
+    this.entityService.savePHEntity();
+    return null;
   }
 
   

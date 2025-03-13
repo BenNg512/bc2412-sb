@@ -9,6 +9,7 @@ import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 public interface EntityService {
   public List<StockSymbolEntity> saveStockSymbolEntity(List<StockSymbolEntity> stockSymbolEntity);
   public StockSymbolEntity saveStockSymbolEntity(StockSymbolEntity stockSymbolEntity);
+  public void savePHEntity();
   public void saveStockSymbolsFromJson();
   public void redisSaveStockSymbols() throws JsonProcessingException;
   public List<StockSymbolEntity> redisGetAllStockSymbols();

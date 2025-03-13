@@ -1,5 +1,6 @@
 package com.xfin.bc_xfin_service.entity;
 
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.xfin.bc_xfin_service.codewave.TimestampConverter;

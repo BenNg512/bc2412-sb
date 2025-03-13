@@ -13,9 +13,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xfin.bc_xfin_service.codewave.RedisManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
+import com.xfin.bc_xfin_service.entity.PublicHolidayEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.entity.mapper.EntityMapper;
+import com.xfin.bc_xfin_service.repository.PublicHolidayRepository;
 import com.xfin.bc_xfin_service.repository.StockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockSymbolRepository;
 import com.xfin.bc_xfin_service.service.EntityService;
@@ -30,6 +32,11 @@ private StockSymbolRepository stockSymbolRepository;
 private StockPriceRepository stockPriceRepository;
 
 @Autowired
+private PublicHolidayRepository publicHolidayRepository;
+
+private ObjectMapper objectMapper = new ObjectMapper();
+
+@Autowired
 RestTemplate restTemplate;
 
 @Autowired
@@ -37,6 +44,7 @@ RedisManager redisManager;
 
 @Autowired
 YahooFinanceManager yahooFinanceManager;
+
 // private RedisTemplate<String, String> redisTemplate;
 // private ObjectMapper objectMapper;
 
@@ -49,6 +57,22 @@ YahooFinanceManager yahooFinanceManager;
   public StockSymbolEntity saveStockSymbolEntity(StockSymbolEntity stockSymbolEntity) {
     return stockSymbolRepository.save(stockSymbolEntity);
   }
+  
+  @Override
+  public void savePHEntity() {
+      String url = "https://date.nager.at/api/v3/PublicHolidays/2025/HK";
+
+      try {
+          String jsonResponse = restTemplate.getForObject(url, String.class);
+
+          List<PublicHolidayEntity> holidays = objectMapper.readValue(jsonResponse, new TypeReference<List<PublicHolidayEntity>>() {});
+
+          publicHolidayRepository.saveAll(holidays);
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+  }
+
 
   // save default StockSymbol to database
   @Override

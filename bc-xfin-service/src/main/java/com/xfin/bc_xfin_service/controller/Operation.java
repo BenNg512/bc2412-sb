@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
+import com.xfin.bc_xfin_service.entity.PublicHolidayEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
@@ -30,4 +31,6 @@ public interface Operation {
   @GetMapping("/stock/symbol")
   public StockPriceEntity saveStockPrice(@RequestParam String symbol);
 
+  @PostMapping("/PH")
+  public List<PublicHolidayEntity> savePHEntity();
 }

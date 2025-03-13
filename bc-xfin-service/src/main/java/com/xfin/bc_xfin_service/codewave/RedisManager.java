@@ -59,4 +59,14 @@ public class RedisManager {
     return json == null ? null : objectMapper.readValue(json, new TypeReference<List<StockSymbolEntity>>() {});
   }
 
+  @SuppressWarnings({"null", "deprecation"})
+  public void clearAllData() {
+    try {
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
+        System.out.println("All Redis data has been cleared.");
+    } catch (Exception e) {
+        System.err.println("Error while clearing Redis data: " + e.getMessage());
+    }
+  }
+
 }
