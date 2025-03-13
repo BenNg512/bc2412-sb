@@ -12,6 +12,7 @@ public interface EntityService {
   public void savePHEntity();
   public void saveStockSymbolsFromJson();
   public void redisSaveStockSymbols() throws JsonProcessingException;
+
   public List<StockSymbolEntity> redisGetAllStockSymbols();
   public StockPriceEntity saveStockPriceFromApi(String symbol);
   public void saveAllStockPriceFromApi();

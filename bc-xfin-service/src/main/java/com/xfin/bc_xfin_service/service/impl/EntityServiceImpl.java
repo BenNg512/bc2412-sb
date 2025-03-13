@@ -10,9 +10,12 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xfin.bc_xfin_service.BcXfinServiceApplication;
 import com.xfin.bc_xfin_service.codewave.RedisManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
+import com.xfin.bc_xfin_service.config.AppConfig;
+import com.xfin.bc_xfin_service.controller.impl.Controller;
 import com.xfin.bc_xfin_service.entity.PublicHolidayEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
@@ -110,6 +113,14 @@ YahooFinanceManager yahooFinanceManager;
     String key = "stockSymbols";
     this.redisManager.set(key, entities);
   }
+  @Override
+  public void redisSaveStockSymbols2() throws JsonProcessingException {
+    List<StockPriceEntity> entities = this.stockPriceRepository.findAll();
+    for (StockPriceEntity stockPriceEntity : entities) {
+      String key = stockPriceEntity.getSymbol();
+      this.redisManager.set(key, stockPriceEntity);
+    }
+  }
 
   // get all stock symbols from redis
   @Override
@@ -149,6 +160,7 @@ YahooFinanceManager yahooFinanceManager;
     }
     try {
         stockPriceRepository.save(stockPriceEntity);
+        redisManager.set(symbol, stockPriceEntity);
         System.out.println("Stock price for symbol " + symbol + " saved successfully.");
         return stockPriceEntity;
     } catch (Exception e) {
@@ -168,8 +180,16 @@ YahooFinanceManager yahooFinanceManager;
     for (String string : symbols) {
       this.saveStockPriceFromApi(string);
     }
-    
   }
+
+  public void clearRedisData(){
+    this.redisManager.clearAllData();
+  }
+
+
+
+
+
 
     
 }
