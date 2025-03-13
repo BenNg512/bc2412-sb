@@ -35,7 +35,7 @@ public class Controller implements Operation {
   
   @Override
   public List<StockSymbolEntity> getAllStockSymbolsFromRedis() {
-    return this.entityService.getAllStockSymbolsFromRedis();
+    return this.entityService.redisGetAllStockSymbols();
   }
 
   @Override

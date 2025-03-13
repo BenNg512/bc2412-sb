@@ -79,6 +79,7 @@ YahooFinanceManager yahooFinanceManager;
   }
 
   // save default StockSymbol to redis
+  @Override
   public void redisSaveStockSymbols() throws JsonProcessingException {
     List<StockSymbolEntity> entities = this.stockSymbolRepository.findAll();
     System.out.println(entities);
@@ -87,7 +88,8 @@ YahooFinanceManager yahooFinanceManager;
   }
 
   // get all stock symbols from redis
-  public List<StockSymbolEntity> getAllStockSymbolsFromRedis() {
+  @Override
+  public List<StockSymbolEntity> redisGetAllStockSymbols() {
     try {
       List<StockSymbolEntity> stockSymbols = redisManager.getStockSymbols();
             if (stockSymbols != null) {
