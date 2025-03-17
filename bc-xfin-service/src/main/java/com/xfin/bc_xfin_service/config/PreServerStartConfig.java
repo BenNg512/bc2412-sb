@@ -13,7 +13,7 @@ public class PreServerStartConfig implements CommandLineRunner {
   public void run(String... args) throws Exception {
     
     try{
-        //this.entityService.saveStockSymbolsFromJson();
+        this.entityService.saveStockSymbolsFromJson();
         //this.entityService.savePHEntity();
         this.entityService.redisSaveStockSymbols();
         this.entityService.saveAllStockPriceFromApi();

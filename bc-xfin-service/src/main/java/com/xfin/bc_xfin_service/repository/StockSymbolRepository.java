@@ -9,5 +9,6 @@ import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 @Repository
 public interface StockSymbolRepository extends JpaRepository<StockSymbolEntity, Long> {
   Optional<StockSymbolEntity> findBySymbol(String symbol);
+  @SuppressWarnings("null")
   List<StockSymbolEntity> findAll();
 }

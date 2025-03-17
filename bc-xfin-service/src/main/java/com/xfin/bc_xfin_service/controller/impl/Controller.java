@@ -7,6 +7,7 @@ import com.xfin.bc_xfin_service.codewave.RedisManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
+import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.service.impl.EntityServiceImpl;
@@ -17,8 +18,7 @@ public class Controller implements Operation {
   @Autowired
   private EntityServiceImpl entityService;
 
-  @Autowired
-  private YahooFinanceManager yahooFinanceManager;
+  YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
 
   @Autowired
   private RedisManager redisManager;
@@ -56,6 +56,24 @@ public class Controller implements Operation {
   @Override
   public StockPriceEntity saveStockPrice(String symbol) {
     return this.entityService.saveStockPriceFromApi(symbol);
+  }
+
+  @Override
+  public String getLatestDataTime(){
+    return this.entityService.findMaxMarketDate();
+  }
+  @Override
+  public String getLatestDataTime(String symbol){
+    return this.entityService.findMaxMarketDate(symbol);
+  }
+
+  @Override
+  public FiveMinDataDto getFiveMinData() {
+    return this.entityService.getFiveMinData();
+  }
+  @Override
+  public FiveMinDataDto getFiveMinData(String symbol) {
+    return this.entityService.getFiveMinData(symbol);
   }
   
 }

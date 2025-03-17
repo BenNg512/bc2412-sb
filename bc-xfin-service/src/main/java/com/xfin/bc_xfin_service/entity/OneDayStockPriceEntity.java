@@ -33,7 +33,7 @@ public class OneDayStockPriceEntity {
   @Builder.Default
   private Long currentTimeStamp = System.currentTimeMillis();
   @Builder.Default
-  private String type = "5M";
+  private String type = "5MIN";
   // @JsonProperty("regular_market_time_UTC")
   // private String regularMarketTimeUTC;
   @JsonProperty("regular_market_time_HKT")
@@ -45,7 +45,7 @@ public class OneDayStockPriceEntity {
   @PreUpdate
   private void prePersistOrUpdate() {
     //this.regularMarketTimeUTC = TimestampConverter.convertTimestampToUTC(this.regularMarketTime);
-    this.regularMarketTimeHKT = TimestampConverter.convertTimestamp(this.regularMarketTime, Timezone.HKT);
+    this.regularMarketTimeHKT = TimestampConverter.convertTimestamp(this.regularMarketTime, Timezone.HKT, "yyyy-MM-dd HH:mm:ss");
     this.stockPriceId = symbol + "_" + regularMarketTime;
   }
 }

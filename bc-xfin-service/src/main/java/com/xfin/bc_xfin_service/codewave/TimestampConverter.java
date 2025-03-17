@@ -6,10 +6,12 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TimestampConverter {
-    public static String convertTimestamp(Long time, Timezone timezone) {
+
+    // custom pattern
+    public static String convertTimestamp(Long time, Timezone timezone, String pattern) {
         Instant instant = Instant.ofEpochSecond(time);
         ZonedDateTime utcDateTime = instant.atZone(ZoneId.of(timezone.value));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         String formattedTime = utcDateTime.format(formatter);
 
         return formattedTime;

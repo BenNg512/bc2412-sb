@@ -28,10 +28,18 @@ public class ScheduleConfig {
       System.out.println(formattedFetchTime);
   }
 
-  //@Scheduled(cron = "0 */5 9-17 * * MON-FRI", zone = "Asia/Hong_Kong")
-  // public void clearRedis() {
-  //     this.redisManager.redisClearAllData();
-  //     System.out.println("Redis cleared");
-  // }
+// if market is open at 9:30, clear previous day data
+// 9-12, 12-16:30
+
+//   @Scheduled(cron = "30 */1 9-17 * * MON-FRI", zone = "Asia/Hong_Kong")
+//   public void clearOneDayData() {
+//       try {
+//           this.entityService.clearOneDayData();
+//           System.out.println("One day data cleared");
+//       } catch (Exception e) {
+//           System.err.println("Error clearing one day data");
+//           e.printStackTrace();
+//       }
+//   }
 
 }
