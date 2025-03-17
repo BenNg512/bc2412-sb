@@ -81,6 +81,11 @@ public QuoteDto getQuote(String symbol) {
     }
 }
 
+public String getHKMarketState() {
+    // "CLOSED" or "REGULAR"
+    return this.getQuote("0005.HK").getQuoteResponse().getResult().get(0).getMarketState();
+}
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -185,5 +190,6 @@ public static class QuoteDto {
 public static void main(String[] args) {
     YahooFinanceManager financeManager = new YahooFinanceManager();
     System.out.println(financeManager.getQuote("0005.HK"));
+    System.out.println(financeManager.getHKMarketState());
 }
 }

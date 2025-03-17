@@ -11,12 +11,13 @@ public class PreServerStartConfig implements CommandLineRunner {
   private EntityService entityService;
   @Override
   public void run(String... args) throws Exception {
+    
     try{
         //this.entityService.saveStockSymbolsFromJson();
         //this.entityService.savePHEntity();
         this.entityService.redisSaveStockSymbols();
         this.entityService.saveAllStockPriceFromApi();
-    }catch(Exception e){
+    }catch(Exception e){ 
         throw e;
     }
     

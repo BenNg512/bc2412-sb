@@ -28,10 +28,10 @@ public class ScheduleConfig {
       System.out.println(formattedFetchTime);
   }
 
-  @Scheduled(cron = "0 */5 9-17 * * MON-FRI", zone = "Asia/Hong_Kong")
-  public void clearRedis() {
-      this.redisManager.clearAllData();
-      System.out.println("Redis cleared");
-  }
+  //@Scheduled(cron = "0 */5 9-17 * * MON-FRI", zone = "Asia/Hong_Kong")
+  // public void clearRedis() {
+  //     this.redisManager.redisClearAllData();
+  //     System.out.println("Redis cleared");
+  // }
 
 }

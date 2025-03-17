@@ -3,30 +3,34 @@ package com.xfin.bc_xfin_service.controller.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
+import com.xfin.bc_xfin_service.codewave.RedisManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
-import com.xfin.bc_xfin_service.entity.PublicHolidayEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.service.impl.EntityServiceImpl;
 
 @RestController
 public class Controller implements Operation {
+
   @Autowired
   private EntityServiceImpl entityService;
 
   @Autowired
   private YahooFinanceManager yahooFinanceManager;
+
+  @Autowired
+  private RedisManager redisManager;
   
   @Override
-  public List<StockSymbolEntity> saveSymbolEntities(List<StockSymbolEntity> stockSymbolEntity) {
-      return this.entityService.saveStockSymbolEntity(stockSymbolEntity);
+  public void saveSymbolEntities(List<StockSymbolEntity> stockSymbolEntity) {
+    this.entityService.saveStockSymbolEntity(stockSymbolEntity);
   }
   
   @Override
-  public StockSymbolEntity saveSymbolEntity(StockSymbolEntity stockSymbolEntity) {
-    return this.entityService.saveStockSymbolEntity(stockSymbolEntity);
+  public void saveSymbolEntity(StockSymbolEntity stockSymbolEntity) {
+    this.entityService.saveStockSymbolEntity(stockSymbolEntity);
   }
 
   @Override
@@ -35,24 +39,23 @@ public class Controller implements Operation {
   }
   
   @Override
-  public List<StockSymbolEntity> getAllStockSymbolsFromRedis() {
+  public List<StockSymbolEntity> redisGetAllStockSymbols() {
     return this.entityService.redisGetAllStockSymbols();
+  }
+
+  //!
+  public List<StockPriceEntity> getStockPriceList(String symbol){
+    return null;
+  }
+
+  @Override
+  public void redisClearByKey(String key){
+    this.redisManager.clearData(key);
   }
 
   @Override
   public StockPriceEntity saveStockPrice(String symbol) {
     return this.entityService.saveStockPriceFromApi(symbol);
   }
-
-  @Override
-  public List<PublicHolidayEntity> savePHEntity(){
-    this.entityService.savePHEntity();
-    return null;
-  }
-
-  
-  
-
-
   
 }

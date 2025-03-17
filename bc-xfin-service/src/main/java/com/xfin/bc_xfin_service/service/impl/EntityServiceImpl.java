@@ -6,21 +6,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xfin.bc_xfin_service.BcXfinServiceApplication;
 import com.xfin.bc_xfin_service.codewave.RedisManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
-import com.xfin.bc_xfin_service.config.AppConfig;
-import com.xfin.bc_xfin_service.controller.impl.Controller;
-import com.xfin.bc_xfin_service.entity.PublicHolidayEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.entity.mapper.EntityMapper;
-import com.xfin.bc_xfin_service.repository.PublicHolidayRepository;
 import com.xfin.bc_xfin_service.repository.StockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockSymbolRepository;
 import com.xfin.bc_xfin_service.service.EntityService;
@@ -35,46 +29,24 @@ private StockSymbolRepository stockSymbolRepository;
 private StockPriceRepository stockPriceRepository;
 
 @Autowired
-private PublicHolidayRepository publicHolidayRepository;
-
-private ObjectMapper objectMapper = new ObjectMapper();
+private RedisManager redisManager;
 
 @Autowired
-RestTemplate restTemplate;
+YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
 
-@Autowired
-RedisManager redisManager;
 
-@Autowired
-YahooFinanceManager yahooFinanceManager;
-
-// private RedisTemplate<String, String> redisTemplate;
-// private ObjectMapper objectMapper;
 
   @Override
-  public List<StockSymbolEntity> saveStockSymbolEntity(List<StockSymbolEntity> stockSymbolEntity) {
-    return stockSymbolRepository.saveAll(stockSymbolEntity);
+  public void saveStockSymbolEntity(List<StockSymbolEntity> stockSymbolEntity) {
+    this.stockSymbolRepository.saveAll(stockSymbolEntity);
   }
 
   @Override
-  public StockSymbolEntity saveStockSymbolEntity(StockSymbolEntity stockSymbolEntity) {
-    return stockSymbolRepository.save(stockSymbolEntity);
+  public void saveStockSymbolEntity(StockSymbolEntity stockSymbolEntity) {
+    this.stockSymbolRepository.save(stockSymbolEntity);
   }
-  
-  @Override
-  public void savePHEntity() {
-      String url = "https://date.nager.at/api/v3/PublicHolidays/2025/HK";
+  //String PHApiUrl = "https://date.nager.at/api/v3/PublicHolidays/2025/HK";
 
-      try {
-          String jsonResponse = restTemplate.getForObject(url, String.class);
-
-          List<PublicHolidayEntity> holidays = objectMapper.readValue(jsonResponse, new TypeReference<List<PublicHolidayEntity>>() {});
-
-          publicHolidayRepository.saveAll(holidays);
-      } catch (Exception e) {
-          e.printStackTrace();
-      }
-  }
 
 
   // save default StockSymbol to database
@@ -113,20 +85,17 @@ YahooFinanceManager yahooFinanceManager;
     String key = "stockSymbols";
     this.redisManager.set(key, entities);
   }
-  @Override
-  public void redisSaveStockSymbols2() throws JsonProcessingException {
-    List<StockPriceEntity> entities = this.stockPriceRepository.findAll();
-    for (StockPriceEntity stockPriceEntity : entities) {
-      String key = stockPriceEntity.getSymbol();
-      this.redisManager.set(key, stockPriceEntity);
-    }
-  }
+
+  // public List<StockSymbolEntity> getStockSymbols() throws JsonProcessingException {
+  //   return redisManager.get2("stockSymbols", new TypeReference<List<StockSymbolEntity>>() {});
+  // }
 
   // get all stock symbols from redis
   @Override
   public List<StockSymbolEntity> redisGetAllStockSymbols() {
     try {
-      List<StockSymbolEntity> stockSymbols = redisManager.getStockSymbols();
+      //List<StockSymbolEntity> stockSymbols = this.redisManager.getStockSymbols();
+      List<StockSymbolEntity> stockSymbols = this.redisManager.getStockSymbols();
             if (stockSymbols != null) {
                 System.out.println("Stock symbols retrieved from Redis!");
             } else {
@@ -139,7 +108,7 @@ YahooFinanceManager yahooFinanceManager;
         }
     }
 
-  // get stock prices and save to database
+  // get stock prices and save to database & redis
   @Override
   public StockPriceEntity saveStockPriceFromApi(String symbol) {
     QuoteDto quoteDto = this.yahooFinanceManager.getQuote(symbol);
@@ -160,7 +129,17 @@ YahooFinanceManager yahooFinanceManager;
     }
     try {
         stockPriceRepository.save(stockPriceEntity);
-        redisManager.set(symbol, stockPriceEntity);
+        //this.redisManager.set(symbol, stockPriceEntity);
+
+      // try {
+      //     this.redisManager.set(symbol, stockPriceEntity);
+      //     System.out.println("Successfully updated " + symbol);
+      // } catch (Exception e) {
+      //     System.err.println("Failed to update " + symbol + ": " + e.getMessage());
+      //     throw e;
+      // }
+
+        redisUpdateStockPrice(symbol, stockPriceEntity);
         System.out.println("Stock price for symbol " + symbol + " saved successfully.");
         return stockPriceEntity;
     } catch (Exception e) {
@@ -170,6 +149,27 @@ YahooFinanceManager yahooFinanceManager;
     }
   }
 
+  // update redis: if symbol exists, update; if not, add
+  public void redisUpdateStockPrice(String symbol, StockPriceEntity newStockPriceEntity) throws Exception {
+      try {
+              List<StockPriceEntity> existingStockPriceEntityList = (List<StockPriceEntity>) this.redisManager.get(symbol, StockPriceEntity.class);
+              if (existingStockPriceEntityList != null) {
+                  existingStockPriceEntityList.add(newStockPriceEntity);
+                  this.redisManager.set(symbol, existingStockPriceEntityList);
+                  System.out.println("Successfully updated " + symbol);
+                  return;
+              }
+              else if (existingStockPriceEntityList == null){
+              List<StockPriceEntity> stockPriceEntityList = List.of(newStockPriceEntity);
+              this.redisManager.set(symbol, stockPriceEntityList);
+              }
+              System.out.println("Successfully added " + symbol);
+      } catch (Exception e) {
+          System.err.println("Failed to update " + symbol + ": " + e.getMessage());
+          throw e;
+      }
+  }
+    
   // get api and save all stock price to database
   @Override
   public void saveAllStockPriceFromApi(){
@@ -181,14 +181,6 @@ YahooFinanceManager yahooFinanceManager;
       this.saveStockPriceFromApi(string);
     }
   }
-
-  public void clearRedisData(){
-    this.redisManager.clearAllData();
-  }
-
-
-
-
 
 
     

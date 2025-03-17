@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Stock_Price")
+@Table(name = "One_Day_Stock_Price")
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder
-public class StockPriceEntity {
+public class OneDayStockPriceEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

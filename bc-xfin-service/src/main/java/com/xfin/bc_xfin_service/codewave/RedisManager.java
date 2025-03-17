@@ -14,8 +14,8 @@ import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 public class RedisManager {
   private static final Duration DEFAULT_DURATION = Duration.ofHours(1);
   
-  private RedisTemplate<String, String> redisTemplate;
-  private ObjectMapper objectMapper;
+  private final RedisTemplate<String, String> redisTemplate;
+  private final ObjectMapper objectMapper;
 
   public RedisManager(RedisConnectionFactory factory,
       ObjectMapper objectMapper) {
@@ -29,10 +29,13 @@ public class RedisManager {
     this.objectMapper = objectMapper;
   }
 
+  // method 1
   public <T> T get(String key, Class<T> clazz) throws JsonProcessingException {
     String json = this.redisTemplate.opsForValue().get(key);
     return json == null ? null : objectMapper.readValue(json, clazz);
   }
+
+
 
   public void set(String key, Object object) throws JsonProcessingException {
     String serializedJson = objectMapper.writeValueAsString(object);
@@ -44,29 +47,25 @@ public class RedisManager {
     String serializedJson = objectMapper.writeValueAsString(object);
     this.redisTemplate.opsForValue().set(key, serializedJson, duration);
   }
-
-  //
-  // for this project only
-
-  public void saveStockSymbols(List<StockSymbolEntity> entities) throws JsonProcessingException {
-    String key = "stockSymbols";
-    this.set(key, entities);
-  }
-
-  public List<StockSymbolEntity> getStockSymbols() throws JsonProcessingException {
-    String key = "stockSymbols";
+  // method 2
+  public <T> T get2(String key, TypeReference<T> typeRef) throws JsonProcessingException {
     String json = this.redisTemplate.opsForValue().get(key);
+    return json == null ? null : objectMapper.readValue(json, typeRef);
+  }
+  // method 3 :hardcode
+  public List<StockSymbolEntity> getStockSymbols() throws JsonProcessingException {
+    String json = this.redisTemplate.opsForValue().get("stockSymbols");
     return json == null ? null : objectMapper.readValue(json, new TypeReference<List<StockSymbolEntity>>() {});
   }
 
   @SuppressWarnings({"null", "deprecation"})
-  public void clearAllData() {
-    try {
-        redisTemplate.getConnectionFactory().getConnection().flushAll();
-        System.out.println("All Redis data has been cleared.");
-    } catch (Exception e) {
-        System.err.println("Error while clearing Redis data: " + e.getMessage());
-    }
+  public void redisClearAllData() {
+    this.redisTemplate.getConnectionFactory().getConnection().flushAll();
+    System.out.println("All Redis data has been cleared.");
+  }
+
+  public void clearData(String key) {
+    this.redisTemplate.delete(key);
   }
 
 }
