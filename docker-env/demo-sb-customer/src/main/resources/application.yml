@@ -1,0 +1,40 @@
+# server.port
+server:
+  port: 8098
+
+# spring.datasource.driverClassName
+# spring.datasource.url
+spring.datasource:
+  driverClassName: "org.postgresql.Driver"
+  url: "jdbc:postgresql://postgres-container:5432/bc2412"
+  username: "postgres"
+  password: "admin1234"
+  
+spring.jpa:
+  show-sql: true
+  hibernate.ddl-auto: update
+
+spring:
+  data:
+    redis:
+      host: redis-container
+      port: 6379
+
+# spring.datasource:
+#   platform: h2
+#   url: jdbc:h2:mem:jpademo 
+
+# # JPA Settings
+# spring.jpa:
+#   show-sql: true
+#   hibernate.ddl-auto: create-drop # for development purpose
+
+# # H2 Database Settings
+# spring.h2.console.enabled: true
+
+# Custom Variables
+api:
+  jsonplaceholder:
+    domain: "jsonplaceholder.typicode.com"
+    endpoints:
+      users: "/users"

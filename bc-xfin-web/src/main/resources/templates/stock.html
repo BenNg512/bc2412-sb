@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Stock Price Graph</title>
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        canvas {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 th:text="'Stock Price for ' + ${symbol}">Stock Price</h1>
+    <!-- Canvas for the chart -->
+    <canvas id="stockChart"></canvas>
+
+    <!-- Pass data from Thymeleaf to JavaScript -->
+    <script th:inline="javascript">
+        // Extract data from Thymeleaf model
+        const stockData = /*[[${stockData}]]*/ [];
+
+        // Prepare labels (marketTime) and prices (regularMarketPrice)
+        const labels = stockData.map(entry => entry.marketTime);
+        const prices = stockData.map(entry => entry.regularMarketPrice);
+
+        // Create the chart
+        const ctx = document.getElementById('stockChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line', // Line graph
+            data: {
+                labels: labels, // X-axis: time
+                datasets: [{
+                    label: 'Stock Price (HKD)',
+                    data: prices, // Y-axis: price
+                    borderColor: 'blue',
+                    backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Time' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Price (HKD)' },
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
