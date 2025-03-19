@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta http-equiv="refresh" content="10">
+    <link rel="icon" href="bitcoin.png" />
     <title>Stock Price Graph</title>
     <!-- Include Chart.js from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         canvas {
-            max-width: 800px;
+            width: 90%;
             margin: 20px auto;
         }
     </style>
 </head>
 <body>
-    <h1 th:text="'Stock Price for ' + ${symbol}">Stock Price</h1>
+    <h1 th:text="${title} + ' on ' + ${date}">Stock Price</h1>
+    <p>Next refresh: <span id="timer">10</span> seconds</p>
     <!-- Canvas for the chart -->
     <canvas id="stockChart"></canvas>
 
@@ -22,29 +25,58 @@
         const stockData = /*[[${stockData}]]*/ [];
 
         // Prepare labels (marketTime) and prices (regularMarketPrice)
-        const labels = stockData.map(entry => entry.marketTime);
+        const labels = stockData.map(entry => entry.marketTime.substring(11, 16)); // HH:MM
         const prices = stockData.map(entry => entry.regularMarketPrice);
+
+        // Calculate 5-period Simple Moving Average (SMA)
+        const period = 5; // 5 periods (25 minutes for 5-min data)
+        const smaData = stockData.map((entry, index) => {
+            if (index < period - 1) {
+                return null; // Not enough data for SMA yet
+            }
+            // Sum the last 'period' prices and divide by period
+            const pricesSlice = stockData.slice(index - (period - 1), index + 1).map(e => e.regularMarketPrice);
+            const sum = pricesSlice.reduce((acc, val) => acc + val, 0);
+            return sum / period;
+        });
+
+        // Align SMA data with labels
+        const smaDataset = labels.map((label, index) => ({
+            x: label,
+            y: smaData[index]
+        }));
 
         // Create the chart
         const ctx = document.getElementById('stockChart').getContext('2d');
         new Chart(ctx, {
             type: 'line', // Line graph
             data: {
-                labels: labels, // X-axis: time
-                datasets: [{
-                    label: 'Stock Price (HKD)',
-                    data: prices, // Y-axis: price
-                    borderColor: 'blue',
-                    backgroundColor: 'rgba(0, 0, 255, 0.1)',
-                    fill: true,
-                    tension: 0.1
-                }]
+                labels: labels, // X-axis: time (HH:MM)
+                datasets: [
+                    {
+                        label: 'Stock Price (HKD)',
+                        data: prices, // Y-axis: price
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    },
+                    {
+                        label: '5-Period SMA',
+                        data: smaDataset,
+                        borderColor: 'orange',
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 0, // No points, just a line
+                        tension: 0.1
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 scales: {
                     x: {
-                        title: { display: true, text: 'Time' }
+                        title: { display: true, text: 'Time (HH:MM)' }
                     },
                     y: {
                         title: { display: true, text: 'Price (HKD)' },
@@ -54,5 +86,8 @@
             }
         });
     </script>
+
+    <!-- Load the timer JavaScript -->
+    <script src="/js/script.js"></script>
 </body>
 </html>

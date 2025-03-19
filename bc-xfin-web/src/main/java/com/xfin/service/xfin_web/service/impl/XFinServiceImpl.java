@@ -17,8 +17,11 @@ public FiveMinDataDto getFiveMinData(String symbol) {
   String url = "http://localhost:8101/5min-data/" + symbol;
   return restTemplate.getForObject(url, FiveMinDataDto.class);
 }
+@Override
+public FiveMinDataDto getFiveMinData(String symbol, String date) {
+  String url = "http://localhost:8101/5min-data/" + symbol + "/" + date;
+  return restTemplate.getForObject(url, FiveMinDataDto.class);
+}
 
 
-
-  
 }

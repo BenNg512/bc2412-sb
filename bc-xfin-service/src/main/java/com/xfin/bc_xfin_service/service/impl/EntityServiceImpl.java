@@ -1,5 +1,6 @@
 package com.xfin.bc_xfin_service.service.impl;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import com.xfin.bc_xfin_service.codewave.RedisManager;
 import com.xfin.bc_xfin_service.codewave.TimestampConverter;
 import com.xfin.bc_xfin_service.codewave.Timezone;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
+import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.map.DtoMapper;
@@ -211,6 +213,21 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
       return DtoMapper.mapToFiveMinDataDto(stockPriceEntities);
     }
     return null;
+  }
+
+  @Override
+  public FiveMinDataDto getFiveMinData(String symbol, String date) {
+    List<StockPriceEntity> stockPriceEntities = 
+        this.stockPriceRepository.findByRegularMarketTime(date, symbol);
+    if (stockPriceEntities != null && !stockPriceEntities.isEmpty()) {
+      return DtoMapper.mapToFiveMinDataDto(stockPriceEntities);
+    }
+    return null;
+  }
+
+  @Override
+  public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException {
+    return this.yahooFinanceManager.getDailyData(symbol, period1, period2);
   }
 
 }

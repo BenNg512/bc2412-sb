@@ -1,10 +1,11 @@
 package com.xfin.bc_xfin_service.controller.impl;
 
+import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-import com.xfin.bc_xfin_service.codewave.RedisManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
+import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
@@ -20,9 +21,6 @@ public class Controller implements Operation {
 
   YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
 
-  @Autowired
-  private RedisManager redisManager;
-  
   @Override
   public void saveSymbolEntities(List<StockSymbolEntity> stockSymbolEntity) {
     this.entityService.saveStockSymbolEntity(stockSymbolEntity);
@@ -41,16 +39,6 @@ public class Controller implements Operation {
   @Override
   public List<StockSymbolEntity> redisGetAllStockSymbols() {
     return this.entityService.redisGetAllStockSymbols();
-  }
-
-  //!
-  public List<StockPriceEntity> getStockPriceList(String symbol){
-    return null;
-  }
-
-  @Override
-  public void redisClearByKey(String key){
-    this.redisManager.clearData(key);
   }
 
   @Override
@@ -74,6 +62,15 @@ public class Controller implements Operation {
   @Override
   public FiveMinDataDto getFiveMinData(String symbol) {
     return this.entityService.getFiveMinData(symbol);
+  }
+
+  @Override
+  public FiveMinDataDto getFiveMinData(String symbol, String date) {
+    return this.entityService.getFiveMinData(symbol, date);
+  }
+
+  public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException {
+    return this.entityService.getDailyData(symbol, period1, period2);
   }
   
 }

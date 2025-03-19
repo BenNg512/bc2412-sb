@@ -1,5 +1,6 @@
 package com.xfin.bc_xfin_service.codewave;
 
+import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.CookieStore;
@@ -10,9 +11,15 @@ import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +29,7 @@ public class YahooFinanceManager{
 
 private final CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
 private final ObjectMapper objectMapper = new ObjectMapper();
+private final RestTemplate restTemplate = new RestTemplate();
 
 public QuoteDto getQuote(String symbol) {
     String crumbUrl = "https://query1.finance.yahoo.com/v1/test/getcrumb";
@@ -185,6 +193,163 @@ public static class QuoteDto {
         private String symbol;
     }
 }
+
+public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException {
+  Long startTimestamp = Long.parseLong(period1);
+  Long endTimestamp = Long.parseLong(period2);
+
+  String quoteUrl = "https://finance.yahoo.com/quote/" + symbol;
+  HttpHeaders headers = new HttpHeaders();
+  headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
+  HttpEntity<String> entity = new HttpEntity<>(headers);
+
+  ResponseEntity<String> quoteResponse = restTemplate.exchange(quoteUrl, HttpMethod.GET, entity, String.class);
+  String cookie = quoteResponse.getHeaders().getFirst("Set-Cookie");
+  //String html = quoteResponse.getBody();
+  String crumb = "dynamic-crumb";
+
+  String url = "https://query1.finance.yahoo.com/v8/finance/chart/" 
+              + symbol
+              + "?period1=" + startTimestamp
+              + "&period2=" + endTimestamp
+              + "&interval=1d&events=history&crumb=" + crumb;
+
+  headers.set("Cookie", cookie);
+  HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+  ResponseEntity<HistoricalDataDto> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, HistoricalDataDto.class);
+  return response.getBody();
+}
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public static class HistoricalDataDto {
+
+    private Chart chart;
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Chart {
+        private List<Result> result;
+        private Object error; // Can be null or an error object
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Result {
+        private Meta meta;
+        private List<Long> timestamp;
+        private Indicators indicators;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Meta {
+        private String currency;
+        private String symbol;
+        private String exchangeName;
+        private String fullExchangeName;
+        private String instrumentType;
+        private Long firstTradeDate;
+        private Long regularMarketTime;
+        private Boolean hasPrePostMarketData;
+        private Integer gmtoffset;
+        private String timezone;
+        private String exchangeTimezoneName;
+        private Double regularMarketPrice;
+        private Double fiftyTwoWeekHigh;
+        private Double fiftyTwoWeekLow;
+        private Double regularMarketDayHigh;
+        private Double regularMarketDayLow;
+        private Long regularMarketVolume;
+        private String longName;
+        private String shortName;
+        private Double chartPreviousClose;
+        private Integer priceHint;
+        private CurrentTradingPeriod currentTradingPeriod;
+        private String dataGranularity;
+        private String range;
+        private List<String> validRanges;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class CurrentTradingPeriod {
+        private TradingPeriod pre;
+        private TradingPeriod regular;
+        private TradingPeriod post;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class TradingPeriod {
+        private String timezone;
+        private Long start;
+        private Long end;
+        private Integer gmtoffset;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Indicators {
+        private List<Quote> quote;
+        private List<AdjClose> adjclose;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Quote {
+        private List<Double> low;
+        private List<Long> volume;
+        private List<Double> open;
+        private List<Double> high;
+        private List<Double> close;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class AdjClose {
+        private List<Double> adjclose;
+    }
+}
+
+
 public static void main(String[] args) {
     YahooFinanceManager financeManager = new YahooFinanceManager();
     System.out.println(financeManager.getQuote("0005.HK"));

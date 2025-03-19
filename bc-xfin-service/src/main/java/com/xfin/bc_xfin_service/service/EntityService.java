@@ -1,7 +1,9 @@
 package com.xfin.bc_xfin_service.service;
 
+import java.io.IOException;
 import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
@@ -21,4 +23,6 @@ public interface EntityService {
   public String findMaxMarketDate(String symbol);
   public FiveMinDataDto getFiveMinData();
   public FiveMinDataDto getFiveMinData(String symbol);
+  public FiveMinDataDto getFiveMinData(String symbol, String date);
+  public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException;
 }
