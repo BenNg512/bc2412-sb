@@ -69,8 +69,13 @@ public class Controller implements Operation {
     return this.entityService.getFiveMinData(symbol, date);
   }
 
+  @Override
   public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException {
-    return this.entityService.getDailyData(symbol, period1, period2);
+    return this.entityService.getDailyData(symbol, period1, period2, "1d");
+  }
+
+  public void saveDailyHistData(String symbol, String period1, String period2) throws IOException {
+    this.entityService.saveHistoricalDataDto(symbol,period1,period2,"1d");
   }
   
 }

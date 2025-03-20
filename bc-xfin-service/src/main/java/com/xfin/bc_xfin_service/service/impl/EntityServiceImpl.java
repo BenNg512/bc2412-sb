@@ -18,10 +18,12 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.map.DtoMapper;
+import com.xfin.bc_xfin_service.entity.HistoryStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.OneDayStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.entity.mapper.EntityMapper;
+import com.xfin.bc_xfin_service.repository.HistoryStockPriceRepository;
 import com.xfin.bc_xfin_service.repository.OneDayStockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockSymbolRepository;
@@ -36,6 +38,8 @@ private StockSymbolRepository stockSymbolRepository;
 private StockPriceRepository stockPriceRepository;
 @Autowired
 private OneDayStockPriceRepository oneDayStockPriceRepository;
+@Autowired
+private HistoryStockPriceRepository historyStockPriceRepository;
 @Autowired
 private RedisManager redisManager;
 
@@ -226,8 +230,29 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
   }
 
   @Override
-  public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException {
-    return this.yahooFinanceManager.getDailyData(symbol, period1, period2);
+  public HistoricalDataDto getDailyData(String symbol, String period1, String period2, String interval) throws IOException {
+    return this.yahooFinanceManager.getDailyData(symbol, period1, period2, interval);
   }
+
+
+  public void saveHistoricalDataDto(String symbol, String period1, String period2, String interval) throws IOException {
+    try {
+        HistoricalDataDto data = this.yahooFinanceManager.getDailyData(symbol, period1, period2, interval);
+        if (data == null || data.getChart() == null || data.getChart().getResult() == null) {
+            throw new IOException("No data returned from Yahoo Finance API");
+        }
+        List<HistoryStockPriceEntity> entities = EntityMapper.toEntities(data);
+        
+        // Filter out entities that already exist in the database
+        List<HistoryStockPriceEntity> newEntities = entities.stream()
+            .filter(entity -> !historyStockPriceRepository.existsBySymbolAndTimestamp(entity.getSymbol(), entity.getTimestamp()))
+            .toList();
+        if (!newEntities.isEmpty()) {
+            historyStockPriceRepository.saveAll(newEntities);
+        }
+    } catch (IOException e) {
+        throw new IOException("Failed to save historical data for symbol " + symbol + ": " + e.getMessage(), e);
+    }
+}
 
 }

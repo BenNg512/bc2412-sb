@@ -10,6 +10,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +33,8 @@ public class YahooFinanceManager{
 private final CookieManager cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
 private final ObjectMapper objectMapper = new ObjectMapper();
 private final RestTemplate restTemplate = new RestTemplate();
+private static final DateTimeFormatter DATE_TIME_FORMATTER = 
+        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Hong_Kong"));
 
 public QuoteDto getQuote(String symbol) {
     String crumbUrl = "https://query1.finance.yahoo.com/v1/test/getcrumb";
@@ -194,9 +199,20 @@ public static class QuoteDto {
     }
 }
 
-public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException {
-  Long startTimestamp = Long.parseLong(period1);
-  Long endTimestamp = Long.parseLong(period2);
+private Long parseToUnixTimestamp(String dateTimeStr) {
+        try {
+            // Try parsing as a Unix timestamp (numeric string)
+            return Long.parseLong(dateTimeStr);
+        } catch (NumberFormatException e) {
+            // If parsing as a number fails, assume it's a date-time string (yyyy-MM-dd HH:mm:ss)
+            LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DATE_TIME_FORMATTER);
+            return dateTime.atZone(ZoneId.of("Asia/Hong_Kong")).toEpochSecond();
+        }
+}
+
+public HistoricalDataDto getDailyData(String symbol, String period1, String period2, String interval) throws IOException {
+    Long startTimestamp = parseToUnixTimestamp(period1);
+    Long endTimestamp = parseToUnixTimestamp(period2);
 
   String quoteUrl = "https://finance.yahoo.com/quote/" + symbol;
   HttpHeaders headers = new HttpHeaders();
@@ -212,7 +228,8 @@ public HistoricalDataDto getDailyData(String symbol, String period1, String peri
               + symbol
               + "?period1=" + startTimestamp
               + "&period2=" + endTimestamp
-              + "&interval=1d&events=history&crumb=" + crumb;
+              + "&interval=" + interval
+              + "&events=history&crumb=" + crumb;
 
   headers.set("Cookie", cookie);
   HttpEntity<String> requestEntity = new HttpEntity<>(headers);

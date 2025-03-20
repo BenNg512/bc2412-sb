@@ -23,12 +23,18 @@ private XFinServiceImpl xFinService;
 
   @Override
   public String stockPage(Model model, String symbol) {
-    FiveMinDataDto data = xFinService.getFiveMinData(symbol);
-    String date = data.getDataMap().get(symbol).getRegularMarketTime().substring(0,11);
-    model.addAttribute("date", date);
-    model.addAttribute("stockData", data.getDataMap().get(symbol).getData());
-    model.addAttribute("title", symbol = "Stock Price for " + symbol);
-    return "stock";
+      FiveMinDataDto data = xFinService.getFiveMinData(symbol);
+      if (data == null) {
+          model.addAttribute("title", "Data Not Found");
+          model.addAttribute("date", "today (default day)");
+          return "stock";
+      }
+      String date = data.getDataMap().get(symbol).getRegularMarketTime().substring(0, 11);
+      model.addAttribute("date", date);
+      model.addAttribute("stockData", data.getDataMap().get(symbol).getData());
+      model.addAttribute("title", "Stock Price for " + symbol);
+  
+      return "stock";
   }
 
   @Override

@@ -24,5 +24,7 @@ public interface EntityService {
   public FiveMinDataDto getFiveMinData();
   public FiveMinDataDto getFiveMinData(String symbol);
   public FiveMinDataDto getFiveMinData(String symbol, String date);
-  public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException;
+  public HistoricalDataDto getDailyData(String symbol, String period1, String period2, String interval) throws IOException;
+
+  public void saveHistoricalDataDto(String symbol, String period1, String period2, String interval) throws IOException;
 }
