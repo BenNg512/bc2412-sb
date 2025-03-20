@@ -1,9 +1,13 @@
 package com.xfin.service.xfin_web.controller;
 
+import java.util.List;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import com.xfin.service.xfin_web.model.FiveMinDataDto;
+import com.xfin.service.xfin_web.model.HistoryStockPriceDto;
 
 public interface XFinOperation {
   
@@ -19,5 +23,17 @@ public interface XFinOperation {
   @GetMapping(value = "/stock-price/daily/{symbol}/{date}")
   public String stockPage(Model model, @PathVariable("symbol") String symbol, @PathVariable("date") String date);
 
+  // http://localhost:8102/history?symbol=0005.HK&start=1741353781&end=1742353781
+  @GetMapping("/history")
+    public ResponseEntity<List<HistoryStockPriceDto>> getHistoryData(@RequestParam String symbol,
+                                                    @RequestParam String start,
+                                                    @RequestParam String end);
+
+  // http://localhost:8102/history/chart?symbol=0005.HK&start=1741353781&end=1742353781
+  @GetMapping("/history/chart")
+  public String getHistoryData(Model model,
+                                  @RequestParam String symbol, 
+                                  @RequestParam String start, 
+                                  @RequestParam String end);
 
 }

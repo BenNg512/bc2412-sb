@@ -9,6 +9,7 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
+import com.xfin.bc_xfin_service.entity.DailyHistoryStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.service.impl.EntityServiceImpl;
@@ -72,6 +73,11 @@ public class Controller implements Operation {
   @Override
   public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval) throws IOException {
     return this.entityService.getHistoricalData(symbol, start, end, interval);
+  }
+
+  @Override
+  public List<DailyHistoryStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end){
+    return this.entityService.getDailyHistoricalDataEntity(symbol, start, end);
   }
   
 }

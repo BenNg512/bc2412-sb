@@ -33,7 +33,7 @@ public class ScheduleConfig {
     String formattedFetchTime = apiFetchTime.withZoneSameInstant(ZoneId.of("Asia/Hong_Kong"))
                                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss 'HKT'"));
     System.out.println(formattedFetchTime);
-}
+  }
 
 // if market is open at 9:30, clear previous day data
 // 9-12, 12-16:30

@@ -1,6 +1,5 @@
 package com.xfin.bc_xfin_service.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.xfin.bc_xfin_service.codewave.TimestampConverter;
 import com.xfin.bc_xfin_service.codewave.Timezone;
@@ -26,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder
-public class HistoryStockPriceEntity {
+public class DailyHistoryStockPriceEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -40,7 +39,6 @@ public class HistoryStockPriceEntity {
   private Long volume;
   private Double adjClose;
 
-  @JsonProperty("regular_market_time_HKT")
   private String regularMarketTimeHKT;
   @Column(name = "id2", unique = true, nullable = false)
   private String stockPriceId;

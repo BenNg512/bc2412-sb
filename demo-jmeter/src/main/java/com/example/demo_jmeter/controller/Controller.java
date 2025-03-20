@@ -2,35 +2,46 @@ package com.example.demo_jmeter.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 public class Controller {
-  public static int availableStock = 0;
+  public static int availableStock = 1000;
+  //public static AtomicInteger availableStock = new AtomicInteger(1000);
   public static int orderCount = 0;
 
   @GetMapping(value = "/info")
     public String getInfo(){
       return "availableStock: " + availableStock + ", orderCount: " + orderCount;
     }
+  
+  @GetMapping("/syncBuy")
+  public String syncBuy(){
+    availableStock--;
+    if (availableStock >= 0 && payment()){
+      orderCount++;
+      return "TRUE " + getInfo();
+    }else{
+      availableStock++;
+      return "FALSE " + getInfo();
+    }
     
+  }
 
   @GetMapping(value = "/buy")
-    public boolean buy(){
-      if (payment()){
+    public String buy(){
+      if (availableStock >= 1 && payment()){
         availableStock--;
         orderCount++;
-        return true;
+        return "TRUE " + getInfo();
       }
-      return false;
+      return "FALSE " + getInfo();
     }
   
     private boolean payment(){
       try{
         Thread.sleep(20);
       } catch (Exception e) {
-        e.printStackTrace();
+        return false;
       }
       return true;
     }

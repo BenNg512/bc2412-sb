@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
+import com.xfin.bc_xfin_service.entity.DailyHistoryStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
@@ -61,4 +62,11 @@ public interface Operation {
                                         @RequestParam("end") String end,
                                         @RequestParam("interval") String interval
     ) throws IOException;
+
+  // http://localhost:8101/stock-price/historical/0005.HK?start=1741353781&end=1742353781
+  @GetMapping("/stock-price/historical/{symbol}")
+  public List<DailyHistoryStockPriceEntity> getDailyHistoricalDataEntity(@PathVariable("symbol") String symbol, 
+                                                                    @RequestParam("start") Integer start, 
+                                                                    @RequestParam("end") Integer end);
+
 }

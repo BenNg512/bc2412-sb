@@ -210,7 +210,7 @@ private Long parseToUnixTimestamp(String dateTimeStr) {
         }
 }
 
-public HistoricalDataDto getDailyData(String symbol, String period1, String period2, String interval) throws IOException {
+public HistoricalDataDto getHistoricalData(String symbol, String period1, String period2, String interval) throws IOException {
     Long startTimestamp = parseToUnixTimestamp(period1);
     Long endTimestamp = parseToUnixTimestamp(period2);
 

@@ -45,6 +45,11 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		  <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version> <!-- Or latest version -->
+    </dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

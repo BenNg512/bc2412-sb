@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="refresh" content="10">
-    <link rel="icon" href="bitcoin.png" />
+    <link rel="icon" href="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
     <title>Stock Price Graph</title>
     <!-- Include Chart.js from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -29,7 +29,7 @@
         const prices = stockData.map(entry => entry.regularMarketPrice);
 
         // Calculate 5-period Simple Moving Average (SMA)
-        const period = 5; // 5 periods (25 minutes for 5-min data)
+        const period = 30; // 5 periods (25 minutes for 5-min data)
         const smaData = stockData.map((entry, index) => {
             if (index < period - 1) {
                 return null; // Not enough data for SMA yet

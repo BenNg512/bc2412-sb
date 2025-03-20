@@ -18,12 +18,12 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.map.DtoMapper;
-import com.xfin.bc_xfin_service.entity.HistoryStockPriceEntity;
+import com.xfin.bc_xfin_service.entity.DailyHistoryStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.OneDayStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.entity.mapper.EntityMapper;
-import com.xfin.bc_xfin_service.repository.HistoryStockPriceRepository;
+import com.xfin.bc_xfin_service.repository.DailyHistoryStockPriceRepository;
 import com.xfin.bc_xfin_service.repository.OneDayStockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockSymbolRepository;
@@ -39,7 +39,7 @@ private StockPriceRepository stockPriceRepository;
 @Autowired
 private OneDayStockPriceRepository oneDayStockPriceRepository;
 @Autowired
-private HistoryStockPriceRepository historyStockPriceRepository;
+private DailyHistoryStockPriceRepository historyStockPriceRepository;
 @Autowired
 private RedisManager redisManager;
 
@@ -231,20 +231,20 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
 
   @Override
   public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval) throws IOException {
-    return this.yahooFinanceManager.getDailyData(symbol, start, end, interval);
+    return this.yahooFinanceManager.getHistoricalData(symbol, start, end, interval);
   }
 
   @Override
-  public void saveDailyHistoricalData(String symbol, String start, String end, String interval) throws IOException {
+  public void saveDailyHistoricalData(String symbol, String start, String end) throws IOException {
     try {
-        HistoricalDataDto data = this.yahooFinanceManager.getDailyData(symbol, start, end, interval);
+        HistoricalDataDto data = this.yahooFinanceManager.getHistoricalData(symbol, start, end, "1d");
         if (data == null || data.getChart() == null || data.getChart().getResult() == null) {
             throw new IOException("No data returned from Yahoo Finance API");
         }
-        List<HistoryStockPriceEntity> entities = EntityMapper.toEntities(data);
+        List<DailyHistoryStockPriceEntity> entities = EntityMapper.toEntities(data);
         
         // Filter out entities that already exist in the database
-        List<HistoryStockPriceEntity> newEntities = entities.stream()
+        List<DailyHistoryStockPriceEntity> newEntities = entities.stream()
             .filter(entity -> !historyStockPriceRepository.existsBySymbolAndTimestamp(entity.getSymbol(), entity.getTimestamp()))
             .toList();
         if (!newEntities.isEmpty()) {
@@ -255,15 +255,21 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     }
   }
 
-  public void saveAllDailyHistoricalData (String start, String end, String interval) throws IOException{
+  public void saveAllDailyHistoricalData (String start, String end) throws IOException{
     historyStockPriceRepository.deleteAll();
     List<String> symbols = this.stockSymbolRepository.findAll()
                           .stream()
                           .map(StockSymbolEntity::getSymbol)
                           .collect(Collectors.toList());
     for (String string : symbols) {
-    this.saveDailyHistoricalData(string, start, end, interval);
+    this.saveDailyHistoricalData(string, start, end);
     }
   }
+
+  @Override
+  public List<DailyHistoryStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end){
+    return this.historyStockPriceRepository.findData(symbol, Long.valueOf(start), Long.valueOf(end));
+  }
+
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
+import com.xfin.bc_xfin_service.entity.DailyHistoryStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
@@ -26,6 +27,7 @@ public interface EntityService {
   public FiveMinDataDto getFiveMinData(String symbol, String date);
 
   public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval) throws IOException;
-  public void saveDailyHistoricalData(String symbol, String start, String end, String interval) throws IOException;
-  public void saveAllDailyHistoricalData (String start, String end, String interval) throws IOException;
+  public void saveDailyHistoricalData(String symbol, String start, String end) throws IOException;
+  public void saveAllDailyHistoricalData (String start, String end) throws IOException;
+  public List<DailyHistoryStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end);
 }

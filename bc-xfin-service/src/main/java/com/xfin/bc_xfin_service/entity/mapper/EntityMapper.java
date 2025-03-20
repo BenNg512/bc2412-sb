@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
-import com.xfin.bc_xfin_service.entity.HistoryStockPriceEntity;
+import com.xfin.bc_xfin_service.entity.DailyHistoryStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.OneDayStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 
@@ -37,19 +37,19 @@ public class EntityMapper {
         return entity;
     }
 
-    public static List<HistoryStockPriceEntity> mapToHistoricalDataDto(YahooFinanceManager.HistoricalDataDto.Result result) {
+    public static List<DailyHistoryStockPriceEntity> mapToHistoricalDataDto(YahooFinanceManager.HistoricalDataDto.Result result) {
         if (result == null) {
             return null;
         }
-        HistoryStockPriceEntity dto = new HistoryStockPriceEntity();
+        DailyHistoryStockPriceEntity dto = new DailyHistoryStockPriceEntity();
         dto.setSymbol(result.getMeta().getSymbol());
         dto.setTimestamp(result.getTimestamp().get(0));
 
         return null;
     }
 
-    public static List<HistoryStockPriceEntity> toEntities(HistoricalDataDto dto) {
-        List<HistoryStockPriceEntity> entities = new ArrayList<>();
+    public static List<DailyHistoryStockPriceEntity> toEntities(HistoricalDataDto dto) {
+        List<DailyHistoryStockPriceEntity> entities = new ArrayList<>();
 
         // Check if DTO or its nested structures are null
         if (dto == null || dto.getChart() == null || dto.getChart().getResult() == null || dto.getChart().getResult().isEmpty()) {
@@ -75,7 +75,7 @@ public class EntityMapper {
         for (int i = 0; i < timestamps.size(); i++) {
 
             // Create entity
-            HistoryStockPriceEntity entity = HistoryStockPriceEntity.builder()
+            DailyHistoryStockPriceEntity entity = DailyHistoryStockPriceEntity.builder()
                     .symbol(meta.getSymbol())
                     .timestamp(timestamps.get(i))
                     .open(Double.valueOf(quote.getOpen().get(i)))
