@@ -235,7 +235,7 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
   }
 
   @Override
-  public void saveDailyHistoricalDataDto(String symbol, String start, String end, String interval) throws IOException {
+  public void saveDailyHistoricalData(String symbol, String start, String end, String interval) throws IOException {
     try {
         HistoricalDataDto data = this.yahooFinanceManager.getDailyData(symbol, start, end, interval);
         if (data == null || data.getChart() == null || data.getChart().getResult() == null) {
@@ -252,6 +252,17 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
         }
     } catch (IOException e) {
         throw new IOException("Failed to save historical data for symbol " + symbol + ": " + e.getMessage(), e);
+    }
+  }
+
+  public void saveAllDailyHistoricalData (String start, String end, String interval) throws IOException{
+    historyStockPriceRepository.deleteAll();
+    List<String> symbols = this.stockSymbolRepository.findAll()
+                          .stream()
+                          .map(StockSymbolEntity::getSymbol)
+                          .collect(Collectors.toList());
+    for (String string : symbols) {
+    this.saveDailyHistoricalData(string, start, end, interval);
     }
   }
 
