@@ -230,14 +230,14 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
   }
 
   @Override
-  public HistoricalDataDto getDailyData(String symbol, String period1, String period2, String interval) throws IOException {
-    return this.yahooFinanceManager.getDailyData(symbol, period1, period2, interval);
+  public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval) throws IOException {
+    return this.yahooFinanceManager.getDailyData(symbol, start, end, interval);
   }
 
-
-  public void saveHistoricalDataDto(String symbol, String period1, String period2, String interval) throws IOException {
+  @Override
+  public void saveDailyHistoricalDataDto(String symbol, String start, String end, String interval) throws IOException {
     try {
-        HistoricalDataDto data = this.yahooFinanceManager.getDailyData(symbol, period1, period2, interval);
+        HistoricalDataDto data = this.yahooFinanceManager.getDailyData(symbol, start, end, interval);
         if (data == null || data.getChart() == null || data.getChart().getResult() == null) {
             throw new IOException("No data returned from Yahoo Finance API");
         }
@@ -253,6 +253,6 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     } catch (IOException e) {
         throw new IOException("Failed to save historical data for symbol " + symbol + ": " + e.getMessage(), e);
     }
-}
+  }
 
 }

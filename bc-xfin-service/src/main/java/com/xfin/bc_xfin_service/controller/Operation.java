@@ -56,8 +56,9 @@ public interface Operation {
 
   // http://localhost:8101/stock-price/period/0005.HK?period1=1741353781&period2=1742353781
   @GetMapping("/stock-price/period/{symbol}")
-  public HistoricalDataDto getDailyData(@PathVariable("symbol") String symbol, 
-                                        @RequestParam("period1") String period1, 
-                                        @RequestParam("period2") String period2
+  public HistoricalDataDto getHistoricalData(@PathVariable("symbol") String symbol, 
+                                        @RequestParam("start") String start, 
+                                        @RequestParam("end") String end,
+                                        @RequestParam("interval") String interval
     ) throws IOException;
 }

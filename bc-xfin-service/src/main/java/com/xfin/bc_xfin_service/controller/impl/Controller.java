@@ -70,12 +70,8 @@ public class Controller implements Operation {
   }
 
   @Override
-  public HistoricalDataDto getDailyData(String symbol, String period1, String period2) throws IOException {
-    return this.entityService.getDailyData(symbol, period1, period2, "1d");
-  }
-
-  public void saveDailyHistData(String symbol, String period1, String period2) throws IOException {
-    this.entityService.saveHistoricalDataDto(symbol,period1,period2,"1d");
+  public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval) throws IOException {
+    return this.entityService.getHistoricalData(symbol, start, end, interval);
   }
   
 }

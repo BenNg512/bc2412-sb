@@ -25,9 +25,9 @@ public class ScheduleConfig {
       System.out.println(formattedFetchTime);
   }
 
-  @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Hong_Kong")
+  @Scheduled(cron = "0 * * * * *", zone = "Asia/Hong_Kong")
   public void saveStockPricesBITC() {
-    this.entityService.saveStockPriceFromApi("BITC");
+    this.entityService.saveStockPriceFromApi("BTC-USD");
     System.out.println("Bitcoin data fetched");
     ZonedDateTime apiFetchTime = ZonedDateTime.now();
     String formattedFetchTime = apiFetchTime.withZoneSameInstant(ZoneId.of("Asia/Hong_Kong"))
