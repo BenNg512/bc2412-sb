@@ -65,6 +65,7 @@ private ObjectMapper objectMapper = new ObjectMapper();
     return ResponseEntity.status(500).body("Error fetching data: " + ex.getMessage());
   }
 
+  @Override
   public ResponseEntity<List<HistoryStockPriceDto>> getHistoryData(String symbol, String start, String end) {
     List<HistoryStockPriceDto> stockData = xFinService.getHistoryData(symbol, start, end);
     if (stockData.isEmpty()) {
