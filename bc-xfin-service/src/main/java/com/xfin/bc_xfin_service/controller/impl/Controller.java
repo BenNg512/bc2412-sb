@@ -9,7 +9,7 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
-import com.xfin.bc_xfin_service.entity.DailyHistoryStockPriceEntity;
+import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.service.impl.EntityServiceImpl;
@@ -48,15 +48,6 @@ public class Controller implements Operation {
   }
 
   @Override
-  public String getLatestDataTime(){
-    return this.entityService.findMaxMarketDate();
-  }
-  @Override
-  public String getLatestDataTime(String symbol){
-    return this.entityService.findMaxMarketDate(symbol);
-  }
-
-  @Override
   public FiveMinDataDto getFiveMinData() {
     return this.entityService.getFiveMinData();
   }
@@ -76,7 +67,7 @@ public class Controller implements Operation {
   }
 
   @Override
-  public List<DailyHistoryStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end){
+  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end){
     return this.entityService.getDailyHistoricalDataEntity(symbol, start, end);
   }
   

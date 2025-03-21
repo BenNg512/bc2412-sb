@@ -1,13 +1,43 @@
 server:
-  port: 8010
+  port: 8099
 
 spring.datasource:
   driverClassName: "org.postgresql.Driver"
-  url: "jdbc:postgresql://localhost:5432/swagger"
+  url: "jdbc:postgresql://localhost:5432/bc2412"
   username: "postgres"
   password: "admin1234"
   
 spring.jpa:
   show-sql: true
   hibernate.ddl-auto: update
-  open-in-view: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+management.endpoints.web.base-path: /bootcamp
+
+# 可以這樣寫，就會開啟所有endpoints(不包含shutdown)
+management.endpoints.web.exposure.include: "*"
+
+# 如果要開啟/actuator/shutdown，要額外再加這一行
+management.endpoint.shutdown.enabled: true
+
+# exclude可以用來關閉某些endpoints
+# exclude通常會跟include一起用，就是先include了全部，然後再exclude /actuator/beans這個endpoint
+# management.endpoints.web.exposure.exclude: beans
+
+# 也可以這樣寫，就只會開啟指定的endpoint，因此此處只會再額外開啟/actuator/beans和/actuator/mappings
+web.exposure.include: beans,mappings
+
+# now we can access more details from endpoint /metrics/health/readiness
+management.endpoint.health.group.readiness.show-details: always
+
+info.application:
+  name: Stock Backend Service
+  description: A Demo for Swagger/Actuator
+  author:
+    name: Vincent Lau
+    bio: Testing Bio

@@ -25,7 +25,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonPropertyOrder
-public class DailyHistoryStockPriceEntity {
+public class HistoricalStockPriceEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -42,6 +42,7 @@ public class DailyHistoryStockPriceEntity {
   private String regularMarketTimeHKT;
   @Column(name = "id2", unique = true, nullable = false)
   private String stockPriceId;
+  private String intervalType;
 
   @PrePersist
   @PreUpdate

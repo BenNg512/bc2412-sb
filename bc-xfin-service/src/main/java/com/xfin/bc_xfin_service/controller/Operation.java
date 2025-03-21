@@ -7,13 +7,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
-import com.xfin.bc_xfin_service.entity.DailyHistoryStockPriceEntity;
+import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
+
+@RestController
 public interface Operation {
   // http://localhost:8101/stock/symbols
   @PostMapping("/stock/symbols")
@@ -35,14 +38,6 @@ public interface Operation {
   @GetMapping("/stock/symbol")
   public StockPriceEntity saveStockPrice(@RequestParam String symbol);
 
-  // http://localhost:8101/market-date
-  @GetMapping("/market-date")
-  public String getLatestDataTime();
-
-  // http://localhost:8101/market-date/0005.HK
-  @GetMapping("/market-date/{symbol}")
-  public String getLatestDataTime(@PathVariable("symbol") String symbol);
-
   // http://localhost:8101/5min-data
   @GetMapping("/5min-data")
   public FiveMinDataDto getFiveMinData();
@@ -55,7 +50,7 @@ public interface Operation {
   @GetMapping("/5min-data/{symbol}/{date}")
   public FiveMinDataDto getFiveMinData(@PathVariable("symbol") String symbol, @PathVariable("date") String date);
 
-  // http://localhost:8101/stock-price/period/0005.HK?period1=1741353781&period2=1742353781
+  // http://localhost:8101/stock-price/period/0005.HK?start=1741353781&end=1742353781
   @GetMapping("/stock-price/period/{symbol}")
   public HistoricalDataDto getHistoricalData(@PathVariable("symbol") String symbol, 
                                         @RequestParam("start") String start, 
@@ -65,7 +60,7 @@ public interface Operation {
 
   // http://localhost:8101/stock-price/historical/0005.HK?start=1741353781&end=1742353781
   @GetMapping("/stock-price/historical/{symbol}")
-  public List<DailyHistoryStockPriceEntity> getDailyHistoricalDataEntity(@PathVariable("symbol") String symbol, 
+  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(@PathVariable("symbol") String symbol, 
                                                                     @RequestParam("start") Integer start, 
                                                                     @RequestParam("end") Integer end);
 
