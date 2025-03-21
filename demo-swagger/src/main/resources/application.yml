@@ -1,0 +1,13 @@
+server:
+  port: 8010
+
+spring.datasource:
+  driverClassName: "org.postgresql.Driver"
+  url: "jdbc:postgresql://localhost:5432/swagger"
+  username: "postgres"
+  password: "admin1234"
+  
+spring.jpa:
+  show-sql: true
+  hibernate.ddl-auto: update
+  open-in-view: true

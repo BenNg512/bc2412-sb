@@ -9,6 +9,7 @@ import com.mtr.mtr_station.entity.StationEntity;
 
 @Repository
 public interface StationRepository extends JpaRepository<StationEntity, Long> {
+  @SuppressWarnings("null")
   List<StationEntity> findAll();
 
   @Query(value = "delete from StationEntity s where s.stationCode = :stationCode", nativeQuery = false)

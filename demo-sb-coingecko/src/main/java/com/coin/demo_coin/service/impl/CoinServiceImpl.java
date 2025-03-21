@@ -50,6 +50,7 @@ import com.coin.demo_coin.service.CoinService;
             new ParameterizedTypeReference<List<CoinDto>>() {}
         );
         List<CoinDto> coinDtos = response.getBody();
+        @SuppressWarnings("null")
         List<Coin> coinEntities = coinDtos.stream().map(coinDto -> {
             Coin coinEntity = new Coin();
             coinEntity.setId(coinDto.getId());

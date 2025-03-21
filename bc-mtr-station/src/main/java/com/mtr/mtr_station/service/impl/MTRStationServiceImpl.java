@@ -36,6 +36,7 @@ public class MTRStationServiceImpl implements MTRStationService {
       String url = "https://rt.data.gov.hk/v1/transport/mtr/getSchedule.php" +
               "?line=" + station.getLine() +
               "&sta=" + station.getStation();
+      @SuppressWarnings("unused")
       TrainScheduleDto schedule =this.restTemplate.getForObject(url, TrainScheduleDto.class);
       
     }

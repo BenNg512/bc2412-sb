@@ -1,6 +1,5 @@
 package com.mtr.mtr_station.config;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component

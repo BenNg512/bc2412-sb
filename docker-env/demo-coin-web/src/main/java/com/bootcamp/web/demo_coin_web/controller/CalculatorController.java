@@ -19,6 +19,7 @@ public class CalculatorController {
   @Autowired
   private RestTemplate restTemplate;
 
+  @SuppressWarnings("null")
   @GetMapping(value = "/calculate/{x}/{y}")
   public Integer calculate(@PathVariable Integer x, @PathVariable Integer y) {
     String url = "http://" + host + endpoint;

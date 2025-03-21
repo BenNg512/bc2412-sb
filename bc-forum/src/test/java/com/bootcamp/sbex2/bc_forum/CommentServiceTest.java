@@ -5,25 +5,15 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
 import com.bootcamp.sbex2.bc_forum.model.dto.CommentDto;
 import com.bootcamp.sbex2.bc_forum.service.impl.CommentServiceImpl;
 
 @WebMvcTest(MockitoExtension.class)
 public class CommentServiceTest {
 
-    @MockBean
-    private RestTemplate restTemplate;
-    
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    //@MockBean
     private CommentServiceImpl commentService;
 
     @Value("${api.jsonplaceholder.domain}")
