@@ -1,6 +1,5 @@
 package com.xfin.bc_xfin_service.codewave;
 
-import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.net.CookieStore;
@@ -210,7 +209,7 @@ private Long parseToUnixTimestamp(String dateTimeStr) {
         }
 }
 
-public HistoricalDataDto getHistoricalData(String symbol, String period1, String period2, String interval) throws IOException {
+public HistoricalDataDto getHistoricalData(String symbol, String period1, String period2, String interval){
     Long startTimestamp = parseToUnixTimestamp(period1);
     Long endTimestamp = parseToUnixTimestamp(period2);
 

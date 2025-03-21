@@ -1,6 +1,5 @@
 package com.xfin.bc_xfin_service.service;
 
-import java.io.IOException;
 import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
@@ -26,8 +25,8 @@ public interface EntityService {
   public FiveMinDataDto getFiveMinData(String symbol);
   public FiveMinDataDto getFiveMinData(String symbol, String date);
 
-  public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval) throws IOException;
-  public void saveDailyHistoricalData(String symbol, String start, String end) throws IOException;
-  public void saveAllDailyHistoricalData (String start, String end) throws IOException;
+  public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval);
+  public void saveDailyHistoricalData(String symbol, String start, String end);
+  public void saveAllDailyHistoricalData (String start, String end);
   public List<DailyHistoryStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end);
 }
