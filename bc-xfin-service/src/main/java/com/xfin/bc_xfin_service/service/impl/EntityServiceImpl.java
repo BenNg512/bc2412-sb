@@ -2,6 +2,8 @@ package com.xfin.bc_xfin_service.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -273,8 +275,14 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
   }
   @Override
   public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType){
+    if (end > LocalDate.now()
+        .atStartOfDay(ZoneId.of(Timezone.HKT.value))
+        .toEpochSecond()){
+      end = (int) LocalDate.now()
+        .atStartOfDay(ZoneId.of(Timezone.HKT.value))
+        .toEpochSecond();
+    }
     return this.historyStockPriceRepository.findDataByIntervalType(symbol, Long.valueOf(start), Long.valueOf(end), intervalType);
   }
-
 
 }
