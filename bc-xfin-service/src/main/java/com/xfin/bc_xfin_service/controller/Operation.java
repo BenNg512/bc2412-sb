@@ -50,18 +50,22 @@ public interface Operation {
   @GetMapping("/5min-data/{symbol}/{date}")
   public FiveMinDataDto getFiveMinData(@PathVariable("symbol") String symbol, @PathVariable("date") String date);
 
-  // http://localhost:8101/stock-price/period/0005.HK?start=1741353781&end=1742353781
+  // for getting raw data
+  // http://localhost:8101/stock-price/period/0005.HK?start=1741353781&end=1742353781&interval=1d
   @GetMapping("/stock-price/period/{symbol}")
-  public HistoricalDataDto getHistoricalData(@PathVariable("symbol") String symbol, 
-                                        @RequestParam("start") String start, 
-                                        @RequestParam("end") String end,
-                                        @RequestParam("interval") String interval
+  public HistoricalDataDto getHistoricalData(
+      @PathVariable("symbol") String symbol, 
+      @RequestParam("start") String start, 
+      @RequestParam("end") String end,
+      @RequestParam("interval") String interval
     ) throws IOException;
 
-  // http://localhost:8101/stock-price/historical/0005.HK?start=1741353781&end=1742353781
-  @GetMapping("/stock-price/historical/{symbol}")
-  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(@PathVariable("symbol") String symbol, 
-                                                                    @RequestParam("start") Integer start, 
-                                                                    @RequestParam("end") Integer end);
+  // http://localhost:8101/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
+  @GetMapping("/stock-price/history/{symbol}")
+  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(
+      @PathVariable("symbol") String symbol, 
+      @RequestParam("start") Integer start, 
+      @RequestParam("end") Integer end,
+      @RequestParam("interval") String interval);
 
 }

@@ -67,8 +67,8 @@ public class Controller implements Operation {
   }
 
   @Override
-  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end){
-    return this.entityService.getDailyHistoricalDataEntity(symbol, start, end);
+  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end, String interval) {
+    return this.entityService.getDailyHistoricalDataEntity(symbol, start, end, interval);
   }
   
 }

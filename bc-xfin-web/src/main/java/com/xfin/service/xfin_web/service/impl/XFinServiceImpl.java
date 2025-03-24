@@ -29,11 +29,13 @@ public FiveMinDataDto getFiveMinData(String symbol, String date) {
 }
 
 @Override
-public List<HistoryStockPriceDto> getHistoryData(String symbol, String start, String end) {
-  String url = "http://localhost:8101/stock-price/historical/" 
+public List<HistoryStockPriceDto> getHistoryData(String symbol, String start, String end, String interval) {
+  // http://localhost:8101/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
+  String url = "http://localhost:8101/stock-price/history/" 
               + symbol 
               + "?start=" + start 
-              + "&end=" + end;
+              + "&end=" + end
+              + "&interval=" + interval;
   System.out.println("Calling API: " + url);
   try {
       HistoryStockPriceDto[] responseArray = restTemplate.getForObject(url, HistoryStockPriceDto[].class);

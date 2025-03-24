@@ -262,6 +262,7 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
         .map(StockSymbolEntity::getSymbol)
         .collect(Collectors.toList());
     for (String symbol : symbols) {
+        this.saveHistoricalData(symbol, start, end, "5d");
         this.saveHistoricalData(symbol, start, end, "1d");
     }
   }

@@ -23,6 +23,7 @@ public class StockPriceEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Column(length = 10)
   private String symbol;
   private Long regularMarketTime;
   private Double regularMarketPrice;
@@ -33,12 +34,14 @@ public class StockPriceEntity {
   @Builder.Default
   private Long currentTimeStamp = System.currentTimeMillis();
   @Builder.Default
+  @Column(length = 4)
   private String type = "5MIN";
   // @JsonProperty("regular_market_time_UTC")
   // private String regularMarketTimeUTC;
+  @Column(length = 20)
   @JsonProperty("regular_market_time_HKT")
   private String regularMarketTimeHKT;
-  @Column(name = "id2", unique = true, nullable = false)
+  @Column(name = "id2", length = 30, unique = true, nullable = false)
   private String stockPriceId;
 
   @PrePersist

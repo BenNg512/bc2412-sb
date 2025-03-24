@@ -12,8 +12,7 @@
 <body>
     <div>
         <p>Symbol: <span th:text="${symbol} ?: 'Not provided'"></span></p>
-        <p>Start: <span th:text="${start} ?: 'Not provided'"></span></p>
-        <p>End: <span th:text="${end} ?: 'Not provided'"></span></p>
+        <p>Period: <span th:text="${start} ?: 'Not provided'"></span> to <span th:text="${end} ?: 'Not provided'"></span></p>
     </div>
 
     <h1 id="chartTitle">Loading...</h1>

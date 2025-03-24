@@ -15,25 +15,34 @@ public interface XFinOperation {
   @GetMapping("/5min-data/{symbol}")
   public FiveMinDataDto getFiveMinData(@PathVariable("symbol") String symbol);
 
+  // html
   // http://localhost:8102/stock-price/daily/{symbol}
   @GetMapping(value = "/stock-price/daily/{symbol}")
-  public String stockPage(Model model, @PathVariable("symbol") String symbol);
+  public String dailyChart(Model model, @PathVariable("symbol") String symbol);
 
+  // Json data
   // http://localhost:8102/stock-price/daily/0005.HK/2025-03-18
   @GetMapping(value = "/stock-price/daily/{symbol}/{date}")
-  public String stockPage(Model model, @PathVariable("symbol") String symbol, @PathVariable("date") String date);
+  public String dailyChart(Model model, @PathVariable("symbol") String symbol, @PathVariable("date") String date);
 
-  // http://localhost:8102/history?symbol=0005.HK&start=1741353781&end=1742353781
-  @GetMapping("/history")
-    public ResponseEntity<List<HistoryStockPriceDto>> getHistoryData(@RequestParam String symbol,
-                                                    @RequestParam String start,
-                                                    @RequestParam String end);
+  // json data
+  // http://localhost:8102/history/symbol=0005.HK?start=1741353781&end=1742353781&interval=1d
+  @GetMapping("/history/{symbol}")
+  public ResponseEntity<List<HistoryStockPriceDto>> getHistoryData(
+        @RequestParam String symbol,
+        @RequestParam String start,
+        @RequestParam String end,
+        @RequestParam String interval
+        );
 
-  // http://localhost:8102/history/chart?symbol=0005.HK&start=1741353781&end=1742353781
-  @GetMapping("/history/chart")
-  public String getHistoryData(Model model,
-                                  @RequestParam String symbol, 
-                                  @RequestParam String start, 
-                                  @RequestParam String end);
+  // http://localhost:8102/history/chart/BTC-USD?start=1735689600&end=1742353781&interval=1d
+  @GetMapping("/history/chart/{symbol}")
+  public String getHistoryData(
+        Model model,
+        @PathVariable("symbol") String symbol, 
+        @RequestParam String start, 
+        @RequestParam String end,
+        @RequestParam String interval
+        );
 
 }

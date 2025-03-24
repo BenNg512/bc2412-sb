@@ -1,7 +1,6 @@
 package com.bootcamp.demo.demo_swagger.controller.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.bootcamp.demo.demo_swagger.controller.StockOperation;
 import com.bootcamp.demo.demo_swagger.dto.StockDTO;
@@ -9,7 +8,6 @@ import com.bootcamp.demo.demo_swagger.dto.mapper.DTOMapper;
 import com.bootcamp.demo.demo_swagger.entity.StockEntity;
 import com.bootcamp.demo.demo_swagger.entity.mapper.EntityMapper;
 import com.bootcamp.demo.demo_swagger.service.StockService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 public class StockController implements StockOperation {

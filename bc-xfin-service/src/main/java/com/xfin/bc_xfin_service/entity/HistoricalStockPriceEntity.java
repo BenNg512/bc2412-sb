@@ -39,15 +39,17 @@ public class HistoricalStockPriceEntity {
   private Long volume;
   private Double adjClose;
 
+  @Column(length = 25)
   private String regularMarketTimeHKT;
-  @Column(name = "id2", unique = true, nullable = false)
+  @Column(name = "id2", length = 40, unique = true, nullable = false)
   private String stockPriceId;
+  @Column(length = 5)
   private String intervalType;
 
   @PrePersist
   @PreUpdate
   private void prePersistOrUpdate() {
     this.regularMarketTimeHKT = TimestampConverter.convertTimestamp(this.timestamp, Timezone.HKT, "yyyy-MM-dd HH:mm:ss");
-    this.stockPriceId = symbol + "_" + timestamp;
+    this.stockPriceId = symbol + "_" + timestamp + "_" + intervalType;
   }
 }

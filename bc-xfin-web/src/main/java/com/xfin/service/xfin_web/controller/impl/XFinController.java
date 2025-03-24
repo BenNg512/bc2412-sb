@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xfin.service.xfin_web.controller.XFinOperation;
@@ -30,7 +29,7 @@ private ObjectMapper objectMapper = new ObjectMapper();
   }
 
   @Override
-  public String stockPage(Model model, String symbol) {
+  public String dailyChart(Model model, String symbol) {
       FiveMinDataDto data = xFinService.getFiveMinData(symbol);
       if (data == null) {
           model.addAttribute("title", "Data Not Found");
@@ -46,7 +45,7 @@ private ObjectMapper objectMapper = new ObjectMapper();
   }
 
   @Override
-  public String stockPage(Model model, String symbol, String date) {
+  public String dailyChart(Model model, String symbol, String date) {
     FiveMinDataDto data = xFinService.getFiveMinData(symbol, date);
     model.addAttribute("date", date);
     
@@ -66,22 +65,23 @@ private ObjectMapper objectMapper = new ObjectMapper();
   }
 
   @Override
-  public ResponseEntity<List<HistoryStockPriceDto>> getHistoryData(String symbol, String start, String end) {
-    List<HistoryStockPriceDto> stockData = xFinService.getHistoryData(symbol, start, end);
+  public ResponseEntity<List<HistoryStockPriceDto>> getHistoryData(String symbol, String start, String end, String interval) {
+    List<HistoryStockPriceDto> stockData = xFinService.getHistoryData(symbol, start, end, interval);
     if (stockData.isEmpty()) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 204 if no data
     }
     return ResponseEntity.ok(stockData); // 200 with the list of data
   }
 
-  public String getHistoryData(Model model,
-                              @RequestParam String symbol, 
-                              @RequestParam String start, 
-                              @RequestParam String end) {
-    List<HistoryStockPriceDto> stockData = xFinService.getHistoryData(symbol, start, end);
+  @Override
+  public String getHistoryData(Model model, String symbol, String start, String end, String interval) {
+    List<HistoryStockPriceDto> stockData = xFinService.getHistoryData(symbol, start, end, interval);
     String startDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date(Long.parseLong(start) * 1000));
     String endDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date(Long.parseLong(end) * 1000));
-    
+    model.addAttribute("symbol", symbol);
+    model.addAttribute("start", startDate);
+    model.addAttribute("end", endDate);
+
     if (stockData == null || stockData.isEmpty()) {
         model.addAttribute("stockDataJson", "[]");
         model.addAttribute("errorMessage", "No stock data available for the given period.");
@@ -95,10 +95,6 @@ private ObjectMapper objectMapper = new ObjectMapper();
             e.printStackTrace();
         }
     }
-    // Add parameters to model
-    model.addAttribute("symbol", symbol);
-    model.addAttribute("start", startDate);
-    model.addAttribute("end", endDate);
     return "historyChart";
   }
 
