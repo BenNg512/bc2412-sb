@@ -73,7 +73,6 @@ public class EntityMapper {
 
         // Iterate over timestamps and map to entities
         for (int i = 0; i < timestamps.size(); i++) {
-
             // Create entity
             HistoricalStockPriceEntity entity = HistoricalStockPriceEntity.builder()
                     .symbol(meta.getSymbol())

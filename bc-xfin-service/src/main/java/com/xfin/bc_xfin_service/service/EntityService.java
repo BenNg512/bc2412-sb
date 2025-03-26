@@ -14,7 +14,6 @@ public interface EntityService {
   public void saveStockSymbolEntity(StockSymbolEntity stockSymbolEntity);
   public void saveStockSymbolsFromJson();
   public void redisSaveStockSymbols() throws JsonProcessingException;
-  public List<StockSymbolEntity> redisGetAllStockSymbols();
 
   public StockPriceEntity saveStockPriceFromApi(String symbol);
   public void saveAllStockPriceFromApi();
@@ -28,6 +27,9 @@ public interface EntityService {
   public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval);
   public void saveHistoricalData(String symbol, String start, String end, String interval);
   public void saveAllHistoricalData (String start, String end);
-  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end);
-  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType);
+  public List<HistoricalStockPriceEntity> getHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType);
+
+  public void redisSaveHistoryData() throws JsonProcessingException;
+  public List<HistoricalStockPriceEntity> redisGetHistoryData() throws JsonProcessingException;
+  public List<HistoricalStockPriceEntity> redisGetHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType) throws JsonProcessingException;
 }

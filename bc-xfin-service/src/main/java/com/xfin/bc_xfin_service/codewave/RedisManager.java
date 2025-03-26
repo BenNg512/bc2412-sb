@@ -1,7 +1,6 @@
 package com.xfin.bc_xfin_service.codewave;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,7 +8,6 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
 public class RedisManager {
   private static final Duration DEFAULT_DURATION = Duration.ofHours(1);
@@ -34,8 +32,11 @@ public class RedisManager {
     String json = this.redisTemplate.opsForValue().get(key);
     return json == null ? null : objectMapper.readValue(json, clazz);
   }
-
-
+  // method 2
+  public <T> T get2(String key, TypeReference<T> typeRef) throws JsonProcessingException {
+    String json = this.redisTemplate.opsForValue().get(key);
+    return json == null ? null : objectMapper.readValue(json, typeRef);
+  }
 
   public void set(String key, Object object) throws JsonProcessingException {
     String serializedJson = objectMapper.writeValueAsString(object);
@@ -46,16 +47,6 @@ public class RedisManager {
       throws JsonProcessingException {
     String serializedJson = objectMapper.writeValueAsString(object);
     this.redisTemplate.opsForValue().set(key, serializedJson, duration);
-  }
-  // method 2
-  public <T> T get2(String key, TypeReference<T> typeRef) throws JsonProcessingException {
-    String json = this.redisTemplate.opsForValue().get(key);
-    return json == null ? null : objectMapper.readValue(json, typeRef);
-  }
-  // method 3 :hardcode
-  public List<StockSymbolEntity> getStockSymbols() throws JsonProcessingException {
-    String json = this.redisTemplate.opsForValue().get("stockSymbols");
-    return json == null ? null : objectMapper.readValue(json, new TypeReference<List<StockSymbolEntity>>() {});
   }
 
   @SuppressWarnings({"null", "deprecation"})

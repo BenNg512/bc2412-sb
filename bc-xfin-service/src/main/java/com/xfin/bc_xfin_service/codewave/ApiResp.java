@@ -36,7 +36,7 @@ public class ApiResp<T> {
     private String message;
     private T data;
 
-    public Builder<T> syscode(SysCode sysCode) {
+    public Builder<T> sysCode(SysCode sysCode) {
       this.code = sysCode.getCode();
       this.message = sysCode.getMessage();
       return this;

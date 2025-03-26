@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.xfin.bc_xfin_service.codewave.ApiResp;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
-import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
 
@@ -30,14 +31,7 @@ public interface Operation {
   @GetMapping("/api")
   public QuoteDto getQuote(@RequestParam String symbol);
 
-  // http://localhost:8101/stock/symbols
-  @GetMapping("/stock/symbols")
-  public List<StockSymbolEntity> redisGetAllStockSymbols();
-
-  // http://localhost:8101/stock/symbol?symbol=0005.HK
-  @GetMapping("/stock/symbol")
-  public StockPriceEntity saveStockPrice(@RequestParam String symbol);
-
+  // json current day all 5min data
   // http://localhost:8101/5min-data
   @GetMapping("/5min-data")
   public FiveMinDataDto getFiveMinData();
@@ -50,7 +44,7 @@ public interface Operation {
   @GetMapping("/5min-data/{symbol}/{date}")
   public FiveMinDataDto getFiveMinData(@PathVariable("symbol") String symbol, @PathVariable("date") String date);
 
-  // for getting raw data
+  // for getting raw quote data
   // http://localhost:8101/stock-price/period/0005.HK?start=1741353781&end=1742353781&interval=1d
   @GetMapping("/stock-price/period/{symbol}")
   public HistoricalDataDto getHistoricalData(
@@ -60,12 +54,23 @@ public interface Operation {
       @RequestParam("interval") String interval
     ) throws IOException;
 
-  // http://localhost:8101/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
-  @GetMapping("/stock-price/history/{symbol}")
-  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(
+  // get json from database
+  // http://localhost:8101/stock-price/history/database/0005.HK?start=1741353781&end=1742353781&interval=1d
+  @GetMapping("/stock-price/history/database/{symbol}")
+  public ApiResp<List<HistoricalStockPriceEntity>> getHistoricalDataEntity(
       @PathVariable("symbol") String symbol, 
       @RequestParam("start") Integer start, 
       @RequestParam("end") Integer end,
       @RequestParam("interval") String interval);
+
+  // get json from redis
+  // http://localhost:8101/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
+  @GetMapping("/stock-price/history/{symbol}")
+  public List<HistoricalStockPriceEntity> getHistoricalDataEntity2(
+      @PathVariable("symbol") String symbol, 
+      @RequestParam("start") Integer start, 
+      @RequestParam("end") Integer end,
+      @RequestParam("interval") String interval)
+      throws JsonProcessingException;
 
 }

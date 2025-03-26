@@ -94,24 +94,6 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     this.redisManager.set(key, entities);
   }
 
-  // get all stock symbols from redis
-  @Override
-  public List<StockSymbolEntity> redisGetAllStockSymbols() {
-    try {
-      //List<StockSymbolEntity> stockSymbols = this.redisManager.getStockSymbols();
-      List<StockSymbolEntity> stockSymbols = this.redisManager.getStockSymbols();
-            if (stockSymbols != null) {
-                System.out.println("Stock symbols retrieved from Redis!");
-            } else {
-                System.out.println("No stock symbols found in Redis.");
-            }
-            return stockSymbols;
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
   // get stock prices and save to database & redis
   @Override
   public StockPriceEntity saveStockPriceFromApi(String symbol) {
@@ -270,11 +252,7 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
   }
 
   @Override
-  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end){
-    return this.historyStockPriceRepository.findData(symbol, Long.valueOf(start), Long.valueOf(end));
-  }
-  @Override
-  public List<HistoricalStockPriceEntity> getDailyHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType){
+  public List<HistoricalStockPriceEntity> getHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType){
     if (end > LocalDate.now()
         .atStartOfDay(ZoneId.of(Timezone.HKT.value))
         .toEpochSecond()){
@@ -282,7 +260,40 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
         .atStartOfDay(ZoneId.of(Timezone.HKT.value))
         .toEpochSecond();
     }
+    
     return this.historyStockPriceRepository.findDataByIntervalType(symbol, Long.valueOf(start), Long.valueOf(end), intervalType);
   }
 
+  @Override
+  public void redisSaveHistoryData() throws JsonProcessingException {
+    this.historyStockPriceRepository.findAll();
+    this.redisManager.set("historyStockPrice", this.historyStockPriceRepository.findAll());
+  }
+  @Override
+  public List<HistoricalStockPriceEntity> redisGetHistoryData() throws JsonProcessingException {
+    return this.redisManager.get2("historyStockPrice", new TypeReference<List<HistoricalStockPriceEntity>>() {});
+  }
+
+
+  public List<HistoricalStockPriceEntity> redisGetHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType) throws JsonProcessingException{
+    List<HistoricalStockPriceEntity> entities = this.redisGetHistoryData();
+      // if (end > LocalDate.now()
+      //   .atStartOfDay(ZoneId.of(Timezone.HKT.value))
+      //   .toEpochSecond()){
+      // end = (int) LocalDate.now()
+      //   .atStartOfDay(ZoneId.of(Timezone.HKT.value))
+      //   .toEpochSecond();
+      // }
+    if (entities != null && !entities.isEmpty()) {
+      return entities.stream()
+          .filter(entity -> entity.getSymbol().equals(symbol))
+          .filter(entity -> entity.getTimestamp() >= start)
+          .filter(entity -> entity.getTimestamp() <= end)
+          .filter(entity -> entity.getIntervalType().equals(intervalType))
+          .collect(Collectors.toList());
+    }
+    return null;
+  }
+
+  
 }
