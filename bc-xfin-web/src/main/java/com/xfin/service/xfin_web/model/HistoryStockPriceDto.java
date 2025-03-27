@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HistoryStockPriceDto {
-    private String lastUpdate;
+    private String lastUpdated;
     private List<HistoryStockPrice> data;
     
     @Getter
@@ -21,7 +21,6 @@ public class HistoryStockPriceDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class HistoryStockPrice {
-        private Long id;
         private String symbol;
         private Long timestamp;
         private Double open;
@@ -32,5 +31,6 @@ public class HistoryStockPriceDto {
         private Double adjClose;
         private String regularMarketTimeHKT;
         private String stockPriceId;
+        private String intervalType;
     }
 }

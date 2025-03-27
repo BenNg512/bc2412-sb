@@ -3,7 +3,6 @@ package com.xfin.service.xfin_web.controller.impl;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,36 +64,31 @@ private ObjectMapper objectMapper = new ObjectMapper();
   }
 
   @Override
-  public ResponseEntity<List<HistoryStockPriceDto>> getHistoryData(String symbol, String start, String end, String interval) {
-    List<HistoryStockPriceDto> stockData = xFinService.getHistoryData(symbol, start, end, interval);
-    if (stockData.isEmpty()) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // 204 if no data
-    }
-    return ResponseEntity.ok(stockData); // 200 with the list of data
+  public ResponseEntity<HistoryStockPriceDto> getHistoryData(String symbol, String start, String end, String interval) {
+    HistoryStockPriceDto stockData = xFinService.getHistoryData(symbol, start, end, interval);
+
+    return ResponseEntity.ok(stockData); 
   }
 
   @Override
   public String getHistoryData(Model model, String symbol, String start, String end, String interval) {
-    List<HistoryStockPriceDto> stockData = xFinService.getHistoryData(symbol, start, end, interval);
+    HistoryStockPriceDto stockData = xFinService.getHistoryData(symbol, start, end, interval);
     String startDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date(Long.parseLong(start) * 1000));
     String endDate = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date(Long.parseLong(end) * 1000));
     model.addAttribute("symbol", symbol);
     model.addAttribute("start", startDate);
     model.addAttribute("end", endDate);
+    model.addAttribute("lastUpdated", stockData.getLastUpdated());
+    List<HistoryStockPriceDto.HistoryStockPrice> data = stockData.getData();
 
-    if (stockData == null || stockData.isEmpty()) {
-        model.addAttribute("stockDataJson", "[]");
-        model.addAttribute("errorMessage", "No stock data available for the given period.");
-    } else {
         try {
-            String stockDataJson = objectMapper.writeValueAsString(stockData);
+            String stockDataJson = objectMapper.writeValueAsString(data);
             model.addAttribute("stockDataJson", stockDataJson);
         } catch (JsonProcessingException e) {
             model.addAttribute("stockDataJson", "[]");
             model.addAttribute("errorMessage", "Error processing stock data.");
             e.printStackTrace();
         }
-    }
     return "historyChart";
   }
 

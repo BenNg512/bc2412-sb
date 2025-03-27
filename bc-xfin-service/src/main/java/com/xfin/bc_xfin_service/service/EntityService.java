@@ -18,7 +18,6 @@ public interface EntityService {
 
   public StockPriceEntity saveStockPriceFromApi(String symbol);
   public void saveAllStockPriceFromApi();
-  public void clearOneDayData();
   public String findMaxMarketDate();
   public String findMaxMarketDate(String symbol);
   public FiveMinDataDto getFiveMinData();

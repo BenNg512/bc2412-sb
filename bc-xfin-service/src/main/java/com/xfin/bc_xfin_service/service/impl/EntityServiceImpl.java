@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,12 +24,10 @@ import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.HistoryDataDto;
 import com.xfin.bc_xfin_service.dto.map.DtoMapper;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
-import com.xfin.bc_xfin_service.entity.OneDayStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.entity.mapper.EntityMapper;
 import com.xfin.bc_xfin_service.repository.HistoryStockPriceRepository;
-import com.xfin.bc_xfin_service.repository.OneDayStockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockPriceRepository;
 import com.xfin.bc_xfin_service.repository.StockSymbolRepository;
 import com.xfin.bc_xfin_service.service.EntityService;
@@ -40,8 +39,6 @@ public class EntityServiceImpl implements EntityService {
 private StockSymbolRepository stockSymbolRepository;
 @Autowired
 private StockPriceRepository stockPriceRepository;
-@Autowired
-private OneDayStockPriceRepository oneDayStockPriceRepository;
 @Autowired
 private HistoryStockPriceRepository historyStockPriceRepository;
 @Autowired
@@ -80,7 +77,6 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
                 System.out.println("Skipped existing stock symbol: " + stockSymbol.getSymbol());
             }
         }
-
         System.out.println("Stock symbols processed successfully!");
     } catch (Exception e) {
         e.printStackTrace();
@@ -101,25 +97,22 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
   public StockPriceEntity saveStockPriceFromApi(String symbol) {
     QuoteDto quoteDto = this.yahooFinanceManager.getQuote(symbol);
     if (quoteDto == null || quoteDto.getQuoteResponse() == null) {
-        System.err.println("QuoteDto or QuoteResponse is null for symbol: " + symbol);
+    //  System.err.println("QuoteDto or QuoteResponse is null for symbol: " + symbol);
         return null;
     }
     List<YahooFinanceManager.QuoteDto.Result> results = quoteDto.getQuoteResponse().getResult();
     if (results == null || results.isEmpty()) {
-        System.err.println("No results found for symbol: " + symbol);
+    //  System.err.println("No results found for symbol: " + symbol);
         return null;
     }
     // map 
     StockPriceEntity stockPriceEntity = EntityMapper.mapToStockPriceEntity(results.get(0));
-    OneDayStockPriceEntity stockPriceEntity2 = EntityMapper.mapToOneDayStockPriceEntity(results.get(0));
-    if (stockPriceEntity == null || stockPriceEntity2 == null) {
-      System.err.println("Failed to map QuoteDto.Result to StockPriceEntity for symbol: " + symbol);
+    if (stockPriceEntity == null) {
+    // System.err.println("Failed to map QuoteDto.Result to StockPriceEntity for symbol: " + symbol);
       return null;
     }
     try {
-        oneDayStockPriceRepository.save(stockPriceEntity2);
         stockPriceRepository.save(stockPriceEntity);
-        redisUpdateStockPrice(symbol, stockPriceEntity);
         System.out.println("Stock price for symbol " + symbol + " saved successfully.");
         return stockPriceEntity;
     } catch (Exception e) {
@@ -129,28 +122,6 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     }
   }
 
-  // update redis: if symbol exists, update; if not, add
-  public void redisUpdateStockPrice(String symbol, StockPriceEntity newStockPriceEntity) throws Exception {
-      try {
-              @SuppressWarnings("unchecked")
-              List<StockPriceEntity> existingStockPriceEntityList = (List<StockPriceEntity>) this.redisManager.get(symbol, StockPriceEntity.class);
-              if (existingStockPriceEntityList != null) {
-                  existingStockPriceEntityList.add(newStockPriceEntity);
-                  this.redisManager.set(symbol, existingStockPriceEntityList);
-                  System.out.println("Successfully updated " + symbol);
-                  return;
-              }
-              else if (existingStockPriceEntityList == null){
-              List<StockPriceEntity> stockPriceEntityList = List.of(newStockPriceEntity);
-              this.redisManager.set(symbol, stockPriceEntityList);
-              }
-              System.out.println("Successfully added " + symbol);
-      } catch (Exception e) {
-          System.err.println("Failed to update " + symbol + ": " + e.getMessage());
-          throw e;
-      }
-  }
-    
   // get api and save all stock price to database
   @Override
   public void saveAllStockPriceFromApi(){
@@ -161,11 +132,6 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     for (String string : symbols) {
       this.saveStockPriceFromApi(string);
     }
-  }
-
-  @Override
-  public void clearOneDayData(){
-    this.oneDayStockPriceRepository.deleteAll();
   }
 
   @Override
@@ -271,9 +237,10 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     List<HistoricalStockPriceEntity> entities = this.historyStockPriceRepository.findAll();
     new HistoryDataDto();
     HistoryDataDto historyDataDto = HistoryDataDto.builder()
-        .lastUpdated(LocalDateTime.now().toString())
+        .lastUpdated(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString())
         .data(entities)
         .build();
+    this.redisManager.clearData("HistoryStockPrice");
     this.redisManager.set("HistoryStockPrice", historyDataDto);
     System.out.println("Data successfully saved to Redis");
   }

@@ -16,8 +16,7 @@ public class PreServerStartConfig implements CommandLineRunner {
     try{
         //this.entityService.saveStockSymbolsFromJson();
         //this.entityService.saveAllStockPriceFromApi();
-        this.entityService.redisSaveHistoryData();
-        System.out.println("Historical data fetched");
+        //this.entityService.redisSaveHistoryData();
         // fetch year to date data
         this.entityService.saveAllHistoricalData("1735689600", currentTime.toString());
     }catch(Exception e){ 

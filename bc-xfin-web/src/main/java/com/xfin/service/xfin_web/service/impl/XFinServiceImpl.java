@@ -1,6 +1,5 @@
 package com.xfin.service.xfin_web.service.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,23 +28,24 @@ public FiveMinDataDto getFiveMinData(String symbol, String date) {
 }
 
 @Override
-public List<HistoryStockPriceDto> getHistoryData(String symbol, String start, String end, String interval) {
+public HistoryStockPriceDto getHistoryData(String symbol, String start, String end, String interval) {
   // http://localhost:8101/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
+
   String url = "http://localhost:8101/stock-price/history/" 
               + symbol 
-              + "?start=" + start 
+              + "?start=" + start
               + "&end=" + end
               + "&interval=" + interval;
   System.out.println("Calling API: " + url);
   try {
-      HistoryStockPriceDto[] responseArray = restTemplate.getForObject(url, HistoryStockPriceDto[].class);
-      List<HistoryStockPriceDto> result = Arrays.asList(responseArray);
+      HistoryStockPriceDto response = restTemplate.getForObject(url, HistoryStockPriceDto.class);
+      List<HistoryStockPriceDto> result = Arrays.asList(response);
       System.out.println("API returned " + result.size() + " records");
-      return result;
+      return response;
   } catch (RestClientException e) {
       System.err.println("Error fetching data for symbol: " + symbol + " - " + e.getMessage());
       e.printStackTrace();
-      return new ArrayList<>();
+      return null;
   }
 }
 
