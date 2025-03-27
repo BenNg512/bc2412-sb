@@ -14,6 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryDataDto {
-  private String lastUpdate;
+  private String lastUpdated;
   private List<HistoricalStockPriceEntity> data;
 }

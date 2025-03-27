@@ -73,22 +73,24 @@ public class EntityMapper {
 
         // Iterate over timestamps and map to entities
         for (int i = 0; i < timestamps.size(); i++) {
-            // Create entity
             HistoricalStockPriceEntity entity = HistoricalStockPriceEntity.builder()
                     .symbol(meta.getSymbol())
                     .timestamp(timestamps.get(i))
-                    .open(Double.valueOf(quote.getOpen().get(i)))
-                    .high(Double.valueOf(quote.getHigh().get(i)))
-                    .low(Double.valueOf(quote.getLow().get(i)))
-                    .close(Double.valueOf(quote.getClose().get(i)))
-                    .volume(Long.valueOf(quote.getVolume().get(i)))
-                    .adjClose(adjCloseValues != null ? Double.valueOf(adjCloseValues.get(i)) : null)
+                    .open(safeDoubleValue(quote.getOpen(), i))
+                    .high(safeDoubleValue(quote.getHigh(), i))
+                    .low(safeDoubleValue(quote.getLow(), i))
+                    .close(safeDoubleValue(quote.getClose(), i))
+                    .volume(quote.getVolume() != null && quote.getVolume().get(i) != null ? Long.valueOf(quote.getVolume().get(i)) : null)
+                    .adjClose(adjCloseValues != null && adjCloseValues.get(i) != null ? Double.valueOf(adjCloseValues.get(i)) : null)
                     .build();
-
+        
             entities.add(entity);
         }
 
         return entities;
+    }
+    private static Double safeDoubleValue(List<Double> list, int index) {
+        return (list != null && list.size() > index && list.get(index) != null) ? Double.valueOf(list.get(index)) : null;
     }
   
 }

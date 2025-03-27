@@ -4,6 +4,7 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
+import com.xfin.bc_xfin_service.dto.HistoryDataDto;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
@@ -30,6 +31,6 @@ public interface EntityService {
   public List<HistoricalStockPriceEntity> getHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType);
 
   public void redisSaveHistoryData() throws JsonProcessingException;
-  public List<HistoricalStockPriceEntity> redisGetHistoryData() throws JsonProcessingException;
-  public List<HistoricalStockPriceEntity> redisGetHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType) throws JsonProcessingException;
+  public HistoryDataDto redisGetHistoryData() throws JsonProcessingException;
+  public HistoryDataDto redisGetHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType) throws JsonProcessingException;
 }

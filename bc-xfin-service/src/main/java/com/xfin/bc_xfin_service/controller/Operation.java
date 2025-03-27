@@ -13,6 +13,7 @@ import com.xfin.bc_xfin_service.codewave.ApiResp;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
+import com.xfin.bc_xfin_service.dto.HistoryDataDto;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
@@ -66,7 +67,7 @@ public interface Operation {
   // get json from redis
   // http://localhost:8101/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
   @GetMapping("/stock-price/history/{symbol}")
-  public List<HistoricalStockPriceEntity> getHistoricalDataEntity2(
+  public HistoryDataDto getHistoricalDataEntity2(
       @PathVariable("symbol") String symbol, 
       @RequestParam("start") Integer start, 
       @RequestParam("end") Integer end,

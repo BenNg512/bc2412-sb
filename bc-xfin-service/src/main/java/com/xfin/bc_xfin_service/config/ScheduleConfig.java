@@ -37,8 +37,8 @@ public class ScheduleConfig {
     System.out.println(formattedFetchTime);
   }
 
-// every day update history data
-  @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Hong_Kong")
+// every hour update history data
+  @Scheduled(cron = "0 0 * * * *", zone = "Asia/Hong_Kong")
   public void clearOneDayData() throws JsonProcessingException {
     this.entityService.redisSaveHistoryData();
   }

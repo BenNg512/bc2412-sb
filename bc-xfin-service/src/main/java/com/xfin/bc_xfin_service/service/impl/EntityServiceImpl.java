@@ -3,6 +3,7 @@ package com.xfin.bc_xfin_service.service.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
+import com.xfin.bc_xfin_service.dto.HistoryDataDto;
 import com.xfin.bc_xfin_service.dto.map.DtoMapper;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.OneDayStockPriceEntity;
@@ -266,31 +268,37 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
 
   @Override
   public void redisSaveHistoryData() throws JsonProcessingException {
-    this.historyStockPriceRepository.findAll();
-    this.redisManager.set("historyStockPrice", this.historyStockPriceRepository.findAll());
+    List<HistoricalStockPriceEntity> entities = this.historyStockPriceRepository.findAll();
+    new HistoryDataDto();
+    HistoryDataDto historyDataDto = HistoryDataDto.builder()
+        .lastUpdated(LocalDateTime.now().toString())
+        .data(entities)
+        .build();
+    this.redisManager.set("HistoryStockPrice", historyDataDto);
+    System.out.println("Data successfully saved to Redis");
   }
+
   @Override
-  public List<HistoricalStockPriceEntity> redisGetHistoryData() throws JsonProcessingException {
-    return this.redisManager.get2("historyStockPrice", new TypeReference<List<HistoricalStockPriceEntity>>() {});
+  public HistoryDataDto redisGetHistoryData() throws JsonProcessingException {
+    return this.redisManager.get2("HistoryStockPrice", new TypeReference<HistoryDataDto>() {});
   }
 
 
-  public List<HistoricalStockPriceEntity> redisGetHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType) throws JsonProcessingException{
-    List<HistoricalStockPriceEntity> entities = this.redisGetHistoryData();
-      // if (end > LocalDate.now()
-      //   .atStartOfDay(ZoneId.of(Timezone.HKT.value))
-      //   .toEpochSecond()){
-      // end = (int) LocalDate.now()
-      //   .atStartOfDay(ZoneId.of(Timezone.HKT.value))
-      //   .toEpochSecond();
-      // }
-    if (entities != null && !entities.isEmpty()) {
-      return entities.stream()
+  @Override
+  public HistoryDataDto redisGetHistoricalDataEntity(String symbol, Integer start, Integer end, String intervalType) throws JsonProcessingException{
+    HistoryDataDto entities = this.redisGetHistoryData();
+    List<HistoricalStockPriceEntity> data = entities.getData();
+    if (data != null && !data.isEmpty()) {
+      List<HistoricalStockPriceEntity> data2 = data.stream()
           .filter(entity -> entity.getSymbol().equals(symbol))
           .filter(entity -> entity.getTimestamp() >= start)
           .filter(entity -> entity.getTimestamp() <= end)
           .filter(entity -> entity.getIntervalType().equals(intervalType))
           .collect(Collectors.toList());
+      return HistoryDataDto.builder()
+        .lastUpdated(entities.getLastUpdated())
+        .data(data2)
+        .build();
     }
     return null;
   }
