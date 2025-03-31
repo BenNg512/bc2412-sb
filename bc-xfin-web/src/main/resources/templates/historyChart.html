@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Stock Price Candlestick Chart</title>
-    <link rel="icon" href="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
     <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
     <style>
         .error { color: red; }
-        #chartContainer { width: 80%; height: auto; margin: auto; }
-        form { text-align: center; margin: 20px; }
-        label { margin-right: 10px; }
-        select, input, button { margin-right: 20px; }
-        p { font-size: 15px; }
+        #chartContainer { width: 80%; height: 600px; margin: auto; }
     </style>
 </head>
 <body>
@@ -25,7 +20,6 @@
                 <option value="0004.HK" th:selected="${symbol == '0004.HK'}">0004.HK</option>
                 <option value="0005.HK" th:selected="${symbol == '0005.HK'}">0005.HK</option>
                 <option value="BTC-USD" th:selected="${symbol == 'BTC-USD'}">BTC-USD</option>
-                <!-- Add more stock symbols as needed -->
             </select>
 
             <label for="start">Start Date: </label>
@@ -39,13 +33,11 @@
                 <option value="1d" th:selected="${interval == '1d'}">Daily</option>
                 <option value="5d" th:selected="${interval == '5d'}">5 Days</option>
                 <option value="1mo" th:selected="${interval == '1mo'}">1 Month</option>
-                <!-- Add more intervals as supported by your backend -->
             </select>
 
             <!-- <button type="submit">Update Chart</button> -->
         </form>
     </div>
-
     <div>
         <p>Last Update: <span th:text="${lastUpdated} ?: 'null'"></span></p>
     </div>
@@ -54,11 +46,12 @@
     <div th:if="${errorMessage}" class="error" th:text="${errorMessage}"></div>
     <div id="chartContainer"></div>
 
-    <script th:inline="javascript">
-        let chart = null; // Global chart variable to update or destroy
-        let candlestickSeries = null;
+    <!-- <div>
+        <h3>Raw stockDataJson</h3>
+        <pre th:text="${stockDataJson}"></pre>
+    </div> -->
 
-        // Initial stock data from the server
+    <script th:inline="javascript">
         const stockDataJson = /*[[${stockDataJson}]]*/ '[]';
         console.log("Raw stockDataJson: ", stockDataJson);
 
@@ -70,85 +63,79 @@
             console.error("Error parsing stockDataJson: ", e);
         }
 
-        function initializeChart(stockData) {
-            const titleElement = document.getElementById('chartTitle');
-            const chartContainer = document.getElementById('chartContainer');
-
-            // Clear previous chart if it exists
-            if (chart) {
-                chart.remove();
-            }
-
-            if (stockData.length > 0) {
-                titleElement.textContent = 'Stock Price Chart for ' + stockData[0].symbol;
-                console.log("Title set to: ", titleElement.textContent);
-
-                const chartData = stockData.map((data, index) => {
-                    const candle = {
-                        time: data.timestamp / 1000, // Convert milliseconds to seconds if needed
-                        open: Number(data.open),
-                        high: Number(data.high),
-                        low: Number(data.low),
-                        close: Number(data.close)
-                    };
-                    console.log(`Candle ${index}: `, candle);
-                    return candle;
-                });
-
-                chart = LightweightCharts.createChart(chartContainer, {
-                    width: chartContainer.clientWidth,
-                    height: 500,
-                    layout: {
-                        background: { color: '#222' },
-                        textColor: '#DDD'
-                    },
-                    grid: {
-                        vertLines: { color: '#444' },
-                        horzLines: { color: '#444' }
-                    },
-                    timeScale: {
-                        timeVisible: true,
-                        secondsVisible: false
-                    }
-                });
-
-                candlestickSeries = chart.addCandlestickSeries({
-                    upColor: '#00ff1f',
-                    downColor: '#ff0000',
-                    borderVisible: false,
-                    wickUpColor: '#00ff1f',
-                    wickDownColor: '#ff0000'
-                });
-
-                candlestickSeries.setData(chartData);
-                console.log("Candlestick chart initialized with data: ", chartData);
-
-                window.addEventListener('resize', () => {
-                    chart.resize(chartContainer.clientWidth, 600);
-                });
-
-                chart.timeScale().fitContent();
-            } else {
-                titleElement.textContent = 'No Data Available';
-                console.log("No data, title set to: ", titleElement.textContent);
-            }
+        const titleElement = document.getElementById('chartTitle');
+        if (stockData.length > 0) {
+            titleElement.textContent = 'Stock Price Chart for ' + stockData[0].symbol;
+            console.log("Title set to: ", titleElement.textContent);
+        } else {
+            titleElement.textContent = 'No Data Available';
+            console.log("No data, title set to: ", titleElement.textContent);
         }
 
-        // Initialize chart with initial data
+        if (stockData.length > 0) {
+            const chartData = stockData.map((data, index) => {
+                const candle = {
+                    time: data.timestamp, // lightweight-charts expects Unix timestamp in seconds
+                    open: Number(data.open),
+                    high: Number(data.high),
+                    low: Number(data.low),
+                    close: Number(data.close)
+                };
+                console.log(`Candle ${index}: `, candle);
+                return candle;
+            });
+
+            const chartContainer = document.getElementById('chartContainer');
+            const chart = LightweightCharts.createChart(chartContainer, {
+                width: chartContainer.clientWidth,
+                height: 600,
+                layout: {
+                    background: { color: '#222' }, // Dark background like the example
+                    textColor: '#DDD' // Light text
+                },
+                grid: {
+                    vertLines: { color: '#444' },
+                    horzLines: { color: '#444' }
+                },
+                timeScale: {
+                    timeVisible: true,
+                    secondsVisible: false
+                }
+            });
+
+            const candlestickSeries = chart.addCandlestickSeries({
+                upColor: '#00ff1f', // Green for up days
+                downColor: '#ff0000', // Red for down days
+                borderVisible: false,
+                wickUpColor: '#00ff1f',
+                wickDownColor: '#ff0000'
+            });
+
+            candlestickSeries.setData(chartData);
+            console.log("Candlestick chart initialized with data: ", chartData);
+
+            // Auto-resize chart on window resize
+            window.addEventListener('resize', () => {
+                chart.resize(chartContainer.clientWidth, 600);
+            });
+
+            // Adjust time scale to fit data
+            chart.timeScale().fitContent();
+        } else {
+            console.log("No data to display in chart");
+        }
+
         initializeChart(stockData);
 
-        // Function to update chart based on form inputs
         function updateChart() {
             const symbol = document.getElementById('symbol').value;
             const start = document.getElementById('start').value;
             const end = document.getElementById('end').value;
             const interval = document.getElementById('interval').value;
 
-            // Convert dates to Unix timestamps (in seconds)
             const startTimestamp = Math.floor(new Date(start).getTime() / 1000);
             const endTimestamp = Math.floor(new Date(end).getTime() / 1000);
 
-            // Update URL and reload page
             window.location.href = `/history/chart/${symbol}?start=${startTimestamp}&end=${endTimestamp}&interval=${interval}`;
         }
     </script>
