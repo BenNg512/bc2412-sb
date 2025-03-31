@@ -31,6 +31,7 @@ public class HistoricalStockPriceEntity {
   private Long id;
   @Column(length = 10, nullable = false)
   private String symbol;
+  @Column(unique = false)
   private Long timestamp;
   private Double open;
   private Double high;
@@ -39,12 +40,20 @@ public class HistoricalStockPriceEntity {
   private Long volume;
   private Double adjClose;
 
-  @Column(length = 25)
+  @Column(length = 25, unique = false)
   private String regularMarketTimeHKT;
   @Column(name = "id2", length = 40, unique = true, nullable = false)
   private String stockPriceId;
-  @Column(length = 5)
+  @Column(length = 5, unique = false)
   private String intervalType;
+
+/**
+ * Method annotated with @PrePersist and @PreUpdate to automatically update
+ * certain fields before persisting or updating the entity. It converts the
+ * timestamp to a formatted string in HKT timezone and assigns it to 
+ * regularMarketTimeHKT. It also constructs a unique stockPriceId using the 
+ * symbol, timestamp, and intervalType.
+ */
 
   @PrePersist
   @PreUpdate

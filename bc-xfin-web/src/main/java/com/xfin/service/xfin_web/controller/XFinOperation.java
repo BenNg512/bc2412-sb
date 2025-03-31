@@ -35,14 +35,14 @@ public interface XFinOperation {
         @RequestParam String interval
         );
 
-  // http://localhost:8102/history/chart/0005.HK?start=1735689600&end=2000000000&interval=1d
-  @GetMapping("/history/chart/{symbol}/{start}&{end}&{interval}")
+  // http://localhost:8102/history/chart/BTC-USD?start=1735689600&end=1742353781&interval=1d
+  @GetMapping("/history/chart/{symbol}")
   public String getHistoryData(
         Model model,
         @PathVariable("symbol") String symbol, 
-        @PathVariable("start") String start, 
-        @PathVariable("end") String end,
-        @PathVariable("interval") String interval
+        @RequestParam String start, 
+        @RequestParam String end,
+        @RequestParam String interval
         );
 
 }

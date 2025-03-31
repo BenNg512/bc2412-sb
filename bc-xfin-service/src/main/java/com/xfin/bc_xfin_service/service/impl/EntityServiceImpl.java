@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -196,7 +197,7 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
         List<HistoricalStockPriceEntity> entities = EntityMapper.toEntities(data);
         // Filter out entities that already exist in the database
         List<HistoricalStockPriceEntity> newEntities = entities.stream()
-            .filter(entity -> !historyStockPriceRepository.existsBySymbolAndTimestamp(entity.getSymbol(), entity.getTimestamp()))
+            .filter(entity -> !historyStockPriceRepository.existsBySymbolAndTimestampAndIntervalType(entity.getSymbol(), entity.getTimestamp(), entity.getIntervalType()))
             .toList();
         if (!newEntities.isEmpty()) {
             for (HistoricalStockPriceEntity entity : newEntities) {
@@ -208,12 +209,16 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     }
   }
 
+  @Override
   public void saveAllHistoricalData(String start, String end){
+    this.historyStockPriceRepository.deleteAll();
     List<String> symbols = this.stockSymbolRepository.findAll()
         .stream()
         .map(StockSymbolEntity::getSymbol)
         .collect(Collectors.toList());
     for (String symbol : symbols) {
+        this.saveHistoricalData(symbol, start, end, "3mo");
+        this.saveHistoricalData(symbol, start, end, "1mo");
         this.saveHistoricalData(symbol, start, end, "5d");
         this.saveHistoricalData(symbol, start, end, "1d");
     }
@@ -261,6 +266,7 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
           .filter(entity -> entity.getTimestamp() >= start)
           .filter(entity -> entity.getTimestamp() <= end)
           .filter(entity -> entity.getIntervalType().equals(intervalType))
+          .sorted(Comparator.comparing(HistoricalStockPriceEntity::getTimestamp))
           .collect(Collectors.toList());
       return HistoryDataDto.builder()
         .lastUpdated(entities.getLastUpdated())
@@ -270,5 +276,4 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     return null;
   }
 
-  
 }

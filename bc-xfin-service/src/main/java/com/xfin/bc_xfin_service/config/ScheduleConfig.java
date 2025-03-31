@@ -14,6 +14,7 @@ public class ScheduleConfig {
 
   @Autowired
   private EntityService entityService;
+  Long currentTime = System.currentTimeMillis() / 1000;
 
   // every 5 minutes update 5-mins data
   @Scheduled(cron = "0 */5 9-17 * * MON-FRI", zone = "Asia/Hong_Kong")
@@ -39,8 +40,14 @@ public class ScheduleConfig {
 
 // every hour update history data
   @Scheduled(cron = "0 0 * * * *", zone = "Asia/Hong_Kong")
-  public void clearOneDayData() throws JsonProcessingException {
+  public void updateHistoryData() throws JsonProcessingException {
     this.entityService.redisSaveHistoryData();
   }
+
+  @Scheduled(cron = "0 0 12 1 * *", zone = "Asia/Hong_Kong")
+  public void getUpdateHistoryData() throws JsonProcessingException {
+    this.entityService.saveAllHistoricalData("1735689600", currentTime.toString());
+  }
+
 
 }
