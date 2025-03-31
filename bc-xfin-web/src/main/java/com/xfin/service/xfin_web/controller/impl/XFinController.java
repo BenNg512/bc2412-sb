@@ -78,7 +78,8 @@ private ObjectMapper objectMapper = new ObjectMapper();
     model.addAttribute("symbol", symbol);
     model.addAttribute("start", startDate);
     model.addAttribute("end", endDate);
-    model.addAttribute("lastUpdated", stockData.getLastUpdated());
+    model.addAttribute("interval", interval);
+    model.addAttribute("lastUpdated", stockData.getLastUpdated().substring(0, 19));
     List<HistoryStockPriceDto.HistoryStockPrice> data = stockData.getData();
 
         try {

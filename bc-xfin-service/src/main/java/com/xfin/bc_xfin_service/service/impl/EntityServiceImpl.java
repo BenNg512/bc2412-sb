@@ -192,26 +192,42 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     try {
         HistoricalDataDto data = this.yahooFinanceManager.getHistoricalData(symbol, start, end, interval);
         if (data == null || data.getChart() == null || data.getChart().getResult() == null) {
-            throw new IOException("No data returned from Yahoo Finance API");
+            throw new IOException("No data returned from Yahoo Finance API for symbol: " + symbol);
         }
         List<HistoricalStockPriceEntity> entities = EntityMapper.toEntities(data);
-        // Filter out entities that already exist in the database
+
         List<HistoricalStockPriceEntity> newEntities = entities.stream()
-            .filter(entity -> !historyStockPriceRepository.existsBySymbolAndTimestampAndIntervalType(entity.getSymbol(), entity.getTimestamp(), entity.getIntervalType()))
+            .filter(entity -> !historyStockPriceRepository.existsBySymbolAndTimestampAndIntervalType(
+                entity.getSymbol(), entity.getTimestamp(), entity.getIntervalType()
+            ))
+            .peek(entity -> entity.setIntervalType(interval)) // Set intervalType during the stream processing
             .toList();
         if (!newEntities.isEmpty()) {
-            for (HistoricalStockPriceEntity entity : newEntities) {
-                entity.setIntervalType(interval);
-            }
             historyStockPriceRepository.saveAll(newEntities);
+            System.out.println("Successfully saved " + newEntities.size() + " new records for symbol: " + symbol);
+        } else {
+            System.out.println("No new data to save for symbol: " + symbol + " and interval: " + interval);
         }
     } catch (IOException e) {
+        System.err.println("Error fetching historical data for symbol: " + symbol + " - " + e.getMessage());
+    } catch (Exception e) {
+        System.err.println("An unexpected error occurred while saving historical data: " + e.getMessage());
+        e.printStackTrace();
     }
-  }
+}
 
   @Override
   public void saveAllHistoricalData(String start, String end){
-    this.historyStockPriceRepository.deleteAll();
+    //this.historyStockPriceRepository.deleteAll();
+
+    if (Long.valueOf(end) > LocalDate.now()
+        .atStartOfDay(ZoneId.of(Timezone.HKT.value))
+        .toEpochSecond()){
+      end = LocalDate.now()
+        .atStartOfDay(ZoneId.of(Timezone.HKT.value))
+        .toEpochSecond()+"";
+    }
+    
     List<String> symbols = this.stockSymbolRepository.findAll()
         .stream()
         .map(StockSymbolEntity::getSymbol)
