@@ -203,7 +203,14 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
             .peek(entity -> entity.setIntervalType(interval)) // Set intervalType during the stream processing
             .toList();
         if (!newEntities.isEmpty()) {
-            historyStockPriceRepository.saveAll(newEntities);
+        // filter if data contains null
+        List<HistoricalStockPriceEntity> result = newEntities.stream()
+        .filter(entity -> entity.getOpen() != null
+                        && entity.getHigh() != null
+                        && entity.getLow() != null
+                        && entity.getClose() != null)
+        .collect(Collectors.toList());
+            historyStockPriceRepository.saveAll(result);
             System.out.println("Successfully saved " + newEntities.size() + " new records for symbol: " + symbol);
         } else {
             System.out.println("No new data to save for symbol: " + symbol + " and interval: " + interval);

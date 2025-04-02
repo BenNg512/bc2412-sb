@@ -24,6 +24,7 @@ public class FiveMinDataDto {
     @NoArgsConstructor
     public static class FiveMinData {
         private String regularMarketTime;
+
         private List<FiveMinStockPriceEntity> data;
     }
 

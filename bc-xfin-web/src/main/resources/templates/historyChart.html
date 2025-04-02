@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Stock Price Candlestick Chart</title>
+    <link rel="icon" href="https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400" />
     <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
     <style>
         .error { color: red; }
@@ -133,7 +134,7 @@
             const end = document.getElementById('end').value;
             const interval = document.getElementById('interval').value;
 
-            const startTimestamp = Math.floor(new Date(start).getTime() / 1000);
+            const startTimestamp = Math.floor((new Date(start).getTime() / 1000) < 0 ? 0:(new Date(start).getTime() / 1000));
             const endTimestamp = Math.floor(new Date(end).getTime() / 1000);
 
             window.location.href = `/history/chart/${symbol}?start=${startTimestamp}&end=${endTimestamp}&interval=${interval}`;

@@ -23,6 +23,7 @@ public interface EntityService {
   public FiveMinDataDto getFiveMinData();
   public FiveMinDataDto getFiveMinData(String symbol);
   public FiveMinDataDto getFiveMinData(String symbol, String date);
+  //public void redisSaveFiveMinData() throws JsonProcessingException;
 
   public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval);
   public void saveHistoricalData(String symbol, String start, String end, String interval);

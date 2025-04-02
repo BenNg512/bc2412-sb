@@ -23,6 +23,7 @@ public class FiveMinDataDto {
   @NoArgsConstructor
   public static class FiveMinData {
     private String regularMarketTime;
+    private String lastUpdated;
     private List<FiveMinStockPriceEntity> data;
 
     @Getter
