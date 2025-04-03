@@ -23,6 +23,7 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.HistoryDataDto;
+import com.xfin.bc_xfin_service.dto.OneDayDataDto;
 import com.xfin.bc_xfin_service.dto.map.DtoMapper;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
@@ -181,6 +182,39 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
     }
     return null;
   }
+
+  @Override
+  public void redisSaveLatestTransactionDayData() throws JsonProcessingException{
+    this.redisManager.clearData("LatestTransactionDayData");
+    String date = this.findMaxMarketDate();
+    List<StockPriceEntity> stockPriceEntities = this.stockPriceRepository.findByRegularMarketTime(date);
+    String lastUpdated = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toString();
+
+    OneDayDataDto oneDayDataDto = OneDayDataDto.builder()
+        .lastUpdated(lastUpdated)
+        .data(stockPriceEntities)
+        .build();
+
+    this.redisManager.set("LatestTransactionDayData", oneDayDataDto);
+  }
+
+  @Override
+  public OneDayDataDto redisGetLatestTransactionDayData() throws JsonProcessingException{
+    return this.redisManager.get2("LatestTransactionDayData", new TypeReference<OneDayDataDto>() {});
+  } 
+
+  @Override
+  public OneDayDataDto redisGetLatestTransactionDayData(String Symbol) throws JsonProcessingException{
+    OneDayDataDto data = this.redisManager.get2("LatestTransactionDayData", new TypeReference<OneDayDataDto>() {});
+    List<StockPriceEntity> stockPriceEntity = data.getData().stream()
+        .filter(entity -> entity.getSymbol().equals(Symbol))
+        .collect(Collectors.toList());
+    OneDayDataDto oneDayDataDto = OneDayDataDto.builder()
+        .lastUpdated(data.getLastUpdated())
+        .data(stockPriceEntity)
+        .build();
+    return oneDayDataDto;
+  }   
 
   @Override
   public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval) {

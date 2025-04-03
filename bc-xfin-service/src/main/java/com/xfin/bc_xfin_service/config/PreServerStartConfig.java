@@ -20,7 +20,7 @@ public class PreServerStartConfig implements CommandLineRunner {
         // fetch year to date data
         this.entityService.saveAllHistoricalData(oneYearBefore.toString(), currentTime.toString());
         this.entityService.redisSaveHistoryData();
-
+        this.entityService.redisSaveLatestTransactionDayData();
     }catch(Exception e){ 
         throw e;
     }

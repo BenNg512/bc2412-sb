@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OneDayDataDto {
-  private String lastUpdted;
+  private String lastUpdated;
   private List<StockPriceEntity> data;
   
 }

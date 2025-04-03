@@ -14,6 +14,7 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.HistoryDataDto;
+import com.xfin.bc_xfin_service.dto.OneDayDataDto;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 
@@ -44,6 +45,10 @@ public interface Operation {
   // http://localhost:8101/5min-data/0005.HK/2025-03-17
   @GetMapping("/5min-data/{symbol}/{date}")
   public FiveMinDataDto getFiveMinData(@PathVariable("symbol") String symbol, @PathVariable("date") String date);
+
+  // http://localhost:8101/last-transaction-day-data/0005.HK
+  @GetMapping("/last-transaction-day-data/{symbol}")
+  public OneDayDataDto getLastTransactionDayData(@PathVariable("symbol") String symbol) throws JsonProcessingException;
 
   // for getting raw quote data
   // http://localhost:8101/stock-price/period/0005.HK?start=1741353781&end=1742353781&interval=1d

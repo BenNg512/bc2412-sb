@@ -13,6 +13,7 @@ import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.QuoteDto;
 import com.xfin.bc_xfin_service.controller.Operation;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.HistoryDataDto;
+import com.xfin.bc_xfin_service.dto.OneDayDataDto;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
 import com.xfin.bc_xfin_service.service.impl.EntityServiceImpl;
@@ -52,6 +53,11 @@ public class Controller implements Operation {
   @Override
   public FiveMinDataDto getFiveMinData(String symbol, String date) {
     return this.entityService.getFiveMinData(symbol, date);
+  }
+
+  @Override
+  public OneDayDataDto getLastTransactionDayData(String symbol) throws JsonProcessingException{
+    return this.entityService.redisGetLatestTransactionDayData(symbol);
   }
 
   @Override

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xfin.bc_xfin_service.codewave.YahooFinanceManager.HistoricalDataDto;
 import com.xfin.bc_xfin_service.dto.FiveMinDataDto;
 import com.xfin.bc_xfin_service.dto.HistoryDataDto;
+import com.xfin.bc_xfin_service.dto.OneDayDataDto;
 import com.xfin.bc_xfin_service.entity.HistoricalStockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockPriceEntity;
 import com.xfin.bc_xfin_service.entity.StockSymbolEntity;
@@ -23,7 +24,9 @@ public interface EntityService {
   public FiveMinDataDto getFiveMinData();
   public FiveMinDataDto getFiveMinData(String symbol);
   public FiveMinDataDto getFiveMinData(String symbol, String date);
-  //public void redisSaveFiveMinData() throws JsonProcessingException;
+  public void redisSaveLatestTransactionDayData() throws JsonProcessingException;
+  public OneDayDataDto redisGetLatestTransactionDayData() throws JsonProcessingException;
+  public OneDayDataDto redisGetLatestTransactionDayData(String Symbol) throws JsonProcessingException;
 
   public HistoricalDataDto getHistoricalData(String symbol, String start, String end, String interval);
   public void saveHistoricalData(String symbol, String start, String end, String interval);
