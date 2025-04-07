@@ -259,7 +259,7 @@ YahooFinanceManager yahooFinanceManager = new YahooFinanceManager();
 
   @Override
   public void saveAllHistoricalData(String start, String end){
-    //this.historyStockPriceRepository.deleteAll();
+    this.historyStockPriceRepository.deleteAll();
 
     if (Long.valueOf(end) > LocalDate.now()
         .atStartOfDay(ZoneId.of(Timezone.HKT.value))

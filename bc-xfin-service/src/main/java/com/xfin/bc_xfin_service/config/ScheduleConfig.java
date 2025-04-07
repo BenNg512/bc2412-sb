@@ -18,13 +18,10 @@ public class ScheduleConfig {
   Long oneYearBefore = currentTime - 31536000;
 
   // every 5 minutes update 5-mins data
-  @Scheduled(cron = "0 */5 9-17 * * MON-FRI", zone = "Asia/Hong_Kong")
+  @Scheduled(cron = "0 */1 9-17 * * MON-FRI", zone = "Asia/Hong_Kong")
   public void saveStockPrices() throws JsonProcessingException {
       this.entityService.saveAllStockPriceFromApi();
       System.out.println("5-mins data fetched");
-
-      this.entityService.redisSaveLatestTransactionDayData();
-      System.out.println("Redis 5-mins data fetched");
 
       ZonedDateTime apiFetchTime = ZonedDateTime.now();
       String formattedFetchTime = apiFetchTime.withZoneSameInstant(ZoneId.of("Asia/Hong_Kong"))
@@ -54,5 +51,10 @@ public class ScheduleConfig {
     this.entityService.saveAllHistoricalData(oneYearBefore.toString(), currentTime.toString());
   }
 
+  @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Hong_Kong")
+  public void redisUpdateLatestTransactionDayData() throws JsonProcessingException {
+  this.entityService.redisSaveLatestTransactionDayData();
+  System.out.println("Redis 5-mins data fetched");
+  }
 
 }
