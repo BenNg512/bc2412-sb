@@ -25,7 +25,7 @@
         const stockData = /*[[${stockData}]]*/ [];
 
         // Prepare labels (marketTime) and prices (regularMarketPrice)
-        const labels = stockData.map(entry => entry.marketTime.substring(11, 16)); // HH:MM
+        const labels = stockData.map(entry => entry.regular_market_time_HKT.substring(11, 16)); // HH:MM
         const prices = stockData.map(entry => entry.regularMarketPrice);
 
         // Calculate 5-period Simple Moving Average (SMA)

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xfin.service.xfin_web.controller.XFinOperation;
-import com.xfin.service.xfin_web.model.FiveMinDataDto;
 import com.xfin.service.xfin_web.model.HistoryStockPriceDto;
+import com.xfin.service.xfin_web.model.LastTransactionDayDataDto;
 import com.xfin.service.xfin_web.service.impl.XFinServiceImpl;
 
 @Controller //! not rest controller
@@ -21,42 +21,6 @@ public class XFinController implements XFinOperation {
 private XFinServiceImpl xFinService;
 
 private ObjectMapper objectMapper = new ObjectMapper();
-
-  @Override
-  public FiveMinDataDto getFiveMinData(String symbol) {
-    return xFinService.getFiveMinData(symbol);
-  }
-
-  @Override
-  public String dailyChart(Model model, String symbol) {
-      FiveMinDataDto data = xFinService.getFiveMinData(symbol);
-      if (data == null) {
-          model.addAttribute("title", "Data Not Found");
-          model.addAttribute("date", "today (default day)");
-          return "stock";
-      }
-      String date = data.getDataMap().get(symbol).getRegularMarketTime().substring(0, 11);
-      model.addAttribute("date", date);
-      model.addAttribute("stockData", data.getDataMap().get(symbol).getData());
-      model.addAttribute("title", "Stock Price for " + symbol);
-  
-      return "stock";
-  }
-
-  @Override
-  public String dailyChart(Model model, String symbol, String date) {
-    FiveMinDataDto data = xFinService.getFiveMinData(symbol, date);
-    model.addAttribute("date", date);
-    
-    if (data == null) {
-      model.addAttribute("title", "Data Not Found");
-    }
-    else{
-      model.addAttribute("stockData", data.getDataMap().get(symbol).getData());
-      model.addAttribute("title", symbol = "Stock Price for " + symbol);
-    }
-    return "stock";
-  }
 
   @ExceptionHandler(IOException.class)
   public ResponseEntity<String> handleIOException(IOException ex) {
@@ -93,5 +57,26 @@ private ObjectMapper objectMapper = new ObjectMapper();
     return "historyChart";
   }
 
+  @Override
+  public ResponseEntity<LastTransactionDayDataDto> getLastTransactionDayData(String symbol) {
+    LastTransactionDayDataDto data = xFinService.getLastTransactionDayData(symbol);
+    return ResponseEntity.ok(data);
+  }
+
+  @Override
+  public String lastDay(Model model, String symbol) {
+    LastTransactionDayDataDto data = xFinService.getLastTransactionDayData(symbol);
+      if (data == null) {
+          model.addAttribute("title", "Data Not Found");
+          model.addAttribute("date", "today (default day)");
+          return "stock";
+      }
+      String date = data.getData().get(0).getRegularMarketTimeHKT().substring(0, 11);
+      model.addAttribute("date", date);
+      model.addAttribute("stockData", data.getData());
+      model.addAttribute("title", "Stock Price for " + symbol);
+  
+      return "lastestTransactionDayChart";
+  }
 
 }
