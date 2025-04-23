@@ -72,6 +72,8 @@ private ObjectMapper objectMapper = new ObjectMapper();
           return "stock";
       }
       String date = data.getData().get(0).getRegularMarketTimeHKT().substring(0, 11);
+      String lastUpdated = data.getLastUpdated().substring(0, 19);
+      model.addAttribute("lastUpdated", lastUpdated);
       model.addAttribute("date", date);
       model.addAttribute("stockData", data.getData());
       model.addAttribute("title", "Stock Price for " + symbol);

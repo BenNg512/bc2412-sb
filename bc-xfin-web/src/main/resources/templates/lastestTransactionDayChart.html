@@ -15,6 +15,7 @@
 </head>
 <body>
     <h1 th:text="${title} + ' on ' + ${date}">Stock Price</h1>
+    <p>Last Updated: <span th:text="${lastUpdated} ?: 'null'">Last Updated: null</span></p>
     <p>Next refresh: <span id="timer">10</span> seconds</p>
     <!-- Canvas for the chart -->
     <canvas id="stockChart"></canvas>
@@ -29,7 +30,7 @@
         const prices = stockData.map(entry => entry.regularMarketPrice);
 
         // Calculate 5-period Simple Moving Average (SMA)
-        const period = 30; // 5 periods (25 minutes for 5-min data)
+        const period = 10; // 5 periods (25 minutes for 5-min data)
         const smaData = stockData.map((entry, index) => {
             if (index < period - 1) {
                 return null; // Not enough data for SMA yet
@@ -62,7 +63,7 @@
                         tension: 0.1
                     },
                     {
-                        label: '5-Period SMA',
+                        label: '10-Period SMA',
                         data: smaDataset,
                         borderColor: 'orange',
                         borderWidth: 2,

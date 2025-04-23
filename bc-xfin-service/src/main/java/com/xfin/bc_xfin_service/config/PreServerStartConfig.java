@@ -11,14 +11,12 @@ public class PreServerStartConfig implements CommandLineRunner {
   private EntityService entityService;
   @Override
   public void run(String... args) throws Exception {
-    Long currentTime = System.currentTimeMillis() / 1000;
-    Long oneYearBefore = currentTime - 31536000;
-    
+
     try{
-        //this.entityService.saveStockSymbolsFromJson();
-        //this.entityService.saveAllStockPriceFromApi();
         // fetch year to date data
-        this.entityService.saveAllHistoricalData(oneYearBefore.toString(), currentTime.toString());
+        // Long currentTime = System.currentTimeMillis() / 1000;
+        // Long oneYearBefore = currentTime - 31536000;
+        // this.entityService.saveAllHistoricalData(oneYearBefore.toString(), currentTime.toString());
         this.entityService.redisSaveHistoryData();
         this.entityService.redisSaveLatestTransactionDayData();
     }catch(Exception e){ 

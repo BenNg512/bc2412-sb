@@ -40,13 +40,14 @@ public class ScheduleConfig {
     System.out.println(formattedFetchTime);
   }
 
-// every hour update history data
+  // every hour update history data
   @Scheduled(cron = "0 0 * * * *", zone = "Asia/Hong_Kong")
   public void redisUpdateHistoryData() throws JsonProcessingException {
     this.entityService.redisSaveHistoryData();
   }
 
-  @Scheduled(cron = "0 0 12 1 * *", zone = "Asia/Hong_Kong")
+  // every day 12:00 update history data
+  @Scheduled(cron = "0 00 12 * * *", zone = "Asia/Hong_Kong")
   public void getUpdateHistoryData() throws JsonProcessingException {
     this.entityService.saveAllHistoricalData(oneYearBefore.toString(), currentTime.toString());
   }
