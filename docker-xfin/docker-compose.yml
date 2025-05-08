@@ -1,0 +1,73 @@
+services:
+  bc-xfin-service:
+    image: bc-xfin-service:0.0.1
+    container_name: bc-xfin-service
+    build:
+      context: ./bc-xfin-service
+      dockerfile: Dockerfile
+    networks:
+      - bootcamp_network
+    ports:
+      - "8191:8091"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stock_market2
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin1234
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+    entrypoint: ["/bin/sh", "-c", "until nc -z -v -w30 postgres 5432; do echo 'Waiting for postgres...'; sleep 5; done; java -jar bc-xfin-service-0.0.1-SNAPSHOT.jar"]
+
+  bc-xfin-web:
+    image: xfin-web:0.0.1
+    container_name: xfin-web
+    build:
+      context: ./bc-xfin-web
+      dockerfile: Dockerfile
+    networks:
+      - bootcamp_network
+    ports:
+      - "8192:8092"
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6479:6379"
+    networks:
+      - bootcamp_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin1234
+      POSTGRES_DB: stock_market2
+    ports:
+      - "5532:5432"
+    networks:
+      - bootcamp_network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  bootcamp_network:
+    driver: bridge

@@ -1,0 +1,20 @@
+server:
+  port: 8091
+
+spring:
+  datasource:
+    driverClassName: "org.postgresql.Driver"
+    url: "jdbc:postgresql://postgres:5432/stock_market2"
+    username: "postgres"
+    password: "admin1234"
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: true
+  data:
+    redis:
+      host: "redis"
+      port: 6379
+  thymeleaf:
+    check-template-location: false
