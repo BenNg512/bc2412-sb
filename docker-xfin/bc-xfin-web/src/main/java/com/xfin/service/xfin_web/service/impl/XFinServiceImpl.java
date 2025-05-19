@@ -20,10 +20,10 @@ private RestTemplate restTemplate;
 
 @Override
 public HistoryStockPriceDto getHistoryData(String symbol, String start, String end, String interval) {
-  // http://localhost:8101/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
-
-  String url = "http://localhost:8191/stock-price/history/" 
-              + symbol 
+  // http://localhost:8191/stock-price/history/0005.HK?start=1741353781&end=1742353781&interval=1d
+  String accessContainer = "bc-xfin-service:8091";
+  String url = "http://" + accessContainer
+              + "/stock-price/history/" + symbol 
               + "?start=" + start
               + "&end=" + end
               + "&interval=" + interval;
@@ -39,7 +39,8 @@ public HistoryStockPriceDto getHistoryData(String symbol, String start, String e
 
 @Override
 public LastTransactionDayDataDto getLastTransactionDayData(String symbol) {
-  String url = "http://localhost:8191/last-transaction-day-data/" + symbol;
+  // http://localhost:8191/last-transaction-day-data/BTC-USD
+  String url = "http://bc-xfin-service:8091/last-transaction-day-data/" + symbol;
   try {
     LastTransactionDayDataDto response = restTemplate.getForObject(url, LastTransactionDayDataDto.class);
     @SuppressWarnings("null")

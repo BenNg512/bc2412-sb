@@ -36,7 +36,7 @@ public interface XFinOperation {
   public ResponseEntity<LastTransactionDayDataDto> getLastTransactionDayData(@PathVariable("symbol") String symbol);
 
   // html
-  // http://localhost:8102/latest-stock-price/0005.HK
+  // http://localhost:8102/latest-stock-price/BTC-USD
   @GetMapping(value = "/latest-stock-price/{symbol}")
   public String lastDay(Model model, @PathVariable("symbol") String symbol);
 
