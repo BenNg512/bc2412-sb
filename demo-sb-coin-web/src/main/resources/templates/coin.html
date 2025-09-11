@@ -9,26 +9,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}">
     <style>
-.last-update1 {
-  color: white;
+.last-update {
+  color: rgb(0, 0, 0);
   position: absolute; 
   top: 10px;
   right: 20px;
   font-size: 10pt;
-}
-.last-update2 {
-  color: white;
-  position: absolute; 
-  top: 30px;
-  right: 20px;
-  font-size: 10pt;
-}
-.last-update3 {
-  color: white;
-  position: absolute; 
-  top: 50px;
-  right: 20px;
-  font-size: 10pt;
+  padding: 4px 10px;
+  background-color: rgba(199, 255, 255, 0.8);
+  border-radius: 8px;
 }
 .version {
   color: rgb(122, 246, 255); 
@@ -49,8 +38,9 @@
 }
 table {
   width: auto;
-  height: auto;
+  height: 80vh;
   margin-top: 20px;
+  overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.8);
 }
 th, td {
@@ -96,16 +86,19 @@ thead th {
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            background-attachment: scroll;">
+            background-attachment: scroll;
+            max-height: 100vh;">
     <div class="container">
         <h1 class="mt-5">Cryptocurrency Market</h1>
-        <div class="last-update1">Data Last Updated from Coingecko api:</div>
-        <div class="last-update2" th:text="${latestUpdate}"></div>
-        <div class="last-update3"><span id="timer">30</span> seconds until next refresh</div>
-
+        <div class="last-update">
+          <div>Data Last Updated from Coingecko api:</div>
+          <div th:text="${latestUpdate}"></div>
+          <div><span id="timer">30</span> seconds until next refresh</div>
+        </div>
+        
         <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Search for coins.." class="form-control mb-3">
         <div class="table-container">
-            <table class="table table-striped mt-3">
+            <table class="table table-striped mt-3" id="coinTable">
                 <thead>
                     <tr>
                         <th>Coin</th>
@@ -134,12 +127,32 @@ thead th {
                 </tbody>
             </table>
         </div>
-        <div class="version"><span>Version last updated on 11th, March 2025</span></div>
+        <br>
+        <div class="version"><span>*Version last updated on 11th, Sep 2025</span></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    function filterTable() {
+        var input = document.getElementById("filterInput");
+        var filter = input.value.toLowerCase();
+        var table = document.getElementById("coinTable");
+        var trs = table.getElementsByTagName("tr");
+        for (var i = 1; i < trs.length; i++) { // skip header row
+            var td = trs[i].getElementsByTagName("td")[0];
+            if (td) {
+                var txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    trs[i].style.display = "";
+                } else {
+                    trs[i].style.display = "none";
+                }
+            }
+        }
+    }
+    </script>
     <script src="/js/script.js"></script>
 </body>
 </html>
