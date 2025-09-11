@@ -21,8 +21,8 @@ public class MTRStationController {
   @Autowired
   MTRStationService mtrStationService;
 
-  // http://localhost:8006/mtrstation/KTL/KWT
-  @GetMapping(value = "/hk-mtr-station/{line}/{station}")
+  // http://localhost:8006/hk-mtr/KTL/KWT
+  @GetMapping(value = "/hk-mtr/{line}/{station}")
   public String getTrainSchedule(Model model, @PathVariable String line, @PathVariable String station){
     model.addAttribute("line", line);
     model.addAttribute("station", station);
@@ -35,7 +35,7 @@ public class MTRStationController {
       model.addAttribute("stationName", mtrStation.getNameEN());
     } catch (Exception e) {
       String firstStation = MTRStation.getStartMtrStation(line);
-      return "redirect:/hk-mtr-station/" + line + "/" + firstStation;
+      return "redirect:/hk-mtr/" + line + "/" + firstStation;
     }
     
     MTRStation mtrStation = MTRStation.fromString(line + "_" + station);

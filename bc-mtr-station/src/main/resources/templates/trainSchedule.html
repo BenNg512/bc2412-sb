@@ -17,8 +17,10 @@
             width: 100%;
             background-color: rgba(252, 252, 252, 0.8);
             border-collapse: collapse;
-            margin-top: 20px;
             color-scheme: dark;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 8px 8px rgba(0, 0, 0, 0.6);
         }
         th, td {
             border: 1px solid #ffffff 0%;
@@ -30,9 +32,17 @@
         }
         .up {
             color: green;
+            font-weight: bold;
+            background-color: rgba(192, 255, 176, 0.9);
+            border: 2px solid green;
+            border-radius: 5px;
         }
         .down {
             color: red;
+            font-weight: bold;
+            background-color: rgba(255, 204, 204, 0.9);
+            border: 2px solid red;
+            border-radius: 5px;
         }
         h1 {
             text-align: center;
@@ -42,6 +52,7 @@
             background-color: rgba(255, 255, 255, 0.5);
             text-align: center;
             padding-inline-end: 0%;
+            border-radius: 10px;
         }
         p {
             text-align: center;
@@ -61,14 +72,22 @@
             right: 20px;
             font-size: 8pt;
         }
+        .form-section {
+            background-color: #bbf0ff;
+            padding: 5px;
+            margin-right: 10px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>HKMTR Train Schedule</h1>
         <div class="last-updated">Last Updated: <span th:text="${sysTime.substring(0, 19)}"></span></div>
-        <div>
-            <form id="mtr" action="/mtrstation/" method="GET">
+        <div class="form-section">
+            <form id="mtr" action="/hk-mtr/" method="GET">
                 <label for="line">Line: </label>
                 <select id="line" name="line" onchange="updateChart()">
                     <option th:each="line : ${lines}" 
@@ -108,7 +127,7 @@
                 <!-- Iterate over UP trains if available -->
                 <tr th:each="train : ${up}">
                     <td th:text="${train.plat}"></td>
-                    <td th:text="${train.ttnt} + ' Minutes'"></td>
+                    <td th:text="${train.ttnt} + ' Minute(s)'"></td>
                     <td th:text="${train.time.substring(11, 16)}"></td>
                     <td th:text="${train.dest}"></td>
                 </tr>
@@ -134,7 +153,7 @@
                 <!-- Iterate over DOWN trains if available -->
                 <tr th:each="train : ${down}">
                     <td th:text="${train.plat}"></td>
-                    <td th:text="${train.ttnt} + ' Minutes'"></td>
+                    <td th:text="${train.ttnt} + ' Minute(s)'"></td>
                     <td th:text="${train.time.substring(11, 16)}"></td>
                     <td th:text="${train.dest}"></td>
                 </tr>
@@ -145,7 +164,7 @@
         function updateChart() {
             const line = document.getElementById('line').value;
             const station = document.getElementById('station').value;
-            window.location.href = `/hk-mtr-station/${line}/${station}`;
+            window.location.href = `/hk-mtr/${line}/${station}`;
         }
     </script>
 </body>
